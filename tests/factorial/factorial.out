@@ -1,0 +1,92 @@
+IDENTIFIER(package)
+IDENTIFIER(main)
+
+Line 1, column 13: unrecognized character (;)
+IDENTIFIER(func)
+IDENTIFIER(factorial)
+(
+IDENTIFIER(n)
+IDENTIFIER(int)
+)
+IDENTIFIER(int)
+
+Line 3, column 30: unrecognized character ({)
+IF
+IDENTIFIER(n)
+=
+=
+NATURAL(0)
+
+Line 4, column 15: unrecognized character ({)
+IDENTIFIER(return)
+NATURAL(1)
+
+Line 5, column 17: unrecognized character (;)
+
+Line 6, column 5: unrecognized character (})
+
+Line 6, column 6: unrecognized character (;)
+IDENTIFIER(return)
+IDENTIFIER(n)
+*
+IDENTIFIER(factorial)
+(
+IDENTIFIER(n)
+-
+NATURAL(1)
+)
+
+Line 7, column 32: unrecognized character (;)
+
+Line 8, column 1: unrecognized character (})
+
+Line 8, column 2: unrecognized character (;)
+IDENTIFIER(func)
+IDENTIFIER(main)
+(
+)
+
+Line 10, column 14: unrecognized character ({)
+IDENTIFIER(var)
+IDENTIFIER(argument)
+IDENTIFIER(int)
+
+Line 11, column 22: unrecognized character (;)
+IDENTIFIER(argument)
+,
+
+Line 12, column 16: unrecognized character (_)
+=
+IDENTIFIER(strconv)
+
+Line 12, column 28: unrecognized character (.)
+IDENTIFIER(Atoi)
+(
+IDENTIFIER(os)
+
+Line 12, column 40: unrecognized character (.)
+IDENTIFIER(Args)
+
+Line 12, column 47: unrecognized character ([)
+NATURAL(1)
+
+Line 12, column 49: unrecognized character (])
+)
+
+Line 12, column 51: unrecognized character (;)
+IDENTIFIER(fmt)
+
+Line 13, column 9: unrecognized character (.)
+IDENTIFIER(Println)
+(
+IDENTIFIER(factorial)
+(
+IDENTIFIER(argument)
+)
+)
+
+Line 13, column 44: unrecognized character (;)
+
+Line 14, column 1: unrecognized character (})
+
+Line 14, column 2: unrecognized character (;)
