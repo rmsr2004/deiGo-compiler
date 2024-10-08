@@ -146,4 +146,4 @@ Line <num linha>, column <num coluna>: unterminated string literal\n
 Line <num linha>, column <num coluna>: invalid escape sequence (<c>)\n
 ```
 
-onde "<num linha>" e "<num coluna>" devem ser substituídos pelos valores correspondentes ao _início_ do token que originou o erro, e "<c>" deve ser substituído por esse token. O analisador deve recuperar da ocorrência de erros lexicais a partir do _fim_ desse token. Tanto as linhas como as colunas são numeradas a partir de 1.
+onde "num linha" e "num coluna" devem ser substituídos pelos valores correspondentes ao _início_ do token que originou o erro, e "c" deve ser substituído por esse token. O analisador deve recuperar da ocorrência de erros lexicais a partir do _fim_ desse token. Tanto as linhas como as colunas são numeradas a partir de 1.
