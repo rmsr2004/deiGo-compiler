@@ -24,7 +24,7 @@ output_expected=tests/${1}/${1}.out
 output_generated=tests/${1}/output.out
 
 echo -n "diff tests/${1}/${1}.out tests/${1}/output.out ... "
-diff_output=$(diff "$output_expected" "$output_generated")
+diff_output=$(diff --side-by-side --suppress-common-lines "$output_expected" "$output_generated")
 echo "Done!"
 echo ""
 echo ""
@@ -33,7 +33,8 @@ if [ -z "$diff_output" ]; then
     echo "Test Verified: Output is 100% correct!"
 else
     echo "Test Failed: Output is not correct!"
-    echo "Differences found between the expected output and the generated output:\n\n"
+    echo "Differences found between the expected output and the generated output:"
+    echo ""
     echo "$diff_output"
     exit 1
 fi
