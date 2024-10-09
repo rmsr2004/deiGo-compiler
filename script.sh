@@ -1,5 +1,13 @@
 #!/bin/bash
 
+set -e # Ends the script when an error it's found
+
+if [ "$#" -ne 1 ]; then
+    echo "Error: You must give a <file>.dgo"
+    exit 1
+fi
+
+
 echo -n "lex src/gocompiler.l ... "
 lex src/gocompiler.l
 echo "Done!"
@@ -24,7 +32,7 @@ output_expected=tests/${1}/${1}.out
 output_generated=tests/${1}/output.out
 
 echo -n "diff tests/${1}/${1}.out tests/${1}/output.out ... "
-diff_output=$(diff --side-by-side --suppress-common-lines "$output_expected" "$output_generated")
+diff_output=$(diff --side-by-side --suppress-common-lines "$output_expected" "$output_generated" || true)
 echo "Done!"
 echo ""
 echo ""
