@@ -9,6 +9,6 @@ func factorial(n int) int {
 
 func main () {
     var argument int;
-    argument, _ = strconv.Atoi (os.Args[1]);
+    argument, _ = strconv.Atoi(os.Args[1]);
     fmt.Println(factorial(argument));
 };
