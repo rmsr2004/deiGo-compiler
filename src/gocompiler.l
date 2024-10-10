@@ -11,7 +11,7 @@
         column_index += yyleng;
     }
 
-    void save_comment() {
+    void save_comment(){
         comment_line = line_index;
         comment_column = column_index;
     }
@@ -21,7 +21,7 @@
     }
 
     void error(const char* message){
-        printf("Line %d, column %d: %s\n", line_index, column_index, message);
+        printf("Line %d, column %d: %s (%s)\n", line_index, column_index, message, yytext);
     }
 %}
 
@@ -41,7 +41,7 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 {digit}*"."{digit}+                     { printf("DECIMAL(%s)\n", yytext); update_column(); }
 
 "/*"                                    { BEGIN(COMMENT); save_comment(); }
-<COMMENT>[^*]+                          { update_column(); }
+<COMMENT>[^*\n]+                        { update_column(); }
 <COMMENT>\n                             { update_line(); }
 <COMMENT>"*/"                           { BEGIN(INITIAL); update_column(); }
 <COMMENT><<EOF>>                        { 
@@ -91,10 +91,10 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 "os.Args"                               { printf("CMDARGS\n"); update_column(); }
 {keyword}                               { printf("RESERVERD\n"); update_column(); }
 
-({letter}|("_")+)({digit}|{letter})+    { printf("IDENTIFIER(%s)\n", yytext); update_column(); }
+({letter}|"_")({digit}|{letter}|"_")*   { printf("IDENTIFIER(%s)\n", yytext); update_column(); }
 
 .                                       { 
-                                            error("illegal character"); 
+                                            error("illegal character "); 
                                             update_column(); 
                                         }
 %%
