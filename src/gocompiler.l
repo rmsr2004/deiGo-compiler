@@ -13,16 +13,27 @@
 
 digit           [0-9]
 letter          [a-zA-Z]
+hex_digit       [0-9a-fA-F]
+oct_digit       [0-7]
 whitespace      [ \t]
 newline         \n
+exponent        [eE][+-]?{digit}+
 keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto|import|interface|map|range|select|struct|switch|type
 
 %%
 {whitespace}+                   { update_column(); }
 {newline}                       { update_line(); }
 
+
+0[xX]{hex_digit}+               { printf("HEX(%s)\n", yytext); update_column(); }
+0{oct_digit}+                   { printf("OCTAL(%s)\n", yytext); update_column(); }
+0{digit}+                       { printf("Line %d, column %d: invalid octal constant (%s)\n", line_index, column_index, yytext);
+                                update_column(); }
 {digit}+                        { printf("NATURAL(%s)\n", yytext); update_column(); }
-{digit}*"."{digit}+             { printf("DECIMAL(%s)\n", yytext); update_column(); }
+{digit}+"."{digit}*{exponent}?  { printf("DECIMAL(%s)\n", yytext); update_column(); }
+"."{digit}+{exponent}*          { printf("DECIMAL(%s)\n", yytext); update_column(); }
+{digit}+{exponent}              { printf("DECIMAL(%s)\n", yytext); update_column(); }
+
 
 ";"                             { printf("SEMICOLON\n"); update_column(); }
 ","                             { printf("COMMA\n"); update_column(); }
