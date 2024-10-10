@@ -1,0 +1,6 @@
+package main;
+
+func main() {
+    /* This a unfinished comment
+    fmt.Println("Hello, World!")
+};
