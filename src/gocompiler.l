@@ -1,6 +1,14 @@
 %{
     int line_index = 1;
     int column_index = 1;
+    
+    int last_token_type = 0;
+
+    #define TOK_IDENTIFIER 1
+    #define TOK_LITERAL 2
+    #define TOK_RETURN 3
+    #define TOK_RPAR_RSQ_RBRACE 4
+
 
     void update_line(){
         line_index++;
@@ -8,6 +16,14 @@
     }
     void update_column(){
         column_index += yyleng;
+    }
+    void emit_semicolon_if_needed(){
+        if (last_token_type == TOK_IDENTIFIER || 
+            last_token_type == TOK_LITERAL || 
+            last_token_type == TOK_RETURN || 
+            last_token_type == TOK_RPAR_RSQ_RBRACE) {
+            printf("SEMICOLON\n");
+        }
     }
 %}
 
@@ -22,17 +38,24 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 
 %%
 {whitespace}+                   { update_column(); }
-{newline}                       { update_line(); }
+{newline}                       { emit_semicolon_if_needed(); update_line(); }
 
-
-0[xX]{hex_digit}+               { printf("HEX(%s)\n", yytext); update_column(); }
-0{oct_digit}+                   { printf("OCTAL(%s)\n", yytext); update_column(); }
+0[xX]{hex_digit}+               { printf("HEX(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
+0{oct_digit}+                   { printf("OCTAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
 0{digit}+                       { printf("Line %d, column %d: invalid octal constant (%s)\n", line_index, column_index, yytext);
-                                update_column(); }
-{digit}+                        { printf("NATURAL(%s)\n", yytext); update_column(); }
-{digit}+"."{digit}*{exponent}?  { printf("DECIMAL(%s)\n", yytext); update_column(); }
-"."{digit}+{exponent}*          { printf("DECIMAL(%s)\n", yytext); update_column(); }
-{digit}+{exponent}              { printf("DECIMAL(%s)\n", yytext); update_column(); }
+                                  update_column(); }
+{digit}+                        { printf("NATURAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
+{digit}+"."{digit}*{exponent}?  { printf("DECIMAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
+"."{digit}+{exponent}*          { printf("DECIMAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
+
+"return"                        { printf("RETURN\n"); update_column(); last_token_type = TOK_RETURN; }
+
+{letter}({digit}|{letter})*     { printf("IDENTIFIER(%s)\n", yytext); update_column(); last_token_type = TOK_IDENTIFIER; }
+
+")"                             { printf("RPAR\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
+"]"                             { printf("RSQ\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
+"}"                             { printf("RBRACE\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
+
 
 
 ";"                             { printf("SEMICOLON\n"); update_column(); }
