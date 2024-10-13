@@ -1,19 +1,8 @@
+
 #!/bin/bash
 
 set -e # Ends the script when an error it's found
 
-<<<<<<< HEAD:script.sh
-<<<<<<< HEAD
-if [ "$#" -ne 1 ]; then
-    echo "Error: You must give a <file>.dgo"
-    exit 1
-fi
-
-
-=======
->>>>>>> jsimoes04
-=======
->>>>>>> e785b6e890d93922ab27064f000bbd998417161d:compile.sh
 echo -n "lex src/gocompiler.l ... "
 lex src/gocompiler.l
 echo "Done!"

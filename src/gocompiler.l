@@ -1,27 +1,22 @@
 %{
-<<<<<<< HEAD
-    int line_index = 1;
-    int column_index = 1;
-    
-    int last_token_type = 0;
+    #include <stdio.h>
+    #include <string.h>
+    #include <stdarg.h>
+
     #define TOK_IDENTIFIER 1
     #define TOK_LITERAL 2
     #define TOK_RETURN 3
     #define TOK_RPAR_RSQ_RBRACE 4
 
-=======
-    #include <stdio.h>
-    #include <string.h>
-    #include <stdarg.h>
-
-    char current_string[128] = "";
-
+    int last_token_type = 0;
+    
     int line_index = 1, column_index = 1;
-    int comment_line = 0, comment_column = 0;
-    int string_line = 0, string_column = 0;
 
+    int comment_line = 0, comment_column = 0;
+
+    int string_line = 0, string_column = 0;
+    char current_string[128] = "";
     int flag_string = 1;    // Flag to check if the string is valid (1) or not (0)
->>>>>>> e785b6e890d93922ab27064f000bbd998417161d
 
     void update_line(){
         line_index++;
@@ -31,48 +26,17 @@
     void update_column(){
         column_index += yyleng;
     }
-<<<<<<< HEAD
-    void emit_semicolon_if_needed(){
-        if (last_token_type == TOK_IDENTIFIER || 
-            last_token_type == TOK_LITERAL || 
-            last_token_type == TOK_RETURN || 
-            last_token_type == TOK_RPAR_RSQ_RBRACE) {
-            printf("SEMICOLON\n");
+
+    void emit_semicolon(){
+        switch(last_token_type){
+            case TOK_IDENTIFIER:
+            case TOK_LITERAL:
+            case TOK_RETURN:
+            case TOK_RPAR_RSQ_RBRACE:
+                printf("SEMICOLON\n");
+                break;
         }
     }
-%}
-
-digit           [0-9]
-letter          [a-zA-Z]
-hex_digit       [0-9a-fA-F]
-oct_digit       [0-7]
-whitespace      [ \t]
-newline         \n
-exponent        [eE][+-]?{digit}+
-keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto|import|interface|map|range|select|struct|switch|type
-
-%%
-{whitespace}+                   { update_column(); }
-{newline}                       { emit_semicolon_if_needed(); update_line(); }
-
-0[xX]{hex_digit}+               { printf("HEX(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
-0{oct_digit}+                   { printf("OCTAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
-0{digit}+                       { printf("Line %d, column %d: invalid octal constant (%s)\n", line_index, column_index, yytext);
-                                  update_column(); }
-{digit}+                        { printf("NATURAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
-{digit}+"."{digit}*{exponent}?  { printf("DECIMAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
-"."{digit}+{exponent}*          { printf("DECIMAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
-
-"return"                        { printf("RETURN\n"); update_column(); last_token_type = TOK_RETURN; }
-
-{letter}({digit}|{letter})*     { printf("IDENTIFIER(%s)\n", yytext); update_column(); last_token_type = TOK_IDENTIFIER; }
-
-")"                             { printf("RPAR\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
-"]"                             { printf("RSQ\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
-"}"                             { printf("RBRACE\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
-
-
-=======
 
     void save_comment_pos(){
         comment_line = line_index;
@@ -100,24 +64,34 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
     }
 %}
 
-digit               [0-9]
-letter              [a-zA-Z]
-whitespace          [ \t]
-newline             \n
-keyword             break|case|chan|const|continue|default|defer|fallthrough|go|goto|import|interface|map|range|select|struct|switch|type|"++"|"--"
-valid_escape        \\[fnrt\\\"]
-invalid_escape      \\.|\\
-line_break          \n|\r|\r\n
+digit           [0-9]
+letter          [a-zA-Z]
+hex_digit       [0-9a-fA-F]
+oct_digit       [0-7]
+whitespace      [ \t]
+newline         \n
+exponent        [eE][+-]?{digit}+
+keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto|import|interface|map|range|select|struct|switch|type|"++"|"--"
+valid_escape    \\[fnrt\\\"]
+invalid_escape  \\.|\\
+line_break      \n|\r|\r\n
+
 
 %X  COMMENT STRING
 
 %%
 {whitespace}+                           { update_column(); }
-{newline}                               { update_line(); }
+{newline}                               { emit_semicolon(); update_line(); }
 
-{digit}+                                { printf("NATURAL(%s)\n", yytext); update_column(); }
-{digit}*"."{digit}+                     { printf("DECIMAL(%s)\n", yytext); update_column(); }
->>>>>>> e785b6e890d93922ab27064f000bbd998417161d
+0[xX]{hex_digit}+                       { printf("NATURAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
+0{oct_digit}+                           { printf("NATURAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
+0{digit}+                               { 
+                                            error(line_index, column_index, "invalid octal constant (%s)", yytext);
+                                            update_column(); 
+                                        }
+{digit}+                                { printf("NATURAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
+{digit}+"."{digit}*{exponent}?          { printf("DECIMAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
+"."{digit}+{exponent}*                  { printf("DECIMAL(%s)\n", yytext); update_column(); last_token_type = TOK_LITERAL; }
 
 "/*"                                    { BEGIN(COMMENT); save_comment_pos(); }
 <COMMENT>[^*\n]+                        { update_column(); }
@@ -148,11 +122,11 @@ line_break          \n|\r|\r\n
 "!"                                     { printf("NOT\n"); update_column(); }
 "&&"                                    { printf("AND\n"); update_column(); }
 "||"                                    { printf("OR\n"); update_column(); }
-"}"                                     { printf("RBRACE\n"); update_column(); }
-")"                                     { printf("RPAR\n"); update_column(); }
-"]"                                     { printf("RSQ\n"); update_column(); }
+"}"                                     { printf("RBRACE\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
+")"                                     { printf("RPAR\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
+"]"                                     { printf("RSQ\n"); update_column(); last_token_type = TOK_RPAR_RSQ_RBRACE; }
 "package"                               { printf("PACKAGE\n"); update_column(); }
-"return"                                { printf("RETURN\n"); update_column(); }
+"return"                                { printf("RETURN\n"); update_column(); last_token_type = TOK_RETURN; }
 "else"                                  { printf("ELSE\n"); update_column(); }
 "for"                                   { printf("FOR\n"); update_column(); }
 "if"                                    { printf("IF\n"); update_column(); }
@@ -167,7 +141,11 @@ line_break          \n|\r|\r\n
 "os.Args"                               { printf("CMDARGS\n"); update_column(); }
 {keyword}                               { printf("RESERVERD\n"); update_column(); }
 
-({letter}|"_")({digit}|{letter}|"_")*   { printf("IDENTIFIER(%s)\n", yytext); update_column(); }
+({letter}|"_")({digit}|{letter}|"_")*   { 
+                                            printf("IDENTIFIER(%s)\n", yytext); 
+                                            update_column(); 
+                                            last_token_type = TOK_IDENTIFIER;
+                                        }
 
 \"                                      { 
                                             BEGIN(STRING); 
