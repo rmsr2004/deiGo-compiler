@@ -17,4 +17,8 @@ SEMICOLON
 STRLIT("o melhor numero e")
 Line 12, column 21: illegal character (:)
 NATURAL(42)
+<<<<<<< HEAD
 SEMICOLON
+=======
+SEMICOLON
+>>>>>>> e785b6e890d93922ab27064f000bbd998417161d
