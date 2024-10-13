@@ -2,12 +2,15 @@
 
 set -e # Ends the script when an error it's found
 
+<<<<<<< HEAD
 if [ "$#" -ne 1 ]; then
     echo "Error: You must give a <file>.dgo"
     exit 1
 fi
 
 
+=======
+>>>>>>> jsimoes04
 echo -n "lex src/gocompiler.l ... "
 lex src/gocompiler.l
 echo "Done!"
@@ -17,6 +20,12 @@ mv lex.yy.c src/lex.yy.c
 echo -n "cc src/lex.yy.c -o src/gocompiler ... "
 cc src/lex.yy.c -o src/gocompiler
 echo "Done!"
+
+if [ "$#" -ne 1 ]; then
+    ./src/gocompiler
+
+    exit 1
+fi
 
 folder_name=tests/${1}
 
