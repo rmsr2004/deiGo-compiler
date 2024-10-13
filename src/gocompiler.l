@@ -3,7 +3,6 @@
     int column_index = 1;
     
     int last_token_type = 0;
-
     #define TOK_IDENTIFIER 1
     #define TOK_LITERAL 2
     #define TOK_RETURN 3
