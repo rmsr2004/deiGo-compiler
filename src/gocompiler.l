@@ -86,6 +86,7 @@ line_break      \n|\r|\r\n
 {digit}+                                { printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 {digit}+"."{digit}*{exponent}?          { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 "."{digit}+{exponent}*                  { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+{digit}+{exponent}                      { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 
 "//"[^\r\n]*                            { update_column(); }
 
