@@ -7,40 +7,59 @@
     #include <stdio.h>
     #include <string.h>
     #include <stdarg.h>
+
+    /*
+    *   Variables and flags to control the lexical analysis
+    */
     
-    int line_index = 1, column_index = 1;
+    int line_index = 1, column_index = 1;       // Variables to store the current line and column
+    int comment_line = 0, comment_column = 0;   // Variables to store the position where the comment started
+    int string_line = 0, string_column = 0;     // Variables to store the position where the string started
 
-    int comment_line = 0, comment_column = 0;
+    char current_string[128] = "";              // Buffer to store the current string
 
-    int string_line = 0, string_column = 0;
-    char current_string[128] = "";
-    int flag_string = 1;    // Flag to check if the string is valid (1) or not (0)
+    int flag_string = 1;                        // Flag to check if the string is valid (1) or not (0)
+    int emit_semicolon = 0;                     // Flag to check if a semicolon should be emitted
 
-    int emit_semicolon = 0;
-
+    /*
+    *   Updates the line and column indexes
+    */
     void update_line(){
         line_index++;
         column_index = 1;
     }
-    
+    /*
+    *   Updates the column index
+    */
     void update_column(){
         column_index += yyleng;
     }
-
+    /*
+    *   Saves the position where the comment started
+    */
     void save_comment_pos(){
         comment_line = line_index;
         comment_column = column_index;
     }
-
+    /*
+    *   Saves the position where the string started
+    */
     void save_string_pos(){
         string_line = line_index;
         string_column = column_index;
     }
-
+    /*
+    *   Clears the string buffer
+    */
     void clear_string(){
         memset(current_string, 0, sizeof(current_string));
     }
-
+    /*
+    *   Prints an error message
+    *   Examples:
+    *       - error(line_index, column_index, "invalid octal constant (%s)", yytext)
+    *       - error(comment_line, comment_column, "unterminated comment")
+    */
     void error(int line, int column, const char* format, ...){
         va_list args;
         va_start(args, format);
@@ -59,11 +78,11 @@ hex_digit       [0-9a-fA-F]
 oct_digit       [0-7]
 whitespace      [ \t]
 exponent        [eE][+-]?{digit}+
+identifier      ({letter}|"_")({digit}|{letter}|"_")*
 keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto|import|interface|map|range|select|struct|switch|type|"++"|"--"
 valid_escape    \\[fnrt\\\"]
 invalid_escape  \\.|\\
 line_break      \n|\r|\r\n
-
 
 %X  COMMENT STRING
 
@@ -136,7 +155,7 @@ line_break      \n|\r|\r\n
 "os.Args"                               { printf("CMDARGS\n"); update_column(); emit_semicolon = 0; }
 {keyword}                               { printf("RESERVED(%s)\n", yytext); update_column(); emit_semicolon = 0; }
 
-({letter}|"_")({digit}|{letter}|"_")*   { printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+{identifier}                            { printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 
 \"                                      { 
                                             BEGIN(STRING); 
@@ -168,7 +187,6 @@ line_break      \n|\r|\r\n
                                                 emit_semicolon = 1;
                                             } 
                                             update_column();
-                                            
                                         }
 <STRING>.                               { strcat(current_string, yytext); update_column(); }
 
