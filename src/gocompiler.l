@@ -5,7 +5,6 @@
     */
 
     #include <stdio.h>
-    #include <string.h>
     #include <stdarg.h>
 
     /*
@@ -15,8 +14,6 @@
     int line_index = 1, column_index = 1;       // Variables to store the current line and column
     int comment_line = 0, comment_column = 0;   // Variables to store the position where the comment started
     int string_line = 0, string_column = 0;     // Variables to store the position where the string started
-
-    char current_string[128] = "";              // Buffer to store the current string
 
     int flag_string = 1;                        // Flag to check if the string is valid (1) or not (0)
     int emit_semicolon = 0;                     // Flag to check if a semicolon should be emitted
@@ -51,12 +48,6 @@
         string_column = column_index;
     }
     /*
-    *   Clears the string buffer
-    */
-    void clear_string(){
-        memset(current_string, 0, sizeof(current_string));
-    }
-    /*
     *   Prints an error message
     *   Examples:
     *       - error(line_index, column_index, "invalid octal constant (%s)", yytext)
@@ -81,10 +72,11 @@ oct_digit       [0-7]
 whitespace      [ \t]
 exponent        [eE][+-]?{digit}+
 identifier      ({letter}|"_")({digit}|{letter}|"_")*
-keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto|import|interface|map|range|select|struct|switch|type|"++"|"--"
+string 	        ["]([^\n\r\"\\]|(\\n|\\r|\\f|\\t|\\\\|\\\"))*["]
 valid_escape    \\[fnrt\\\"]
 invalid_escape  \\.|\\
 line_break      \n|\r|\r\n
+keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto|import|interface|map|range|select|struct|switch|type|"++"|"--"
 
 %X  COMMENT STRING
 
@@ -159,17 +151,10 @@ line_break      \n|\r|\r\n
 
 {identifier}                            { if(flag) printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 
-\"                                      { 
-                                            BEGIN(STRING); 
-                                            flag_string = 1; 
-                                            save_string_pos();
-                                            clear_string(); 
-                                            update_column();
-                                        }
-<STRING>{valid_escape}                  { strcat(current_string, yytext); update_column(); }
+\"                                      { BEGIN(STRING); save_string_pos(); update_column();}
+<STRING>{valid_escape}                  { update_column(); }
 <STRING>{invalid_escape}                {
                                             error(line_index, column_index, "invalid escape sequence (%s)", yytext);
-                                            flag_string = 0;
                                             update_column(); 
                                         }
 <STRING><<EOF>>                         { 
@@ -182,15 +167,10 @@ line_break      \n|\r|\r\n
                                             error(string_line, string_column, "unterminated string literal");
                                             update_line();
                                         }
-<STRING>\"                              { 
-                                            BEGIN(INITIAL); 
-                                            if(flag_string ){
-                                                if(flag) printf("STRLIT(\"%s\")\n", current_string);
-                                                emit_semicolon = 1;
-                                            } 
-                                            update_column();
-                                        }
-<STRING>.                               { strcat(current_string, yytext); update_column(); }
+<STRING>\"                              { BEGIN(INITIAL); update_column(); }
+<STRING>.                               { update_column(); }
+
+{string}                                { if(flag) printf("STRLIT(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 
 <<EOF>>                                 { 
                                             if(emit_semicolon){
@@ -204,11 +184,13 @@ line_break      \n|\r|\r\n
 %%
 extern int yylex();
 int main(int argc, char* argv[]){
+    /* Check if -l flag is present */
     if(argc > 1){
         if(strcmp(argv[1], "-l") == 0){
             flag = 1;
         }
     }
+
     yylex();    /* run the lexical analysis automaton */
     return 0;
 }
