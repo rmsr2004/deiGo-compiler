@@ -614,40 +614,59 @@ char *yytext;
     #include <stdio.h>
     #include <string.h>
     #include <stdarg.h>
+
+    /*
+    *   Variables and flags to control the lexical analysis
+    */
     
-    int line_index = 1, column_index = 1;
+    int line_index = 1, column_index = 1;       // Variables to store the current line and column
+    int comment_line = 0, comment_column = 0;   // Variables to store the position where the comment started
+    int string_line = 0, string_column = 0;     // Variables to store the position where the string started
 
-    int comment_line = 0, comment_column = 0;
+    char current_string[128] = "";              // Buffer to store the current string
 
-    int string_line = 0, string_column = 0;
-    char current_string[128] = "";
-    int flag_string = 1;    // Flag to check if the string is valid (1) or not (0)
+    int flag_string = 1;                        // Flag to check if the string is valid (1) or not (0)
+    int emit_semicolon = 0;                     // Flag to check if a semicolon should be emitted
 
-    int emit_semicolon = 0;
-
+    /*
+    *   Updates the line and column indexes
+    */
     void update_line(){
         line_index++;
         column_index = 1;
     }
-    
+    /*
+    *   Updates the column index
+    */
     void update_column(){
         column_index += yyleng;
     }
-
+    /*
+    *   Saves the position where the comment started
+    */
     void save_comment_pos(){
         comment_line = line_index;
         comment_column = column_index;
     }
-
+    /*
+    *   Saves the position where the string started
+    */
     void save_string_pos(){
         string_line = line_index;
         string_column = column_index;
     }
-
+    /*
+    *   Clears the string buffer
+    */
     void clear_string(){
         memset(current_string, 0, sizeof(current_string));
     }
-
+    /*
+    *   Prints an error message
+    *   Examples:
+    *       - error(line_index, column_index, "invalid octal constant (%s)", yytext)
+    *       - error(comment_line, comment_column, "unterminated comment")
+    */
     void error(int line, int column, const char* format, ...){
         va_list args;
         va_start(args, format);
@@ -658,9 +677,9 @@ char *yytext;
 
         va_end(args);
     }
-#line 662 "lex.yy.c"
+#line 681 "lex.yy.c"
 
-#line 664 "lex.yy.c"
+#line 683 "lex.yy.c"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -879,9 +898,13 @@ YY_DECL
 		}
 
 	{
+<<<<<<< Updated upstream
 #line 70 "src/gocompiler.l"
+=======
+#line 89 "src/gocompiler.l"
+>>>>>>> Stashed changes
 
-#line 885 "lex.yy.c"
+#line 904 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -940,13 +963,21 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 71 "src/gocompiler.l"
+=======
+#line 90 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { update_column(); }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 72 "src/gocompiler.l"
+=======
+#line 91 "src/gocompiler.l"
+>>>>>>> Stashed changes
 {
                                             if(emit_semicolon){
                                                 printf("SEMICOLON\n");
@@ -957,17 +988,29 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 80 "src/gocompiler.l"
+=======
+#line 99 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 81 "src/gocompiler.l"
+=======
+#line 100 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 82 "src/gocompiler.l"
+=======
+#line 101 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { 
                                             error(line_index, column_index, "invalid octal constant (%s)", yytext);
                                             update_column(); 
@@ -975,257 +1018,461 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 86 "src/gocompiler.l"
+=======
+#line 105 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 87 "src/gocompiler.l"
+=======
+#line 106 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 88 "src/gocompiler.l"
+=======
+#line 107 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 89 "src/gocompiler.l"
+=======
+#line 108 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 91 "src/gocompiler.l"
+=======
+#line 110 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { update_column(); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 93 "src/gocompiler.l"
+=======
+#line 112 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { BEGIN(COMMENT); save_comment_pos(); update_column(); }
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 94 "src/gocompiler.l"
+=======
+#line 113 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { update_line(); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 95 "src/gocompiler.l"
+=======
+#line 114 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { BEGIN(INITIAL); update_column(); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 96 "src/gocompiler.l"
 { update_column(); }
 	YY_BREAK
 case YY_STATE_EOF(COMMENT):
 #line 97 "src/gocompiler.l"
+=======
+#line 115 "src/gocompiler.l"
+{ update_column(); }
+	YY_BREAK
+case YY_STATE_EOF(COMMENT):
+#line 116 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { error(comment_line, comment_column, "unterminated comment"); yyterminate(); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 99 "src/gocompiler.l"
+=======
+#line 118 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("SEMICOLON\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 100 "src/gocompiler.l"
+=======
+#line 119 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("COMMA\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 101 "src/gocompiler.l"
+=======
+#line 120 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("BLANKID\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 102 "src/gocompiler.l"
+=======
+#line 121 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("ASSIGN\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 103 "src/gocompiler.l"
+=======
+#line 122 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("STAR\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 104 "src/gocompiler.l"
+=======
+#line 123 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("DIV\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 105 "src/gocompiler.l"
+=======
+#line 124 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("MINUS\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 106 "src/gocompiler.l"
+=======
+#line 125 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("PLUS\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 107 "src/gocompiler.l"
+=======
+#line 126 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("EQ\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 108 "src/gocompiler.l"
+=======
+#line 127 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("GE\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 109 "src/gocompiler.l"
+=======
+#line 128 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("GT\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 110 "src/gocompiler.l"
+=======
+#line 129 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("LBRACE\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 111 "src/gocompiler.l"
+=======
+#line 130 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("LE\n"); update_column(); emit_semicolon = 0;  }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 112 "src/gocompiler.l"
+=======
+#line 131 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("LPAR\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 113 "src/gocompiler.l"
+=======
+#line 132 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("LSQ\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 114 "src/gocompiler.l"
+=======
+#line 133 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("LT\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 115 "src/gocompiler.l"
+=======
+#line 134 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("MOD\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 116 "src/gocompiler.l"
+=======
+#line 135 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("NE\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 117 "src/gocompiler.l"
+=======
+#line 136 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("NOT\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 118 "src/gocompiler.l"
+=======
+#line 137 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("AND\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 119 "src/gocompiler.l"
+=======
+#line 138 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("OR\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 120 "src/gocompiler.l"
+=======
+#line 139 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("RBRACE\n"); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 121 "src/gocompiler.l"
+=======
+#line 140 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("RPAR\n"); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 122 "src/gocompiler.l"
+=======
+#line 141 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("RSQ\n"); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 123 "src/gocompiler.l"
+=======
+#line 142 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("PACKAGE\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 124 "src/gocompiler.l"
+=======
+#line 143 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("RETURN\n"); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 125 "src/gocompiler.l"
+=======
+#line 144 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("ELSE\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 126 "src/gocompiler.l"
+=======
+#line 145 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("FOR\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 127 "src/gocompiler.l"
+=======
+#line 146 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("IF\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 128 "src/gocompiler.l"
+=======
+#line 147 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("VAR\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 129 "src/gocompiler.l"
+=======
+#line 148 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("INT\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 130 "src/gocompiler.l"
+=======
+#line 149 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("FLOAT32\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 131 "src/gocompiler.l"
+=======
+#line 150 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("BOOL\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 132 "src/gocompiler.l"
+=======
+#line 151 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("STRING\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 133 "src/gocompiler.l"
+=======
+#line 152 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("PRINT\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 134 "src/gocompiler.l"
+=======
+#line 153 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("PARSEINT\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 135 "src/gocompiler.l"
+=======
+#line 154 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("FUNC\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 136 "src/gocompiler.l"
+=======
+#line 155 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("CMDARGS\n"); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 137 "src/gocompiler.l"
+=======
+#line 156 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("RESERVED(%s)\n", yytext); update_column(); emit_semicolon = 0; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 139 "src/gocompiler.l"
+=======
+#line 158 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 141 "src/gocompiler.l"
+=======
+#line 160 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { 
                                             BEGIN(STRING); 
                                             flag_string = 1; 
@@ -1236,12 +1483,20 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 148 "src/gocompiler.l"
+=======
+#line 167 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { strcat(current_string, yytext); update_column(); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 149 "src/gocompiler.l"
+=======
+#line 168 "src/gocompiler.l"
+>>>>>>> Stashed changes
 {
                                             error(line_index, column_index, "invalid escape sequence (%s)", yytext);
                                             flag_string = 0;
@@ -1249,7 +1504,11 @@ YY_RULE_SETUP
                                         }
 	YY_BREAK
 case YY_STATE_EOF(STRING):
+<<<<<<< Updated upstream
 #line 154 "src/gocompiler.l"
+=======
+#line 173 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { 
                                             BEGIN(INITIAL);
                                             error(string_line, string_column, "unterminated string literal");
@@ -1259,7 +1518,11 @@ case YY_STATE_EOF(STRING):
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 159 "src/gocompiler.l"
+=======
+#line 178 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { 
                                             BEGIN(INITIAL); 
                                             error(string_line, string_column, "unterminated string literal");
@@ -1268,7 +1531,11 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
+<<<<<<< Updated upstream
 #line 164 "src/gocompiler.l"
+=======
+#line 183 "src/gocompiler.l"
+>>>>>>> Stashed changes
 { 
                                             BEGIN(INITIAL); 
                                             if(flag_string){
@@ -1281,11 +1548,11 @@ YY_RULE_SETUP
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 173 "src/gocompiler.l"
+#line 191 "src/gocompiler.l"
 { strcat(current_string, yytext); update_column(); }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 175 "src/gocompiler.l"
+#line 193 "src/gocompiler.l"
 { 
                                             if(emit_semicolon){
                                                 printf("SEMICOLON\n");
@@ -1296,15 +1563,19 @@ case YY_STATE_EOF(INITIAL):
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 183 "src/gocompiler.l"
+#line 201 "src/gocompiler.l"
 { error(line_index, column_index, "illegal character (%s)", yytext); update_column(); }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 184 "src/gocompiler.l"
+#line 202 "src/gocompiler.l"
 ECHO;
 	YY_BREAK
+<<<<<<< Updated upstream
 #line 1308 "lex.yy.c"
+=======
+#line 1326 "lex.yy.c"
+>>>>>>> Stashed changes
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2307,7 +2578,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 184 "src/gocompiler.l"
+#line 202 "src/gocompiler.l"
 
 extern int yylex();
 int main(){
