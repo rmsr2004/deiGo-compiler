@@ -21,6 +21,8 @@
     int flag_string = 1;                        // Flag to check if the string is valid (1) or not (0)
     int emit_semicolon = 0;                     // Flag to check if a semicolon should be emitted
 
+    int flag = 0;                               // Flag to check if -l flag is present
+
     /*
     *   Updates the line and column indexes
     */
@@ -90,22 +92,22 @@ line_break      \n|\r|\r\n
 {whitespace}+                           { update_column(); }
 {line_break}                            {
                                             if(emit_semicolon){
-                                                printf("SEMICOLON\n");
+                                                if(flag) printf("SEMICOLON\n");
                                                 emit_semicolon = 0;
                                             }
                                             update_line();
                                         }
 
-0[xX]{hex_digit}+                       { printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
-0{oct_digit}+                           { printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+0[xX]{hex_digit}+                       { if(flag) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+0{oct_digit}+                           { if(flag) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 0{digit}+                               { 
                                             error(line_index, column_index, "invalid octal constant (%s)", yytext);
                                             update_column(); 
                                         }
-{digit}+                                { printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
-{digit}+"."{digit}*{exponent}?          { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
-"."{digit}+{exponent}*                  { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
-{digit}+{exponent}                      { printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+{digit}+                                { if(flag) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+{digit}+"."{digit}*{exponent}?          { if(flag) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+"."{digit}+{exponent}*                  { if(flag) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+{digit}+{exponent}                      { if(flag) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 
 "//"[^\r\n]*                            { update_column(); }
 
@@ -115,47 +117,47 @@ line_break      \n|\r|\r\n
 <COMMENT>.                              { update_column(); }
 <COMMENT><<EOF>>                        { error(comment_line, comment_column, "unterminated comment"); yyterminate(); }
 
-";"                                     { printf("SEMICOLON\n"); update_column(); emit_semicolon = 0; }
-","                                     { printf("COMMA\n"); update_column(); emit_semicolon = 0; }
-"_"                                     { printf("BLANKID\n"); update_column(); emit_semicolon = 0; }
-"="                                     { printf("ASSIGN\n"); update_column(); emit_semicolon = 0; }
-"*"                                     { printf("STAR\n"); update_column(); emit_semicolon = 0; }
-"/"                                     { printf("DIV\n"); update_column(); emit_semicolon = 0; }
-"-"                                     { printf("MINUS\n"); update_column(); emit_semicolon = 0; }
-"+"                                     { printf("PLUS\n"); update_column(); emit_semicolon = 0; }
-"=="                                    { printf("EQ\n"); update_column(); emit_semicolon = 0; }
-">="                                    { printf("GE\n"); update_column(); emit_semicolon = 0; }
-">"                                     { printf("GT\n"); update_column(); emit_semicolon = 0; }
-"{"                                     { printf("LBRACE\n"); update_column(); emit_semicolon = 0; }
-"<="                                    { printf("LE\n"); update_column(); emit_semicolon = 0;  }
-"("                                     { printf("LPAR\n"); update_column(); emit_semicolon = 0; }
-"["                                     { printf("LSQ\n"); update_column(); emit_semicolon = 0; }
-"<"                                     { printf("LT\n"); update_column(); emit_semicolon = 0; }
-"%"                                     { printf("MOD\n"); update_column(); emit_semicolon = 0; }
-"!="                                    { printf("NE\n"); update_column(); emit_semicolon = 0; }
-"!"                                     { printf("NOT\n"); update_column(); emit_semicolon = 0; }
-"&&"                                    { printf("AND\n"); update_column(); emit_semicolon = 0; }
-"||"                                    { printf("OR\n"); update_column(); emit_semicolon = 0; }
-"}"                                     { printf("RBRACE\n"); update_column(); emit_semicolon = 1; }
-")"                                     { printf("RPAR\n"); update_column(); emit_semicolon = 1; }
-"]"                                     { printf("RSQ\n"); update_column(); emit_semicolon = 1; }
-"package"                               { printf("PACKAGE\n"); update_column(); emit_semicolon = 0; }
-"return"                                { printf("RETURN\n"); update_column(); emit_semicolon = 1; }
-"else"                                  { printf("ELSE\n"); update_column(); emit_semicolon = 0; }
-"for"                                   { printf("FOR\n"); update_column(); emit_semicolon = 0; }
-"if"                                    { printf("IF\n"); update_column(); emit_semicolon = 0; }
-"var"                                   { printf("VAR\n"); update_column(); emit_semicolon = 0; }
-"int"                                   { printf("INT\n"); update_column(); emit_semicolon = 0; }
-"float32"                               { printf("FLOAT32\n"); update_column(); emit_semicolon = 0; }
-"bool"                                  { printf("BOOL\n"); update_column(); emit_semicolon = 0; }
-"string"                                { printf("STRING\n"); update_column(); emit_semicolon = 0; }
-"fmt.Println"                           { printf("PRINT\n"); update_column(); emit_semicolon = 0; }
-"strconv.Atoi"                          { printf("PARSEINT\n"); update_column(); emit_semicolon = 0; }
-"func"                                  { printf("FUNC\n"); update_column(); emit_semicolon = 0; }
-"os.Args"                               { printf("CMDARGS\n"); update_column(); emit_semicolon = 0; }
-{keyword}                               { printf("RESERVED(%s)\n", yytext); update_column(); emit_semicolon = 0; }
+";"                                     { if(flag) printf("SEMICOLON\n"); update_column(); emit_semicolon = 0; }
+","                                     { if(flag) printf("COMMA\n"); update_column(); emit_semicolon = 0; }
+"_"                                     { if(flag) printf("BLANKID\n"); update_column(); emit_semicolon = 0; }
+"="                                     { if(flag) printf("ASSIGN\n"); update_column(); emit_semicolon = 0; }
+"*"                                     { if(flag) printf("STAR\n"); update_column(); emit_semicolon = 0; }
+"/"                                     { if(flag) printf("DIV\n"); update_column(); emit_semicolon = 0; }
+"-"                                     { if(flag) printf("MINUS\n"); update_column(); emit_semicolon = 0; }
+"+"                                     { if(flag) printf("PLUS\n"); update_column(); emit_semicolon = 0; }
+"=="                                    { if(flag) printf("EQ\n"); update_column(); emit_semicolon = 0; }
+">="                                    { if(flag) printf("GE\n"); update_column(); emit_semicolon = 0; }
+">"                                     { if(flag) printf("GT\n"); update_column(); emit_semicolon = 0; }
+"{"                                     { if(flag) printf("LBRACE\n"); update_column(); emit_semicolon = 0; }
+"<="                                    { if(flag) printf("LE\n"); update_column(); emit_semicolon = 0;  }
+"("                                     { if(flag) printf("LPAR\n"); update_column(); emit_semicolon = 0; }
+"["                                     { if(flag) printf("LSQ\n"); update_column(); emit_semicolon = 0; }
+"<"                                     { if(flag) printf("LT\n"); update_column(); emit_semicolon = 0; }
+"%"                                     { if(flag) printf("MOD\n"); update_column(); emit_semicolon = 0; }
+"!="                                    { if(flag) printf("NE\n"); update_column(); emit_semicolon = 0; }
+"!"                                     { if(flag) printf("NOT\n"); update_column(); emit_semicolon = 0; }
+"&&"                                    { if(flag) printf("AND\n"); update_column(); emit_semicolon = 0; }
+"||"                                    { if(flag) printf("OR\n"); update_column(); emit_semicolon = 0; }
+"}"                                     { if(flag) printf("RBRACE\n"); update_column(); emit_semicolon = 1; }
+")"                                     { if(flag) printf("RPAR\n"); update_column(); emit_semicolon = 1; }
+"]"                                     { if(flag) printf("RSQ\n"); update_column(); emit_semicolon = 1; }
+"package"                               { if(flag) printf("PACKAGE\n"); update_column(); emit_semicolon = 0; }
+"return"                                { if(flag) printf("RETURN\n"); update_column(); emit_semicolon = 1; }
+"else"                                  { if(flag) printf("ELSE\n"); update_column(); emit_semicolon = 0; }
+"for"                                   { if(flag) printf("FOR\n"); update_column(); emit_semicolon = 0; }
+"if"                                    { if(flag) printf("IF\n"); update_column(); emit_semicolon = 0; }
+"var"                                   { if(flag) printf("VAR\n"); update_column(); emit_semicolon = 0; }
+"int"                                   { if(flag) printf("INT\n"); update_column(); emit_semicolon = 0; }
+"float32"                               { if(flag) printf("FLOAT32\n"); update_column(); emit_semicolon = 0; }
+"bool"                                  { if(flag) printf("BOOL\n"); update_column(); emit_semicolon = 0; }
+"string"                                { if(flag) printf("STRING\n"); update_column(); emit_semicolon = 0; }
+"fmt.Println"                           { if(flag) printf("PRINT\n"); update_column(); emit_semicolon = 0; }
+"strconv.Atoi"                          { if(flag) printf("PARSEINT\n"); update_column(); emit_semicolon = 0; }
+"func"                                  { if(flag) printf("FUNC\n"); update_column(); emit_semicolon = 0; }
+"os.Args"                               { if(flag) printf("CMDARGS\n"); update_column(); emit_semicolon = 0; }
+{keyword}                               { if(flag) printf("RESERVED(%s)\n", yytext); update_column(); emit_semicolon = 0; }
 
-{identifier}                            { printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; }
+{identifier}                            { if(flag) printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; }
 
 \"                                      { 
                                             BEGIN(STRING); 
@@ -182,8 +184,8 @@ line_break      \n|\r|\r\n
                                         }
 <STRING>\"                              { 
                                             BEGIN(INITIAL); 
-                                            if(flag_string){
-                                                printf("STRLIT(\"%s\")\n", current_string);
+                                            if(flag_string ){
+                                                if(flag) printf("STRLIT(\"%s\")\n", current_string);
                                                 emit_semicolon = 1;
                                             } 
                                             update_column();
@@ -192,7 +194,7 @@ line_break      \n|\r|\r\n
 
 <<EOF>>                                 { 
                                             if(emit_semicolon){
-                                                printf("SEMICOLON\n");
+                                                if(flag) printf("SEMICOLON\n");
                                                 emit_semicolon = 0;
                                             }
                                             return 0; 
@@ -201,7 +203,12 @@ line_break      \n|\r|\r\n
 .                                       { error(line_index, column_index, "illegal character (%s)", yytext); update_column(); }
 %%
 extern int yylex();
-int main(){
+int main(int argc, char* argv[]){
+    if(argc > 1){
+        if(strcmp(argv[1], "-l") == 0){
+            flag = 1;
+        }
+    }
     yylex();    /* run the lexical analysis automaton */
     return 0;
 }
