@@ -12,8 +12,8 @@
     void yyerror(char* s);
 %}
 
-%token  IDENTIFIER STRLIT NATURAL DECIMAL SEMICOLON COMMA BLANKID ASSIGN STAR DIV MINUS PLUS EQ GE GT LBRACE LE LPAR LSQ
-%token  LT MOD NE NOT AND OR RBRACE RPAR RSQ PACKAGE RETURN ELSE FOR IF VAR INT FLOAT32 STRING PRINT PARSEINT FUNC CMDARGS RESERVED
+%token  IDENTIFIER STRLIT NATURAL DECIMAL SEMICOLON COMMA BLANKID ASSIGN STAR DIV MINUS PLUS EQ GE GT LBRACE LE LPAR LSQ LT MOD
+%token  NE NOT AND OR RBRACE RPAR RSQ PACKAGE RETURN ELSE FOR IF VAR INT FLOAT32 BOOL STRING PRINT PARSEINT FUNC CMDARGS RESERVED
 
 %left PLUS MINUS STAR DIV MOD
 %left OR AND
@@ -22,6 +22,55 @@
 %right ASSIGN
 
 %%
+
+/*
+*   
+*   To Do:
+*       - things inside of {} and []
+*
+*/
+
+Program:
+    PACKAGE IDENTIFIER SEMICOLON Declarations   { ; }
+    ;
+
+Declarations:
+    ;
+
+VarDeclaration:
+    VAR VarSpec                             { ; }
+    | VAR LPAR VarSpec SEMICOLON RPAR       { ; }
+    ;
+
+VarSpec:
+    ;
+
+Type:
+    INT             { ; }
+    | FLOAT32       { ; }
+    | BOOL          { ; }
+    | STRING        { ; }
+    ;
+
+FuncDeclaration:
+    ;
+
+Parameters:
+    ;
+
+FuncBody:
+    LBRACE VarsAndStatements RBRACE { ; }
+    ;
+
+VarsAndStatements:
+    ;
+
+Statement: 
+    IDENTIFIER ASSIGN Expr       { ; }
+    | FuncInvocation | ParseArgs { ; }
+    | error                      { ; }
+    ;
+    
 ParseArgs:
     IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR CMDARGS LSQ Expr RSQ RPAR     { ; }
     | IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR                  { ; }
@@ -29,7 +78,6 @@ ParseArgs:
 
 FuncInvocation:
     IDENTIFIER LPAR RPAR                        { ; }
-    | IDENTIFIER LPAR Expr COMMA Expr RPAR      { ; }
     | IDENTIFIER LPAR error RPAR                { ; }
     ;
 
