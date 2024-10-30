@@ -46,7 +46,7 @@ struct node_list {
     struct node_list *next;         // A pointer to the next element in the list.
 };
 
-struct node* newnode(enum category category, char *token);
+struct node* new_node(enum category category, char *token);
 void add_child(struct node* parent, struct node* child);
 void print_ast(struct node *node, int depth);
 const char* category_to_string(enum category cat);

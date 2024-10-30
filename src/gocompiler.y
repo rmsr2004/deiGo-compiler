@@ -35,7 +35,7 @@
 %%
 
 Program:
-    PACKAGE IDENTIFIER SEMICOLON Declarations   { ; }
+    PACKAGE IDENTIFIER SEMICOLON Declarations   { $$ = program = new_node(Program, NULL); add_child(program, $4); }
     ;
 
 Declarations:

@@ -15,7 +15,7 @@
 * @param token The token associated with the node.
 * @return A pointer to the newly created node.
 */
-struct node* newnode(enum category category, char *token) {
+struct node* new_node(enum category category, char *token) {
     struct node *new = malloc(sizeof(struct node));
     new->category = category;
     new->token = token;
