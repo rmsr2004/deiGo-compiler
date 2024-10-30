@@ -2,6 +2,12 @@
 
 set -e # Exit the script if any command returns a non-zero status (error)
 
+# Run yacc on the specified source file
+echo -n "yacc -dv src/gocompiler.y ... "
+yacc -dv src/gocompiler.y
+echo "Done!"
+
+
 # Run lex on the specified source file
 echo -n "lex src/gocompiler.l ... "
 lex src/gocompiler.l
@@ -9,10 +15,11 @@ echo "Done!"
 
 # Move the generated lex.yy.c file to the src directory
 mv lex.yy.c src/lex.yy.c
+mv y.tab.c src/y.tab.c
 
 # Compile the lex.yy.c file into the gocompiler binary
 echo -n "cc src/lex.yy.c -o src/gocompiler ... "
-cc src/lex.yy.c -o src/gocompiler
+cc src/lex.yy.c src/y.tab.c -o src/gocompiler
 echo "Done!"
 
 # Check if the number of arguments passed is not equal to 1
