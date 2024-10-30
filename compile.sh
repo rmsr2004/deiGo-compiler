@@ -13,9 +13,11 @@ echo -n "lex src/gocompiler.l ... "
 lex src/gocompiler.l
 echo "Done!"
 
-# Move the generated lex.yy.c file to the src directory
+# Move the generated lex.yy.c, y.tab.c and y.tab.h files to the src directory
 mv lex.yy.c src/lex.yy.c
 mv y.tab.c src/y.tab.c
+mv y.tab.h src/y.tab.h
+mv y.output src/y.output
 
 # Compile the lex.yy.c file into the gocompiler binary
 echo -n "cc src/lex.yy.c -o src/gocompiler ... "
