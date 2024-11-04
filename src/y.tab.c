@@ -315,9 +315,8 @@ enum yysymbol_kind_t
   YYSYMBOL_StatementAux = 59,              /* StatementAux  */
   YYSYMBOL_ParseArgs = 60,                 /* ParseArgs  */
   YYSYMBOL_FuncInvocation = 61,            /* FuncInvocation  */
-  YYSYMBOL_62_1 = 62,                      /* $@1  */
-  YYSYMBOL_FuncInvocationAux = 63,         /* FuncInvocationAux  */
-  YYSYMBOL_Expr = 64                       /* Expr  */
+  YYSYMBOL_FuncInvocationAux = 62,         /* FuncInvocationAux  */
+  YYSYMBOL_Expr = 63                       /* Expr  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -650,11 +649,11 @@ union yyalloc
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  46
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  19
+#define YYNNTS  18
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  69
+#define YYNRULES  70
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  158
+#define YYNSTATES  156
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   300
@@ -709,12 +708,13 @@ static const yytype_int8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    40,    40,    47,    48,    49,    52,    53,    57,    66,
-      67,    71,    72,    73,    74,    78,    88,    95,   103,   114,
-     125,   126,   129,   133,   134,   135,   136,   140,   145,   146,
-     160,   169,   178,   182,   186,   187,   188,   189,   190,   191,
-     195,   196,   199,   200,   204,   204,   206,   210,   211,   214,
+      67,    71,    72,    73,    74,    78,    87,    94,   102,   113,
+     124,   125,   128,   132,   133,   134,   135,   139,   144,   145,
+     159,   168,   177,   181,   185,   186,   187,   188,   189,   190,
+     194,   195,   198,   199,   204,   205,   206,   210,   211,   214,
      215,   216,   217,   218,   219,   220,   221,   222,   223,   224,
-     225,   226,   227,   228,   229,   230,   231,   232,   233,   234
+     225,   226,   227,   228,   229,   230,   231,   232,   233,   234,
+     235
 };
 #endif
 
@@ -739,7 +739,7 @@ static const char *const yytname[] =
   "$accept", "Program", "Declarations", "VarDeclaration", "VarSpec",
   "VarSpecAux", "Type", "FuncDeclaration", "Parameters", "ParametersAux",
   "FuncBody", "VarsAndStatements", "Statement", "StatementAux",
-  "ParseArgs", "FuncInvocation", "$@1", "FuncInvocationAux", "Expr", YY_NULLPTR
+  "ParseArgs", "FuncInvocation", "FuncInvocationAux", "Expr", YY_NULLPTR
 };
 
 static const char *
@@ -749,7 +749,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-53)
+#define YYPACT_NINF (-67)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -763,22 +763,22 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -20,   -32,    28,    50,   -53,   -22,   -11,    13,   -53,    54,
-      56,    17,    58,   -53,    47,   -22,   -22,    65,    29,     0,
-     -21,   -53,   -53,    44,    58,   -53,   -53,   -53,   -53,   -53,
-      52,     0,    48,   -53,   -53,   -53,    60,   -53,    71,    52,
-      77,   -53,    36,   -53,    60,   -53,   -53,   -53,    89,   -53,
-     126,   113,   126,    63,     2,    78,    79,   -53,   -53,     0,
-     -53,    81,    73,   126,   126,    51,   126,   -53,   -53,   -53,
-     273,    89,   239,   256,   122,    84,   126,    55,   -53,   -53,
-      71,    89,   -53,   286,   286,    85,   201,   -53,   126,   126,
-     126,   126,   126,   126,   126,   126,   126,   126,   126,   126,
-     126,    80,    89,    89,    86,   220,    96,   273,    87,   164,
-     -53,   -53,   -53,   -53,   286,   286,   286,   286,   -53,   -53,
-     -53,   -53,   -53,   286,   -53,   133,   133,   -53,    82,    91,
-     -53,   -53,    83,   -53,   126,    99,   -53,   104,   100,   164,
-     -53,   111,    15,   -53,    98,    89,   103,   120,   124,   117,
-     -53,   126,   125,   -53,   181,   -53,   127,   -53
+      -9,   -22,    25,    23,   -67,   -19,   -12,   -14,   -67,    27,
+      31,    -2,    37,   -67,    28,   -19,   -19,    40,     4,    53,
+     -13,   -67,   -67,    47,    37,   -67,   -67,   -67,   -67,   -67,
+      32,    53,    48,   -67,   -67,   -67,    46,   -67,    58,    32,
+      96,   -67,    36,   -67,    46,   -67,   -67,   -67,   111,   -67,
+     137,   122,   137,    62,     1,    79,    88,   -67,   -67,    53,
+     -67,    89,    69,   137,   137,    74,   137,    80,   -67,   -67,
+     -67,   273,   111,   239,   256,   113,    93,   137,    60,   -67,
+     -67,    58,   111,   -67,   286,   286,    75,   201,   -67,   137,
+     137,   137,   137,   137,   137,   137,   137,   137,   137,   137,
+     137,   137,    78,   111,   111,    82,   220,    99,   273,    83,
+     -67,   164,   -67,   -67,   -67,   -67,   286,   286,   286,   286,
+     -67,   -67,   -67,   -67,   -67,   286,   -67,   149,   149,   -67,
+      87,    90,   -67,   -67,    81,   -67,   137,    91,   -67,    84,
+     105,   164,   -67,   116,     0,   -67,   111,   115,   127,   121,
+     -67,   137,   -67,   181,   124,   -67
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -793,29 +793,29 @@ static const yytype_int8 yydefact[] =
        0,    18,     0,    19,     0,    17,    39,    25,     0,    22,
       34,     0,     0,     0,     0,     0,     0,    36,    35,     0,
       15,     0,     0,     0,     0,     0,     0,    67,    65,    66,
-      33,     0,     0,     0,     0,     0,     0,     0,    23,    24,
-      21,     0,    28,    63,    64,     0,     0,    62,     0,     0,
+      68,    33,     0,     0,     0,     0,     0,     0,     0,    23,
+      24,    21,     0,    28,    63,    64,     0,     0,    62,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    27,     0,    48,
-      20,    40,    69,    68,    59,    60,    58,    57,    53,    56,
-      52,    55,    51,    61,    54,    50,    49,    32,     0,     0,
-      38,    37,     0,    46,     0,     0,    31,    30,     0,    48,
-      44,     0,     0,    47,     0,     0,     0,     0,     0,     0,
-      43,     0,     0,    29,     0,    45,     0,    42
+       0,     0,     0,     0,     0,     0,     0,     0,    27,     0,
+      44,    48,    20,    40,    70,    69,    59,    60,    58,    57,
+      53,    56,    52,    55,    51,    61,    54,    50,    49,    32,
+       0,     0,    38,    37,     0,    46,     0,     0,    31,    30,
+       0,    48,    45,     0,     0,    47,     0,     0,     0,     0,
+      43,     0,    29,     0,     0,    42
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -53,   -53,     6,   109,   144,   134,   -28,   -53,   -53,   101,
-     -12,   -53,   119,   -52,   -53,   -53,   -53,    21,   -51
+     -67,   -67,    -1,   110,   140,   135,   -28,   -67,   -67,   104,
+      35,   -67,   130,   -66,   -67,   -40,    54,   -42
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_uint8 yydefgoto[] =
 {
        0,     2,     8,     9,    13,    19,    29,    10,    32,    43,
-      37,    40,    61,    62,    57,    58,   144,   135,    70
+      37,    40,    61,    62,    57,    70,   137,    71
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -823,61 +823,61 @@ static const yytype_uint8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
-      72,    73,    36,    38,    30,    11,    75,     1,    76,     3,
-       6,    44,    83,    84,    86,    87,   146,     7,    77,   101,
-      31,    21,    22,   105,    41,   107,   109,    45,     4,   111,
-      12,    80,    60,    25,    26,    27,    28,   114,   115,   116,
-     117,   118,   119,   120,   121,   122,   123,   124,   125,   126,
-     128,   129,    85,     5,    14,   147,   108,    15,    12,    16,
-      63,    64,    18,    20,    63,    64,    35,    65,    23,    33,
-      24,    65,    66,    39,    35,    42,    66,    59,    46,    74,
-      47,    78,    79,   139,    81,    25,    26,    27,    28,   106,
-      46,    48,    67,   149,    68,    69,    67,    82,    68,    69,
-     154,    49,   132,    48,   127,    50,   136,    51,    52,     6,
-     112,   130,   133,   -41,    53,   137,   142,    50,    54,    51,
-      52,   138,    63,    64,   140,   145,    53,    71,   150,    65,
-      54,    63,    64,   141,    66,    63,    64,   151,    65,   148,
-     152,   153,    65,    66,    92,    93,    94,    66,    95,    55,
-     155,    96,   157,    98,    67,    17,    68,    69,    34,    56,
-     143,     0,     0,    67,   104,    68,    69,    67,   134,    68,
-      69,    88,    89,    90,    91,    92,    93,    94,     0,    95,
-       0,   110,    96,    97,    98,     0,    99,   100,    88,    89,
-      90,    91,    92,    93,    94,     0,    95,     0,     0,    96,
-      97,    98,     0,    99,   100,     0,     0,   156,    88,    89,
-      90,    91,    92,    93,    94,     0,    95,     0,     0,    96,
-      97,    98,     0,    99,   100,     0,   113,    88,    89,    90,
-      91,    92,    93,    94,     0,    95,     0,     0,    96,    97,
-      98,     0,    99,   100,     0,   131,    88,    89,    90,    91,
-      92,    93,    94,   102,    95,     0,     0,    96,    97,    98,
-       0,    99,   100,    88,    89,    90,    91,    92,    93,    94,
-     103,    95,     0,     0,    96,    97,    98,     0,    99,   100,
-      88,    89,    90,    91,    92,    93,    94,     0,    95,     0,
-       0,    96,    97,    98,     0,    99,   100,    92,    93,    94,
-       0,    95,     0,     0,    96,     0,    98,     0,    99,   100
+      58,   147,    36,    38,    11,    76,   102,    77,    58,    73,
+      74,    44,    30,     6,    21,    22,   113,    78,     1,     3,
+       7,    84,    85,    87,    88,     4,     5,    14,    31,    12,
+      15,    81,    58,   106,    16,   108,   111,   130,   131,    12,
+     148,    18,    58,    23,    20,    24,    35,   116,   117,   118,
+     119,   120,   121,   122,   123,   124,   125,   126,   127,   128,
+      35,   109,    42,    58,    58,    25,    26,    27,    28,    63,
+      64,    41,    33,    39,    45,    86,    65,    59,    75,    60,
+     149,    66,    79,    63,    64,   110,    25,    26,    27,    28,
+      65,    80,    82,    83,   141,    66,    78,    46,   107,    47,
+     114,    67,   129,    68,    69,   134,    58,   132,   135,   153,
+      48,   138,    46,   143,   139,    67,   142,    68,    69,   140,
+      49,   144,    63,    64,    50,    48,    51,    52,     6,    65,
+     146,    63,    64,    53,    66,   -41,    72,    54,    65,    50,
+     150,    51,    52,    66,   151,   152,    63,    64,    53,   155,
+      55,    17,    54,    65,    67,   105,    68,    69,    66,    34,
+      93,    94,    95,    67,    96,    68,    69,    97,   136,    99,
+      56,    89,    90,    91,    92,    93,    94,    95,    67,    96,
+      68,    69,    97,    98,    99,   112,   100,   101,    89,    90,
+      91,    92,    93,    94,    95,   145,    96,     0,     0,    97,
+      98,    99,     0,   100,   101,     0,     0,   154,    89,    90,
+      91,    92,    93,    94,    95,     0,    96,     0,     0,    97,
+      98,    99,     0,   100,   101,     0,   115,    89,    90,    91,
+      92,    93,    94,    95,     0,    96,     0,     0,    97,    98,
+      99,     0,   100,   101,     0,   133,    89,    90,    91,    92,
+      93,    94,    95,   103,    96,     0,     0,    97,    98,    99,
+       0,   100,   101,    89,    90,    91,    92,    93,    94,    95,
+     104,    96,     0,     0,    97,    98,    99,     0,   100,   101,
+      89,    90,    91,    92,    93,    94,    95,     0,    96,     0,
+       0,    97,    98,    99,     0,   100,   101,    93,    94,    95,
+       0,    96,     0,     0,    97,     0,    99,     0,   100,   101
 };
 
 static const yytype_int16 yycheck[] =
 {
-      51,    52,    30,    31,    25,    16,     4,    27,     6,    41,
-      32,    39,    63,    64,    65,    66,     1,    39,    16,    71,
-      41,    15,    16,    74,    36,    76,    77,    39,     0,    81,
-      41,    59,    44,    33,    34,    35,    36,    88,    89,    90,
-      91,    92,    93,    94,    95,    96,    97,    98,    99,   100,
-     102,   103,     1,     3,    41,    40,     1,     3,    41,     3,
-       9,    10,     4,    16,     9,    10,    14,    16,     3,    25,
-      41,    16,    21,    25,    14,     4,    21,    41,     1,    16,
-       3,     3,     3,   134,     3,    33,    34,    35,    36,     5,
-       1,    14,    41,   145,    43,    44,    41,    24,    43,    44,
-     151,    24,     6,    14,    24,    28,    24,    30,    31,    32,
-      25,    25,    25,    24,    37,    24,    16,    28,    41,    30,
-      31,    38,     9,    10,    25,    14,    37,    14,    25,    16,
-      41,     9,    10,    29,    21,     9,    10,    17,    16,    41,
-      16,    24,    16,    21,    11,    12,    13,    21,    15,    40,
-      25,    18,    25,    20,    41,    11,    43,    44,    24,    40,
-     139,    -1,    -1,    41,    42,    43,    44,    41,     4,    43,
-      44,     7,     8,     9,    10,    11,    12,    13,    -1,    15,
-      -1,    80,    18,    19,    20,    -1,    22,    23,     7,     8,
-       9,    10,    11,    12,    13,    -1,    15,    -1,    -1,    18,
+      40,     1,    30,    31,    16,     4,    72,     6,    48,    51,
+      52,    39,    25,    32,    15,    16,    82,    16,    27,    41,
+      39,    63,    64,    65,    66,     0,     3,    41,    41,    41,
+       3,    59,    72,    75,     3,    77,    78,   103,   104,    41,
+      40,     4,    82,     3,    16,    41,    14,    89,    90,    91,
+      92,    93,    94,    95,    96,    97,    98,    99,   100,   101,
+      14,     1,     4,   103,   104,    33,    34,    35,    36,     9,
+      10,    36,    25,    25,    39,     1,    16,    41,    16,    44,
+     146,    21,     3,     9,    10,    25,    33,    34,    35,    36,
+      16,     3,     3,    24,   136,    21,    16,     1,     5,     3,
+      25,    41,    24,    43,    44,     6,   146,    25,    25,   151,
+      14,    24,     1,    29,    24,    41,    25,    43,    44,    38,
+      24,    16,     9,    10,    28,    14,    30,    31,    32,    16,
+      14,     9,    10,    37,    21,    24,    14,    41,    16,    28,
+      25,    30,    31,    21,    17,    24,     9,    10,    37,    25,
+      40,    11,    41,    16,    41,    42,    43,    44,    21,    24,
+      11,    12,    13,    41,    15,    43,    44,    18,     4,    20,
+      40,     7,     8,     9,    10,    11,    12,    13,    41,    15,
+      43,    44,    18,    19,    20,    81,    22,    23,     7,     8,
+       9,    10,    11,    12,    13,   141,    15,    -1,    -1,    18,
       19,    20,    -1,    22,    23,    -1,    -1,    26,     7,     8,
        9,    10,    11,    12,    13,    -1,    15,    -1,    -1,    18,
       19,    20,    -1,    22,    23,    -1,    25,     7,     8,     9,
@@ -902,15 +902,15 @@ static const yytype_int8 yystos[] =
       57,    56,     4,    55,    52,    56,     1,     3,    14,    24,
       28,    30,    31,    37,    41,    49,    58,    60,    61,    41,
       56,    58,    59,     9,    10,    16,    21,    41,    43,    44,
-      64,    14,    64,    64,    16,     4,     6,    16,     3,     3,
-      52,     3,    24,    64,    64,     1,    64,    64,     7,     8,
-       9,    10,    11,    12,    13,    15,    18,    19,    20,    22,
-      23,    59,    14,    14,    42,    64,     5,    64,     1,    64,
-      55,    59,    25,    25,    64,    64,    64,    64,    64,    64,
-      64,    64,    64,    64,    64,    64,    64,    24,    59,    59,
-      25,    25,     6,    25,     4,    63,    24,    24,    38,    64,
-      25,    29,    16,    63,    62,    14,     1,    40,    41,    59,
-      25,    17,    16,    24,    64,    25,    26,    25
+      61,    63,    14,    63,    63,    16,     4,     6,    16,     3,
+       3,    52,     3,    24,    63,    63,     1,    63,    63,     7,
+       8,     9,    10,    11,    12,    13,    15,    18,    19,    20,
+      22,    23,    59,    14,    14,    42,    63,     5,    63,     1,
+      25,    63,    55,    59,    25,    25,    63,    63,    63,    63,
+      63,    63,    63,    63,    63,    63,    63,    63,    63,    24,
+      59,    59,    25,    25,     6,    25,     4,    62,    24,    24,
+      38,    63,    25,    29,    16,    62,    14,     1,    40,    59,
+      25,    17,    24,    63,    26,    25
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
@@ -920,9 +920,10 @@ static const yytype_int8 yyr1[] =
       51,    52,    52,    52,    52,    53,    53,    53,    53,    54,
       55,    55,    56,    57,    57,    57,    57,    58,    58,    58,
       58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
-      59,    59,    60,    60,    62,    61,    61,    63,    63,    64,
-      64,    64,    64,    64,    64,    64,    64,    64,    64,    64,
-      64,    64,    64,    64,    64,    64,    64,    64,    64,    64
+      59,    59,    60,    60,    61,    61,    61,    62,    62,    63,
+      63,    63,    63,    63,    63,    63,    63,    63,    63,    63,
+      63,    63,    63,    63,    63,    63,    63,    63,    63,    63,
+      63
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -932,9 +933,10 @@ static const yytype_int8 yyr2[] =
        0,     1,     1,     1,     1,     7,     5,     6,     6,     3,
        4,     0,     3,     3,     3,     2,     0,     3,     3,     9,
        5,     5,     4,     2,     1,     1,     1,     4,     4,     1,
-       3,     0,    11,     8,     0,     9,     4,     3,     0,     3,
+       3,     0,    11,     8,     3,     5,     4,     3,     0,     3,
        3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
-       3,     3,     2,     2,     2,     1,     1,     1,     3,     3
+       3,     3,     2,     2,     2,     1,     1,     1,     1,     3,
+       3
 };
 
 
@@ -1403,37 +1405,37 @@ yyreduce:
                                                     (yyval.node) = program = new_node(Program, NULL);
                                                     add_child(program, (yyvsp[0].node));
                                                 }
-#line 1407 "y.tab.c"
+#line 1409 "y.tab.c"
     break;
 
   case 3: /* Declarations: VarDeclaration SEMICOLON Declarations  */
 #line 47 "src/gocompiler.y"
                                                     { add_child((yyval.node), (yyvsp[0].node)); (yyval.node) = (yyvsp[-2].node); }
-#line 1413 "y.tab.c"
+#line 1415 "y.tab.c"
     break;
 
   case 4: /* Declarations: FuncDeclaration SEMICOLON Declarations  */
 #line 48 "src/gocompiler.y"
                                                     { add_child((yyval.node), (yyvsp[0].node)); (yyval.node) = (yyvsp[-2].node); }
-#line 1419 "y.tab.c"
+#line 1421 "y.tab.c"
     break;
 
   case 5: /* Declarations: %empty  */
 #line 49 "src/gocompiler.y"
                                                     { (yyval.node) = NULL; }
-#line 1425 "y.tab.c"
+#line 1427 "y.tab.c"
     break;
 
   case 6: /* VarDeclaration: VAR VarSpec  */
 #line 52 "src/gocompiler.y"
                                               { (yyval.node) = (yyvsp[0].node); }
-#line 1431 "y.tab.c"
+#line 1433 "y.tab.c"
     break;
 
   case 7: /* VarDeclaration: VAR LPAR VarSpec SEMICOLON RPAR  */
 #line 53 "src/gocompiler.y"
                                               { (yyval.node) = (yyvsp[-2].node);  }
-#line 1437 "y.tab.c"
+#line 1439 "y.tab.c"
     break;
 
   case 8: /* VarSpec: IDENTIFIER VarSpecAux Type  */
@@ -1444,49 +1446,48 @@ yyreduce:
                                                 add_child((yyval.node), new_node(Identifier, (yyvsp[-2].token))); 
                                                 add_child((yyval.node), (yyvsp[0].node)); 
                                             }
-#line 1448 "y.tab.c"
+#line 1450 "y.tab.c"
     break;
 
   case 9: /* VarSpecAux: COMMA IDENTIFIER VarSpecAux  */
 #line 66 "src/gocompiler.y"
                                     { (yyval.node) = new_node(VarDecl, NULL); add_brother((yyval.node), (yyvsp[0].node)); add_child((yyval.node), new_node(Identifier, (yyvsp[-1].token))); }
-#line 1454 "y.tab.c"
+#line 1456 "y.tab.c"
     break;
 
   case 10: /* VarSpecAux: %empty  */
 #line 67 "src/gocompiler.y"
                                     { (yyval.node) = NULL; }
-#line 1460 "y.tab.c"
+#line 1462 "y.tab.c"
     break;
 
   case 11: /* Type: INT  */
 #line 71 "src/gocompiler.y"
                       { (yyval.node) = new_node(Int, NULL); }
-#line 1466 "y.tab.c"
+#line 1468 "y.tab.c"
     break;
 
   case 12: /* Type: FLOAT32  */
 #line 72 "src/gocompiler.y"
                       { (yyval.node) = new_node(Float32, NULL); }
-#line 1472 "y.tab.c"
+#line 1474 "y.tab.c"
     break;
 
   case 13: /* Type: BOOL  */
 #line 73 "src/gocompiler.y"
                       { (yyval.node) = new_node(Bool, NULL); }
-#line 1478 "y.tab.c"
+#line 1480 "y.tab.c"
     break;
 
   case 14: /* Type: STRING  */
 #line 74 "src/gocompiler.y"
                       { (yyval.node) = new_node(String, NULL); }
-#line 1484 "y.tab.c"
+#line 1486 "y.tab.c"
     break;
 
   case 15: /* FuncDeclaration: FUNC IDENTIFIER LPAR Parameters RPAR Type FuncBody  */
 #line 78 "src/gocompiler.y"
                                                         { 
-                                                            printf("Lexical analyzer found IDENTIFIER: %s\n", yytext);
                                                             (yyval.node) = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
                                                             add_child(aux_node, new_node(Identifier, (yyvsp[-5].token)));
@@ -1495,11 +1496,11 @@ yyreduce:
                                                             add_child((yyval.node), aux_node);
                                                             add_brother((yyval.node), (yyvsp[0].node));
                                                         }
-#line 1499 "y.tab.c"
+#line 1500 "y.tab.c"
     break;
 
   case 16: /* FuncDeclaration: FUNC IDENTIFIER LPAR RPAR FuncBody  */
-#line 88 "src/gocompiler.y"
+#line 87 "src/gocompiler.y"
                                                         { 
                                                             (yyval.node) = new_node(FuncDecl, NULL); 
                                                             aux_node = new_node(FuncHeader, NULL); 
@@ -1507,11 +1508,11 @@ yyreduce:
                                                             add_child((yyval.node), aux_node); 
                                                             add_brother((yyval.node), (yyvsp[0].node)); 
                                                         }
-#line 1511 "y.tab.c"
+#line 1512 "y.tab.c"
     break;
 
   case 17: /* FuncDeclaration: FUNC IDENTIFIER LPAR Parameters RPAR FuncBody  */
-#line 95 "src/gocompiler.y"
+#line 94 "src/gocompiler.y"
                                                         { 
                                                             (yyval.node) = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
@@ -1520,11 +1521,11 @@ yyreduce:
                                                             add_child((yyval.node), aux_node);
                                                             add_brother((yyval.node), (yyvsp[0].node));
                                                         }
-#line 1524 "y.tab.c"
+#line 1525 "y.tab.c"
     break;
 
   case 18: /* FuncDeclaration: FUNC IDENTIFIER LPAR RPAR Type FuncBody  */
-#line 103 "src/gocompiler.y"
+#line 102 "src/gocompiler.y"
                                                         { 
                                                             (yyval.node) = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
@@ -1533,11 +1534,11 @@ yyreduce:
                                                             add_child((yyval.node), aux_node);
                                                             add_brother((yyval.node), (yyvsp[0].node));
                                                         }
-#line 1537 "y.tab.c"
+#line 1538 "y.tab.c"
     break;
 
   case 19: /* Parameters: IDENTIFIER Type ParametersAux  */
-#line 114 "src/gocompiler.y"
+#line 113 "src/gocompiler.y"
                                     { 
                                         (yyval.node) = new_node(FuncParams, NULL); 
                                         aux_node = new_node(ParamDecl, NULL); 
@@ -1546,69 +1547,69 @@ yyreduce:
                                         add_child((yyval.node), aux_node);
                                         add_brother(aux_node, (yyvsp[0].node)); 
                                     }
-#line 1550 "y.tab.c"
+#line 1551 "y.tab.c"
     break;
 
   case 20: /* ParametersAux: COMMA IDENTIFIER Type ParametersAux  */
-#line 125 "src/gocompiler.y"
+#line 124 "src/gocompiler.y"
                                             { (yyval.node) = new_node(ParamDecl, NULL); add_child((yyval.node), new_node(Identifier, (yyvsp[-2].token))); add_child((yyval.node), (yyvsp[-1].node)); add_brother((yyval.node), (yyvsp[0].node)); }
-#line 1556 "y.tab.c"
+#line 1557 "y.tab.c"
     break;
 
   case 21: /* ParametersAux: %empty  */
-#line 126 "src/gocompiler.y"
+#line 125 "src/gocompiler.y"
                                             { (yyval.node) = NULL; }
-#line 1562 "y.tab.c"
+#line 1563 "y.tab.c"
     break;
 
   case 22: /* FuncBody: LBRACE VarsAndStatements RBRACE  */
-#line 129 "src/gocompiler.y"
+#line 128 "src/gocompiler.y"
                                     { (yyval.node) = new_node(FuncBody, NULL); add_child((yyval.node), (yyvsp[-1].node)); }
-#line 1568 "y.tab.c"
+#line 1569 "y.tab.c"
     break;
 
   case 23: /* VarsAndStatements: VarsAndStatements VarDeclaration SEMICOLON  */
-#line 133 "src/gocompiler.y"
-                                                { add_child((yyval.node), (yyvsp[-1].node)); (yyval.node) = (yyvsp[-2].node); }
-#line 1574 "y.tab.c"
+#line 132 "src/gocompiler.y"
+                                                { (yyval.node) = (yyvsp[-2].node); add_brother((yyvsp[-2].node),(yyvsp[-1].node)); }
+#line 1575 "y.tab.c"
     break;
 
   case 24: /* VarsAndStatements: VarsAndStatements Statement SEMICOLON  */
-#line 134 "src/gocompiler.y"
-                                                { add_child((yyval.node), (yyvsp[-1].node)); (yyval.node) = (yyvsp[-2].node); }
-#line 1580 "y.tab.c"
+#line 133 "src/gocompiler.y"
+                                                { (yyval.node) = (yyvsp[-2].node); add_brother((yyvsp[-2].node),(yyvsp[-1].node)); }
+#line 1581 "y.tab.c"
     break;
 
   case 25: /* VarsAndStatements: VarsAndStatements SEMICOLON  */
-#line 135 "src/gocompiler.y"
+#line 134 "src/gocompiler.y"
                                                 { (yyval.node) = (yyvsp[-1].node); }
-#line 1586 "y.tab.c"
+#line 1587 "y.tab.c"
     break;
 
   case 26: /* VarsAndStatements: %empty  */
-#line 136 "src/gocompiler.y"
+#line 135 "src/gocompiler.y"
                                                 { (yyval.node) = NULL; }
-#line 1592 "y.tab.c"
+#line 1593 "y.tab.c"
     break;
 
   case 27: /* Statement: IDENTIFIER ASSIGN Expr  */
-#line 140 "src/gocompiler.y"
+#line 139 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(Assign, NULL);
                                                                                 add_child((yyval.node), new_node(Identifier, (yyvsp[-2].token))); 
                                                                                 add_child((yyval.node), (yyvsp[0].node)); 
                                                                             }
-#line 1602 "y.tab.c"
+#line 1603 "y.tab.c"
     break;
 
   case 28: /* Statement: LBRACE StatementAux RBRACE  */
-#line 145 "src/gocompiler.y"
+#line 144 "src/gocompiler.y"
                                                                             { add_child((yyval.node), (yyvsp[-1].node)); }
-#line 1608 "y.tab.c"
+#line 1609 "y.tab.c"
     break;
 
   case 29: /* Statement: IF Expr LBRACE StatementAux RBRACE ELSE LBRACE StatementAux RBRACE  */
-#line 146 "src/gocompiler.y"
+#line 145 "src/gocompiler.y"
                                                                             {
                                                                                 (yyval.node) = new_node(If, NULL);
                                                                                 add_child((yyval.node), (yyvsp[-7].node));
@@ -1623,11 +1624,11 @@ yyreduce:
                                                                                 add_child(aux_node, (yyvsp[-1].node));
                                                                                 add_child((yyval.node), aux_node);
                                                                             }
-#line 1627 "y.tab.c"
+#line 1628 "y.tab.c"
     break;
 
   case 30: /* Statement: IF Expr LBRACE StatementAux RBRACE  */
-#line 160 "src/gocompiler.y"
+#line 159 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(If, NULL);
                                                                                 add_child((yyval.node), (yyvsp[-3].node));
@@ -1637,11 +1638,11 @@ yyreduce:
                                                                                 add_child(aux_node, (yyvsp[-1].node));
                                                                                 add_child((yyval.node), aux_node);
                                                                             }
-#line 1641 "y.tab.c"
+#line 1642 "y.tab.c"
     break;
 
   case 31: /* Statement: FOR Expr LBRACE StatementAux RBRACE  */
-#line 169 "src/gocompiler.y"
+#line 168 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(For, NULL);
                                                                                 add_child((yyval.node), (yyvsp[-3].node));
@@ -1651,245 +1652,251 @@ yyreduce:
                                                                                 add_child(aux_node, (yyvsp[-1].node));
                                                                                 add_child((yyval.node), aux_node); 
                                                                             }
-#line 1655 "y.tab.c"
+#line 1656 "y.tab.c"
     break;
 
   case 32: /* Statement: FOR LBRACE StatementAux RBRACE  */
-#line 178 "src/gocompiler.y"
+#line 177 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(For, NULL);
                                                                                 add_child((yyval.node), (yyvsp[-1].node)); 
                                                                             }
-#line 1664 "y.tab.c"
+#line 1665 "y.tab.c"
     break;
 
   case 33: /* Statement: RETURN Expr  */
-#line 182 "src/gocompiler.y"
+#line 181 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(Return, NULL);
                                                                                 add_child((yyval.node), (yyvsp[0].node)); 
                                                                             }
-#line 1673 "y.tab.c"
+#line 1674 "y.tab.c"
     break;
 
   case 34: /* Statement: RETURN  */
-#line 186 "src/gocompiler.y"
+#line 185 "src/gocompiler.y"
                                                                             { (yyval.node) = new_node(Return, NULL); }
-#line 1679 "y.tab.c"
+#line 1680 "y.tab.c"
     break;
 
   case 35: /* Statement: FuncInvocation  */
-#line 187 "src/gocompiler.y"
+#line 186 "src/gocompiler.y"
                                                                             { (yyval.node) = (yyvsp[0].node); }
-#line 1685 "y.tab.c"
+#line 1686 "y.tab.c"
     break;
 
   case 36: /* Statement: ParseArgs  */
-#line 188 "src/gocompiler.y"
+#line 187 "src/gocompiler.y"
                                                                             { (yyval.node) = (yyvsp[0].node); }
-#line 1691 "y.tab.c"
+#line 1692 "y.tab.c"
     break;
 
   case 37: /* Statement: PRINT LPAR Expr RPAR  */
-#line 189 "src/gocompiler.y"
+#line 188 "src/gocompiler.y"
                                                                             { (yyval.node) = new_node(Print, NULL); add_child((yyval.node), (yyvsp[-1].node)); }
-#line 1697 "y.tab.c"
+#line 1698 "y.tab.c"
     break;
 
   case 38: /* Statement: PRINT LPAR STRLIT RPAR  */
-#line 190 "src/gocompiler.y"
+#line 189 "src/gocompiler.y"
                                                                             { (yyval.node) = new_node(Print, NULL); add_child((yyval.node), new_node(String, (yyvsp[-1].token))); }
-#line 1703 "y.tab.c"
+#line 1704 "y.tab.c"
     break;
 
   case 39: /* Statement: error  */
-#line 191 "src/gocompiler.y"
+#line 190 "src/gocompiler.y"
                                                                             { ; }
-#line 1709 "y.tab.c"
+#line 1710 "y.tab.c"
     break;
 
   case 40: /* StatementAux: Statement SEMICOLON StatementAux  */
-#line 195 "src/gocompiler.y"
+#line 194 "src/gocompiler.y"
                                          { (yyval.node) = (yyvsp[-2].node); add_brother((yyval.node), (yyvsp[0].node)); }
-#line 1715 "y.tab.c"
+#line 1716 "y.tab.c"
     break;
 
   case 41: /* StatementAux: %empty  */
-#line 196 "src/gocompiler.y"
+#line 195 "src/gocompiler.y"
                                          { (yyval.node) = NULL; }
-#line 1721 "y.tab.c"
+#line 1722 "y.tab.c"
     break;
 
   case 42: /* ParseArgs: IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR CMDARGS LSQ Expr RSQ RPAR  */
-#line 199 "src/gocompiler.y"
-                                                                                  { ; }
-#line 1727 "y.tab.c"
+#line 198 "src/gocompiler.y"
+                                                                                  {(yyval.node)=new_node(ParseArgs, NULL); aux_node = new_node(Identifier, (yyvsp[-10].token)); add_child((yyval.node), aux_node); add_brother(aux_node, (yyvsp[-2].node));}
+#line 1728 "y.tab.c"
     break;
 
   case 43: /* ParseArgs: IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR  */
-#line 200 "src/gocompiler.y"
+#line 199 "src/gocompiler.y"
                                                                                   { ; }
-#line 1733 "y.tab.c"
+#line 1734 "y.tab.c"
     break;
 
-  case 44: /* $@1: %empty  */
+  case 44: /* FuncInvocation: IDENTIFIER LPAR RPAR  */
 #line 204 "src/gocompiler.y"
-                                                  { ; }
-#line 1739 "y.tab.c"
+                                                  { (yyval.node) = new_node(Call, NULL); aux_node=new_node(Identifier,(yyvsp[-2].token)); add_child((yyval.node),aux_node); }
+#line 1740 "y.tab.c"
     break;
 
-  case 45: /* FuncInvocation: IDENTIFIER LPAR Expr FuncInvocationAux RPAR $@1 IDENTIFIER LPAR RPAR  */
+  case 45: /* FuncInvocation: IDENTIFIER LPAR Expr FuncInvocationAux RPAR  */
 #line 205 "src/gocompiler.y"
-                                                  { ; }
-#line 1745 "y.tab.c"
+                                                    { (yyval.node) = new_node(Call, NULL); aux_node=new_node(Identifier,(yyvsp[-4].token)); add_child((yyval.node),aux_node); add_brother(aux_node,(yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[-1].node)); }
+#line 1746 "y.tab.c"
     break;
 
   case 46: /* FuncInvocation: IDENTIFIER LPAR error RPAR  */
 #line 206 "src/gocompiler.y"
                                                   { ; }
-#line 1751 "y.tab.c"
+#line 1752 "y.tab.c"
     break;
 
   case 47: /* FuncInvocationAux: COMMA Expr FuncInvocationAux  */
 #line 210 "src/gocompiler.y"
-                                     { ; }
-#line 1757 "y.tab.c"
+                                     { (yyval.node) =  (yyvsp[-1].node); add_brother( (yyvsp[-1].node),(yyvsp[0].node)); }
+#line 1758 "y.tab.c"
     break;
 
   case 48: /* FuncInvocationAux: %empty  */
 #line 211 "src/gocompiler.y"
-                                     { ; }
-#line 1763 "y.tab.c"
+                                     { (yyval.node) = NULL; }
+#line 1764 "y.tab.c"
     break;
 
   case 49: /* Expr: Expr OR Expr  */
 #line 214 "src/gocompiler.y"
-                                    { ; }
-#line 1769 "y.tab.c"
+                                    { (yyval.node) = new_node(Or, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1770 "y.tab.c"
     break;
 
   case 50: /* Expr: Expr AND Expr  */
 #line 215 "src/gocompiler.y"
-                                    { ; }
-#line 1775 "y.tab.c"
+                                    { (yyval.node) = new_node(And, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1776 "y.tab.c"
     break;
 
   case 51: /* Expr: Expr LT Expr  */
 #line 216 "src/gocompiler.y"
-                                    { ; }
-#line 1781 "y.tab.c"
+                                    { (yyval.node) = new_node(Lt, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1782 "y.tab.c"
     break;
 
   case 52: /* Expr: Expr GT Expr  */
 #line 217 "src/gocompiler.y"
-                                    { ; }
-#line 1787 "y.tab.c"
+                                    { (yyval.node) = new_node(Gt, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1788 "y.tab.c"
     break;
 
   case 53: /* Expr: Expr EQ Expr  */
 #line 218 "src/gocompiler.y"
-                                    { ; }
-#line 1793 "y.tab.c"
+                                    { (yyval.node) = new_node(Eq, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1794 "y.tab.c"
     break;
 
   case 54: /* Expr: Expr NE Expr  */
 #line 219 "src/gocompiler.y"
-                                    { ; }
-#line 1799 "y.tab.c"
+                                    { (yyval.node) = new_node(Ne, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1800 "y.tab.c"
     break;
 
   case 55: /* Expr: Expr LE Expr  */
 #line 220 "src/gocompiler.y"
-                                    { ; }
-#line 1805 "y.tab.c"
+                                    { (yyval.node) = new_node(Le, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1806 "y.tab.c"
     break;
 
   case 56: /* Expr: Expr GE Expr  */
 #line 221 "src/gocompiler.y"
-                                    { ; }
-#line 1811 "y.tab.c"
+                                    { (yyval.node) = new_node(Ge, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1812 "y.tab.c"
     break;
 
   case 57: /* Expr: Expr PLUS Expr  */
 #line 222 "src/gocompiler.y"
-                                    { ; }
-#line 1817 "y.tab.c"
+                                    { (yyval.node) = new_node(Add, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1818 "y.tab.c"
     break;
 
   case 58: /* Expr: Expr MINUS Expr  */
 #line 223 "src/gocompiler.y"
-                                    { ; }
-#line 1823 "y.tab.c"
+                                    { (yyval.node) = new_node(Sub, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1824 "y.tab.c"
     break;
 
   case 59: /* Expr: Expr STAR Expr  */
 #line 224 "src/gocompiler.y"
-                                    { ; }
-#line 1829 "y.tab.c"
+                                    { (yyval.node) = new_node(Mul, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1830 "y.tab.c"
     break;
 
   case 60: /* Expr: Expr DIV Expr  */
 #line 225 "src/gocompiler.y"
-                                    { ; }
-#line 1835 "y.tab.c"
+                                    { (yyval.node) = new_node(Div, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1836 "y.tab.c"
     break;
 
   case 61: /* Expr: Expr MOD Expr  */
 #line 226 "src/gocompiler.y"
-                                    { ; }
-#line 1841 "y.tab.c"
+                                    { (yyval.node) = new_node(Mod, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_brother((yyvsp[-2].node), (yyvsp[0].node)); }
+#line 1842 "y.tab.c"
     break;
 
   case 62: /* Expr: NOT Expr  */
 #line 227 "src/gocompiler.y"
-                                    { ; }
-#line 1847 "y.tab.c"
+                                    { (yyval.node) = new_node(Not, NULL); add_child((yyval.node), (yyvsp[0].node)); }
+#line 1848 "y.tab.c"
     break;
 
   case 63: /* Expr: MINUS Expr  */
 #line 228 "src/gocompiler.y"
-                                    { ; }
-#line 1853 "y.tab.c"
+                                    { (yyval.node) = new_node(Sub, NULL); add_child((yyval.node), (yyvsp[0].node)); }
+#line 1854 "y.tab.c"
     break;
 
   case 64: /* Expr: PLUS Expr  */
 #line 229 "src/gocompiler.y"
-                                    { ; }
-#line 1859 "y.tab.c"
+                                    { (yyval.node) = new_node(Add, NULL); add_child((yyval.node), (yyvsp[0].node)); }
+#line 1860 "y.tab.c"
     break;
 
   case 65: /* Expr: NATURAL  */
 #line 230 "src/gocompiler.y"
-                                    { ; }
-#line 1865 "y.tab.c"
+                                    { (yyval.node) = new_node(Natural, (yyvsp[0].token)); }
+#line 1866 "y.tab.c"
     break;
 
   case 66: /* Expr: DECIMAL  */
 #line 231 "src/gocompiler.y"
-                                    { ; }
-#line 1871 "y.tab.c"
+                                    { (yyval.node) = new_node(Float32, (yyvsp[0].token)); }
+#line 1872 "y.tab.c"
     break;
 
   case 67: /* Expr: IDENTIFIER  */
 #line 232 "src/gocompiler.y"
-                                    { ; }
-#line 1877 "y.tab.c"
+                                    { (yyval.node) = new_node(Identifier, (yyvsp[0].token)); }
+#line 1878 "y.tab.c"
     break;
 
-  case 68: /* Expr: LPAR Expr RPAR  */
+  case 68: /* Expr: FuncInvocation  */
 #line 233 "src/gocompiler.y"
-                                    { ; }
-#line 1883 "y.tab.c"
+                                    { (yyval.node) = (yyvsp[0].node); }
+#line 1884 "y.tab.c"
     break;
 
-  case 69: /* Expr: LPAR error RPAR  */
+  case 69: /* Expr: LPAR Expr RPAR  */
 #line 234 "src/gocompiler.y"
+                                    { (yyval.node) = (yyvsp[-1].node); }
+#line 1890 "y.tab.c"
+    break;
+
+  case 70: /* Expr: LPAR error RPAR  */
+#line 235 "src/gocompiler.y"
                                     { ; }
-#line 1889 "y.tab.c"
+#line 1896 "y.tab.c"
     break;
 
 
-#line 1893 "y.tab.c"
+#line 1900 "y.tab.c"
 
       default: break;
     }
@@ -2082,4 +2089,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 236 "src/gocompiler.y"
+#line 237 "src/gocompiler.y"
+
