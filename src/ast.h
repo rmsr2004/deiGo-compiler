@@ -48,6 +48,7 @@ struct node_list {
 struct node* new_node(enum category category, char *token);
 void add_child(struct node* parent, struct node* child);
 void add_brother(struct node* node, struct node* new_brother);
+int count_brothers(struct node* node);
 void print_ast(struct node* node, int depth);
 const char* category_to_string(enum category cat);
 

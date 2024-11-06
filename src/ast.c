@@ -76,6 +76,27 @@ void add_brother(struct node* node, struct node* new_brother){
     }
 }
 /**
+* @brief Counts the number of brother nodes.
+*
+* This function traverses the linked list of brother nodes starting from the given node
+* and counts the number of nodes in the list.
+*
+* @param node A pointer to the starting node.
+* @return The number of brother nodes. Returns -1 if the input node is NULL.
+*/
+int count_brothers(struct node* node){
+    if(node == NULL) return -1;
+
+    int count = 0;
+
+    struct node_list* current = node->brothers;
+    while(current != NULL){
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+/**
 * @brief Prints the abstract syntax tree (AST) starting from the given node.
 *
 * This function recursively prints the AST, starting from the specified node.

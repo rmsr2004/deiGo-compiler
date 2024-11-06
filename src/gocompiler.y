@@ -144,7 +144,14 @@ Statement:
                                                                                 add_child($$, new_node(Identifier, $1)); 
                                                                                 add_child($$, $3); 
                                                                             }
-    | LBRACE StatementAux RBRACE                                            { add_child($$, $2); }
+    | LBRACE StatementAux RBRACE                                            { 
+                                                                                if(count_brothers($2) > 0){
+                                                                                    $$ = new_node(Block, NULL);
+                                                                                    add_child($$, $2); 
+                                                                                } else { 
+                                                                                    $$ = $2; 
+                                                                                }
+                                                                            }
     | IF Expr LBRACE StatementAux RBRACE ELSE LBRACE StatementAux RBRACE    {
                                                                                 $$ = new_node(If, NULL);
                                                                                 add_child($$, $2);
@@ -181,14 +188,16 @@ Statement:
                                                                             }
     | FOR LBRACE StatementAux RBRACE                                        { 
                                                                                 $$ = new_node(For, NULL);
-                                                                                add_child($$, $3); 
+                                                                                aux_node = new_node(Block, NULL);
+                                                                                add_child(aux_node, $3);
+                                                                                add_child($$, aux_node); 
                                                                             }
     | RETURN Expr                                                           { $$ = new_node(Return, NULL); add_child($$, $2); }
     | RETURN                                                                { $$ = new_node(Return, NULL); }
     | FuncInvocation                                                        { $$ = $1; }
     | ParseArgs                                                             { $$ = $1; }
     | PRINT LPAR Expr RPAR                                                  { $$ = new_node(Print, NULL); add_child($$, $3); }
-    | PRINT LPAR STRLIT RPAR                                                { $$ = new_node(Print, NULL); add_child($$, new_node(String, $3)); }
+    | PRINT LPAR STRLIT RPAR                                                { $$ = new_node(Print, NULL); add_child($$, new_node(StrLit, $3)); }
     | error                                                                 { ; }
     ;
 
