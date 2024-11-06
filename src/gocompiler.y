@@ -85,8 +85,9 @@ FuncDeclaration:
                                                             $$ = new_node(FuncDecl, NULL); 
                                                             aux_node = new_node(FuncHeader, NULL); 
                                                             add_child(aux_node, new_node(Identifier, $2)); 
+                                                            add_child(aux_node, new_node(FuncParams, NULL));
                                                             add_child($$, aux_node); 
-                                                            add_brother($$, $5); 
+                                                            add_child($$, $5);
                                                         }
     | FUNC IDENTIFIER LPAR Parameters RPAR FuncBody     { 
                                                             $$ = new_node(FuncDecl, NULL);
@@ -131,8 +132,8 @@ FuncBody:
     ;
 
 VarsAndStatements:
-    VarsAndStatements VarDeclaration SEMICOLON      { if($1 == NULL) { $$ = $2; } else { $$ = $1; add_brother($$, $2); } }
-    | VarsAndStatements Statement SEMICOLON         { if($1 == NULL) { $$ = $2; } else { $$ = $1; add_brother($$, $2); } }
+    VarsAndStatements VarDeclaration SEMICOLON      { if($1 == NULL) { $$ = $2; } else { $$ = $1; add_brother($1, $2); } }
+    | VarsAndStatements Statement SEMICOLON         { if($1 == NULL) { $$ = $2; } else { $$ = $1; add_brother($1, $2); } }
     | VarsAndStatements SEMICOLON                   { $$ = $1; }
     | /* null production */                         { $$ = NULL; }
     ;

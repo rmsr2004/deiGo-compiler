@@ -19,7 +19,6 @@ enum category {
     ParseArgs, Or, And, Eq, Ne, Lt, Gt, Le, Ge, Add, Sub, Mul, Div, Mod, Not, Minus, Plus, Assign, Int, Float32,
     Bool, String, Natural, Identifier, StrLit
 };
-
 /**
 * @struct node
 * @brief Represents a node in the abstract syntax tree (AST).
@@ -32,8 +31,8 @@ struct node {
     enum category category;             // The category of the node.
     char* token;                        // The lexical token associated with the node (can be null).
     struct node_list* children;         // A list of child nodes.
+    struct node_list* brothers;         // A list of brother nodes.
 };
-
 /**
 * @struct node_list
 * @brief A structure to represent a linked list of nodes.
@@ -48,8 +47,8 @@ struct node_list {
 
 struct node* new_node(enum category category, char *token);
 void add_child(struct node* parent, struct node* child);
-void add_brother(struct node* aux_brother, struct node* new_brother);
-void print_ast(struct node *node, int depth);
+void add_brother(struct node* node, struct node* new_brother);
+void print_ast(struct node* node, int depth);
 const char* category_to_string(enum category cat);
 
 #endif  // _AST_H

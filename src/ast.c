@@ -24,7 +24,6 @@ struct node* new_node(enum category category, char *token) {
     new->children->next = NULL;
     return new;
 }
-
 /**
 * Adds a child node to the given parent node.
 *
@@ -36,85 +35,86 @@ struct node* new_node(enum category category, char *token) {
 * @param child A pointer to the child node to be added to the parent.
 */
 void add_child(struct node* parent, struct node* child){
-    if(parent == NULL || child == NULL){
-        return;
-    }
+    if(parent == NULL || child == NULL) return;
 
     struct node_list *new = malloc(sizeof(struct node_list));
     new->node = child;
     new->next = NULL;
+
     struct node_list* children = parent->children;
     while(children->next != NULL)
         children = children->next;
     children->next = new;
 }
-
 /**
- * @brief Adds a new brother node to the list of children of the given node.
- *
- * This function adds a new brother node to the list of children of the given node.
- * If either the given node or the new brother node is NULL, the function does nothing.
- * If the given node has no children, the new brother node is added as the first child.
- * Otherwise, the new brother node is added to the end of the list of children.
- *
- * @param aux_brother Pointer to the node to which the new brother node will be added.
- * @param new_brother Pointer to the new brother node to be added.
- */
-void add_brother(struct node* aux_brother, struct node* new_brother){
-    if(aux_brother == NULL || new_brother == NULL){
-        return;
-    }
+* @brief Adds a new brother node to the list of brothers of a given node.
+*
+* This function takes two node pointers, `node` and `new_brother`.
+* It creates a new node_list element for `new_brother` and appends it to the
+* list of brothers of `node`. If `node` or `new_brother` is NULL,
+* the function does nothing.
+*
+* @param node Pointer to the node to which the new brother will be added.
+* @param new_brother Pointer to the new brother node to be added.
+*/
+void add_brother(struct node* node, struct node* new_brother){
+    if(node == NULL || new_brother == NULL) return;
 
-    struct node_list* current = aux_brother->children;
-    if(current == NULL){
-        aux_brother->children = malloc(sizeof(struct node_list));
-        aux_brother->children->node = new_brother;
-        aux_brother->children->next = NULL;
-    } else{
+    struct node_list* new_brother_node = malloc(sizeof(struct node_list));
+    new_brother_node->node = new_brother;
+    new_brother_node->next = NULL;
+
+    if(node->brothers == NULL){
+        node->brothers = new_brother_node;
+    } 
+    else{
+        struct node_list* current = node->brothers;
         while(current->next != NULL){
             current = current->next;
         }
-
-        struct node_list* new_list_node = malloc(sizeof(struct node_list));
-        new_list_node->node = new_brother;
-        new_list_node->next = NULL;
-        current->next = new_list_node;
+        current->next = new_brother_node;
     }
 }
-
-
 /**
+* @brief Prints the abstract syntax tree (AST) starting from the given node.
+*
 * This function recursively prints the AST, starting from the specified node.
-* Each level of depth in the tree is indicated by a series of underscores.
+* It prints each node's category and token (if available), with indentation
+* based on the depth of the node in the tree. The function first prints the
+* current node, then recursively prints its children and siblings.
 *
-* @param node A pointer to the root node of the AST to be printed.
-* @param depth The current depth in the tree, used for indentation.
-*
-* The function prints the category of each node, and if the node has an associated
-* token, it prints the token as well. It then recursively prints all child nodes.
+* @param node Pointer to the root node of the AST or subtree to be printed.
+* @param depth The depth of the current node in the tree, used for indentation.
 */
-void print_ast(struct node *node, int depth) {
-    if (node == NULL) return;
+void print_ast(struct node* node, int depth) {
+    if(node == NULL) return;
 
-    for (int i = 0; i < depth; i++) {
+    for(int i = 0; i < depth; i++){
         printf("..");
     }
 
     printf("%s", category_to_string(node->category));
 
-    if (node->token != NULL) {
+    if(node->token != NULL){
         printf("(%s)", node->token);
     }
 
     printf("\n");
 
-    struct node_list *child = node->children;
-    while (child != NULL) {
-        print_ast(child->node, depth + 1);
-        child = child->next;
+    // Print children of the node
+    struct node_list* current = node->children;
+    while (current != NULL) {
+        print_ast(current->node, depth + 1);
+        current = current->next;
+    }
+
+    // Print brothers of the node
+    current = node->brothers;
+    while(current != NULL){
+        print_ast(current->node, depth);
+        current = current->next;
     }
 }
-
 /**
 * Converts an enum value of type `category` to its corresponding string representation.
 *
@@ -122,8 +122,8 @@ void print_ast(struct node *node, int depth) {
 * @return A constant character pointer to the string representation of the enum value.
 *         If the enum value does not match any known category, "Unknown" is returned.
 */
-const char* category_to_string(enum category cat) {
-    switch (cat) {
+const char* category_to_string(enum category cat){
+    switch(cat){
     case Program:           return "Program";
     case VarDecl:           return "VarDecl";
     case FuncDecl:          return "FuncDecl";
