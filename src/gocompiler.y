@@ -14,6 +14,7 @@
 
     struct node* program;
     struct node* aux_node;
+    struct node* type_node;
 %}
 
 %union{
@@ -25,11 +26,16 @@
 %token          RBRACE RPAR RSQ PACKAGE RETURN ELSE FOR IF VAR INT FLOAT32 BOOL STRING PRINT PARSEINT FUNC CMDARGS
 %token<token>   IDENTIFIER STRLIT NATURAL DECIMAL RESERVED
 
-%left PLUS MINUS STAR DIV MOD
-%left OR AND
-%left EQ NE GT GE LT LE
-%right NOT
-%right ASSIGN
+%left   COMMA
+%right  ASSIGN
+%left   OR
+%left   AND  
+%left   LT GT LE GE  EQ NE
+%left   PLUS MINUS
+%left   STAR DIV MOD
+%right  NOT
+
+%nonassoc ELSE IF
 
 %type<node> Program Declarations VarDeclaration VarSpec VarSpecAux Type FuncDeclaration Parameters ParametersAux FuncBody VarsAndStatements Statement
 %type<node> StatementAux ParseArgs FuncInvocation FuncInvocationAux Expr
@@ -56,11 +62,17 @@ VarSpec:
                                                 add_child($$, $3); 
                                                 add_child($$, new_node(Identifier, $1)); 
                                                 add_brother($$, $2);
+
+                                                add_type_to_brothers($2, $3);
                                             }
     ;
 
 VarSpecAux:
-    COMMA IDENTIFIER VarSpecAux     { $$ = new_node(VarDecl, NULL); add_child($$, new_node(Identifier, $2)); add_brother($$, $3); }
+    COMMA IDENTIFIER VarSpecAux     { 
+                                        $$ = new_node(VarDecl, NULL); 
+                                        add_child($$, new_node(Identifier, $2)); 
+                                        add_brother($$, $3);
+                                    }
     | /*  null production */        { $$ = NULL; }
     ;
 
@@ -95,7 +107,7 @@ FuncDeclaration:
                                                             add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, $4);
                                                             add_child($$, aux_node);
-                                                            add_brother($$, $6);
+                                                            add_child($$, $6);
                                                         }
     | FUNC IDENTIFIER LPAR RPAR Type FuncBody           { 
                                                             $$ = new_node(FuncDecl, NULL);
@@ -247,10 +259,10 @@ Expr:
     | Expr DIV Expr                 { $$ = new_node(Div, NULL); add_child($$, $1); add_child($$, $3); }
     | Expr MOD Expr                 { $$ = new_node(Mod, NULL); add_child($$, $1); add_child($$, $3); }
     | NOT Expr                      { $$ = new_node(Not, NULL); add_child($$, $2); }
-    | MINUS Expr                    { $$ = new_node(Sub, NULL); add_child($$, $2); }
-    | PLUS Expr                     { $$ = new_node(Add, NULL); add_child($$, $2); }
+    | MINUS Expr %prec NOT          { $$ = new_node(Minus, NULL); add_child($$, $2); }
+    | PLUS Expr  %prec NOT          { $$ = new_node(Add, NULL); add_child($$, $2); }
     | NATURAL                       { $$ = new_node(Natural, $1); }
-    | DECIMAL                       { $$ = new_node(Float32, $1); }
+    | DECIMAL                       { $$ = new_node(Decimal, $1); }
     | IDENTIFIER                    { $$ = new_node(Identifier, $1); }
     | FuncInvocation                { $$ = $1; }
     | LPAR Expr RPAR                { $$ = $2; }

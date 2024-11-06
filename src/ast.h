@@ -17,7 +17,7 @@
 enum category { 
     Program, VarDecl, FuncDecl, FuncHeader, FuncParams, FuncBody, ParamDecl, Block, If, For, Return, Call, Print,
     ParseArgs, Or, And, Eq, Ne, Lt, Gt, Le, Ge, Add, Sub, Mul, Div, Mod, Not, Minus, Plus, Assign, Int, Float32,
-    Bool, String, Natural, Identifier, StrLit
+    Bool, String, Natural, Decimal, Identifier, StrLit
 };
 /**
 * @struct node
@@ -49,6 +49,7 @@ struct node* new_node(enum category category, char *token);
 void add_child(struct node* parent, struct node* child);
 void add_brother(struct node* node, struct node* new_brother);
 int count_brothers(struct node* node);
+void add_type_to_brothers(struct node* node, struct node* type_node);
 void print_ast(struct node* node, int depth);
 const char* category_to_string(enum category cat);
 

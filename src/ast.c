@@ -97,6 +97,34 @@ int count_brothers(struct node* node){
     return count;
 }
 /**
+* @brief Adds a type node to all sibling nodes.
+*
+* This function iterates through all sibling nodes starting from the given node,
+* and for each sibling, it sets the type node as the child of the current node,
+* and then adds the original child node (which is assumed to be an identifier) 
+* as a child of the type node. This effectively results in each node having two 
+* children: the type node and the identifier node.
+*
+* @param node The starting node whose siblings will be processed.
+* @param type_node The type node to be added as a child to each sibling node.
+*/
+void add_type_to_brothers(struct node* node, struct node* type_node) {
+    struct node* current = node;
+    while(current != NULL){
+        struct node* aux = current->children->node; // Save the current node (only has the Identifier)
+        current->children->node = type_node;        // Set the node to be the node containing the type 
+        add_child(current, aux);                    // Add the saved node as a child of the node containing the type
+                                                    // Resulting at two childs (Type, Identifier)
+                                
+        // Move to the next brother
+        if(current->brothers != NULL){
+            current = current->brothers->node;
+        } else {
+            current = NULL;
+        }
+    }
+}
+/**
 * @brief Prints the abstract syntax tree (AST) starting from the given node.
 *
 * This function recursively prints the AST, starting from the specified node.
@@ -181,6 +209,7 @@ const char* category_to_string(enum category cat){
     case Bool:              return "Bool";
     case String:            return "String";
     case Natural:           return "Natural";
+    case Decimal:           return "Decimal";
     case Identifier:        return "Identifier";
     case StrLit:            return "StrLit";
     default:                return "Unknown";
