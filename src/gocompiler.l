@@ -97,16 +97,46 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
                                             update_line();
                                         }
 
-0[xX]{hex_digit}+                       { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; if(flag == 2) return NATURAL; }
-0{oct_digit}+                           { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; if(flag == 2) return NATURAL; }
+0[xX]{hex_digit}+                       { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+                                          if(flag == 2){ 
+                                            yylval.token = (char*) strdup(yytext); 
+                                            return NATURAL; 
+                                          } 
+                                        }
+0{oct_digit}+                           { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+                                          if(flag == 2){ 
+                                            yylval.token = (char*) strdup(yytext);
+                                            return NATURAL;
+                                          } 
+                                        }
 0{digit}+                               { 
                                             error(line_index, column_index, "invalid octal constant (%s)", yytext);
                                             update_column(); 
                                         }
-{digit}+                                { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; if(flag == 2) return NATURAL; }
-{digit}+"."{digit}*{exponent}?          { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; if(flag == 2) return DECIMAL; }
-"."{digit}+{exponent}*                  { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; if(flag == 2) return DECIMAL; }
-{digit}+{exponent}                      { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; if(flag == 2) return DECIMAL; }
+{digit}+                                { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+                                          if(flag == 2){
+                                            yylval.token = (char*) strdup(yytext); 
+                                            return NATURAL;
+                                          } 
+                                        }
+{digit}+"."{digit}*{exponent}?          { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+                                          if(flag == 2){
+                                            yylval.token = (char*) strdup(yytext); 
+                                            return DECIMAL;
+                                          }
+                                        }
+"."{digit}+{exponent}*                  { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+                                          if(flag == 2){
+                                            yylval.token = (char*) strdup(yytext); 
+                                            return DECIMAL;
+                                          } 
+                                        }
+{digit}+{exponent}                      { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+                                          if(flag == 2){
+                                            yylval.token = (char*) strdup(yytext); 
+                                            return DECIMAL;
+                                          } 
+                                        }
 
 "//"[^\r\n]*                            { update_column(); }
 
@@ -154,9 +184,19 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 "strconv.Atoi"                          { if(flag == -1) printf("PARSEINT\n"); update_column(); emit_semicolon = 0; if(flag == 2) return PARSEINT; }
 "func"                                  { if(flag == -1) printf("FUNC\n"); update_column(); emit_semicolon = 0; if(flag == 2) return FUNC; }
 "os.Args"                               { if(flag == -1) printf("CMDARGS\n"); update_column(); emit_semicolon = 0; if(flag == 2) return CMDARGS; }
-{keyword}                               { if(flag == -1) printf("RESERVED(%s)\n", yytext); update_column(); emit_semicolon = 0; if(flag == 2) return RESERVED; }
+{keyword}                               { if(flag == -1) printf("RESERVED(%s)\n", yytext); update_column(); emit_semicolon = 0; 
+                                          if(flag == 2){ 
+                                            yylval.token = (char*) strdup(yytext); 
+                                            return RESERVED;
+                                          }
+                                        }
 
-{identifier}                            { if(flag == -1) printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; if(flag == 2) return IDENTIFIER; }
+{identifier}                            { if(flag == -1) printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+                                          if(flag == 2){
+                                            yylval.token = (char*) strdup(yytext); 
+                                            return IDENTIFIER;
+                                          } 
+                                        }
 
 \"                                      { BEGIN(STRING); save_string_pos(); update_column();}
 <STRING>{valid_escape}                  { update_column(); }
@@ -177,7 +217,12 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 <STRING>\"                              { BEGIN(INITIAL); update_column(); }
 <STRING>.                               { update_column(); }
 
-{string}                                { if(flag == -1) printf("STRLIT(%s)\n", yytext); update_column(); emit_semicolon = 1; if(flag == 2) return STRLIT; }
+{string}                                { if(flag == -1) printf("STRLIT(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+                                          if(flag == 2){ 
+                                            yylval.token = (char*) strdup(yytext); 
+                                            return STRLIT;
+                                          } 
+                                        }
 
 <<EOF>>                                 { 
                                             if(emit_semicolon){
@@ -192,22 +237,26 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 extern int yylex();
 int main(int argc, char* argv[]){
     /* Check if -l flag is present */
-    if(argc > 1){
-        if(strcmp(argv[1], "-l") == 0){
-            flag = -1;
-            yylex();    /* run the lexical analysis automaton */
-        }
+    //if(argc > 1){
+    //    if(strcmp(argv[1], "-l") == 0){
+    //        flag = -1;
+    //       yylex();    /* run the lexical analysis automaton */
+    //    }
 
-        if(strcmp(argv[1], "-t") == 0){
-            flag = 2;
-            yyparse();  /* run the syntax analysis automaton */
-            print_ast(program, 0);
-        }
-    } else{
-        flag = 2;
-        yyparse();
-        print_ast(program, 0);
-    }
+    //    if(strcmp(argv[1], "-t") == 0){
+    //        flag = 2;
+    //        yyparse();  /* run the syntax analysis automaton */
+    //        print_ast(program, 0);
+    //    }
+    //} else{
+    //    flag = 2;
+    //    yyparse();
+    //    print_ast(program, 0);
+    //}
+
+    flag = 2;
+    yyparse();
+    print_ast(program, 0);
     return 0;
 }
 
