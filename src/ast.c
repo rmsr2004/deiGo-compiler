@@ -212,7 +212,7 @@ const char* category_to_string(enum category cat){
     case Decimal:           return "Decimal";
     case Identifier:        return "Identifier";
     case StrLit:            return "StrLit";
-    default:                return "Unknown";
+    default:                return "Error";
     }
 }
 

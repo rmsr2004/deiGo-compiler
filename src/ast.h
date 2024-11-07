@@ -17,7 +17,7 @@
 enum category { 
     Program, VarDecl, FuncDecl, FuncHeader, FuncParams, FuncBody, ParamDecl, Block, If, For, Return, Call, Print,
     ParseArgs, Or, And, Eq, Ne, Lt, Gt, Le, Ge, Add, Sub, Mul, Div, Mod, Not, Minus, Plus, Assign, Int, Float32,
-    Bool, String, Natural, Decimal, Identifier, StrLit
+    Bool, String, Natural, Decimal, Identifier, StrLit, Error
 };
 /**
 * @struct node

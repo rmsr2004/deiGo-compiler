@@ -14,7 +14,8 @@
 
     struct node* program;
     struct node* aux_node;
-    struct node* type_node;
+
+    int errors_count = 0;
 %}
 
 %union{
@@ -210,7 +211,7 @@ Statement:
     | ParseArgs                                                             { $$ = $1; }
     | PRINT LPAR Expr RPAR                                                  { $$ = new_node(Print, NULL); add_child($$, $3); }
     | PRINT LPAR STRLIT RPAR                                                { $$ = new_node(Print, NULL); add_child($$, new_node(StrLit, $3)); }
-    | error                                                                 { ; }
+    | error                                                                 { errors_count++; $$ = new_node(Error, NULL); }
     ;
 
 StatementAux:
@@ -223,7 +224,12 @@ ParseArgs:
                                                                                     add_child($$, new_node(Identifier, $1)); 
                                                                                     add_child($$, $9); 
                                                                                 }
-    | IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR                  { ; }
+    | IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR                  { 
+                                                                                    $$ = new_node(ParseArgs, NULL);
+                                                                                    add_child($$, new_node(Identifier, $1));
+                                                                                    add_child($$, new_node(Error, NULL));
+                                                                                    errors_count++;
+                                                                                }
     ;
 
 FuncInvocation:
@@ -237,7 +243,12 @@ FuncInvocation:
                                                         $$ = new_node(Call, NULL); 
                                                         add_child($$, new_node(Identifier, $1));
                                                     }
-    | IDENTIFIER LPAR error RPAR                    { ; }
+    | IDENTIFIER LPAR error RPAR                    { 
+                                                        $$ = new_node(Call, NULL); 
+                                                        add_child($$, new_node(Identifier, $1)); 
+                                                        add_child($$, new_node(Error, NULL));
+                                                        errors_count++;
+                                                    }
     ;
 
 FuncInvocationAux:
@@ -266,6 +277,6 @@ Expr:
     | IDENTIFIER                    { $$ = new_node(Identifier, $1); }
     | FuncInvocation                { $$ = $1; }
     | LPAR Expr RPAR                { $$ = $2; }
-    | LPAR error RPAR               { ; }
+    | LPAR error RPAR               { $$ = new_node(Error, NULL); errors_count++; }
     ;
 %%

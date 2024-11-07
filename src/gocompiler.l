@@ -12,6 +12,7 @@
     int yyparse(void);
 
     extern struct node* program;
+    extern int errors_count;
 
     /*
     *   Variables and flags to control the lexical analysis
@@ -228,6 +229,7 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
                                             if(emit_semicolon){
                                                 if(flag == -1) printf("SEMICOLON\n");
                                                 emit_semicolon = 0;
+                                                if(flag == 2) return SEMICOLON;
                                             }
                                             yyterminate();
                                         }
@@ -236,34 +238,31 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 %%
 extern int yylex();
 int main(int argc, char* argv[]){
-    /* Check if -l flag is present */
-    //if(argc > 1){
-    //    if(strcmp(argv[1], "-l") == 0){
-    //        flag = -1;
-    //       yylex();    /* run the lexical analysis automaton */
-    //    }
+  /* Check if -l or -t flag are present */
+  if(argc > 1){
+    
+    if(strcmp(argv[1], "-l") == 0){
+      flag = -1;
+        yylex();    /* run the lexical analysis automaton */
+    }
 
-    //    if(strcmp(argv[1], "-t") == 0){
-    //        flag = 2;
-    //        yyparse();  /* run the syntax analysis automaton */
-    //        print_ast(program, 0);
-    //    }
-    //} else{
-    //    flag = 2;
-    //    yyparse();
-    //    print_ast(program, 0);
-    //}
+    if(strcmp(argv[1], "-t") == 0){
+      flag = 2;
+      yyparse();  /* run the syntax analysis automaton */
 
-    flag = 2;
-    yyparse();
-    print_ast(program, 0);
-    return 0;
+      if(errors_count == 0) print_ast(program, 0);
+    }
+  } else {
+      flag = 2;
+      yyparse();
+  }
+  return 0;
 }
 
 int yywrap() {  /* called on EOF, return 1 to terminate */
-    return 1;
+  return 1;
 }
 
 void yyerror(char* s){
-    printf("Line %d column %d: %s : %s\n", line_index, column_index, s, yytext);
+  printf("Line %d, column %d: %s: %s\n", line_index, column_index, s, yytext);
 }

@@ -153,7 +153,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "src/gocompiler.y"
+#line 21 "src/gocompiler.y"
 
     char* token;
     struct node* node;
