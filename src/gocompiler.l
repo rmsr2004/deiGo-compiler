@@ -264,5 +264,6 @@ int yywrap() {  /* called on EOF, return 1 to terminate */
 }
 
 void yyerror(char* s){
+  column_index = column_index - yyleng;
   printf("Line %d, column %d: %s: %s\n", line_index, column_index, s, yytext);
 }
