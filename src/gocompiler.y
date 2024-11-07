@@ -271,7 +271,7 @@ Expr:
     | Expr MOD Expr                 { $$ = new_node(Mod, NULL); add_child($$, $1); add_child($$, $3); }
     | NOT Expr                      { $$ = new_node(Not, NULL); add_child($$, $2); }
     | MINUS Expr %prec NOT          { $$ = new_node(Minus, NULL); add_child($$, $2); }
-    | PLUS Expr  %prec NOT          { $$ = new_node(Add, NULL); add_child($$, $2); }
+    | PLUS Expr  %prec NOT          { $$ = new_node(Plus, NULL); add_child($$, $2); }
     | NATURAL                       { $$ = new_node(Natural, $1); }
     | DECIMAL                       { $$ = new_node(Decimal, $1); }
     | IDENTIFIER                    { $$ = new_node(Identifier, $1); }

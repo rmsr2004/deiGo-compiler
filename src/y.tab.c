@@ -1900,7 +1900,7 @@ yyreduce:
 
   case 64: /* Expr: PLUS Expr  */
 #line 274 "src/gocompiler.y"
-                                    { (yyval.node) = new_node(Add, NULL); add_child((yyval.node), (yyvsp[0].node)); }
+                                    { (yyval.node) = new_node(Plus, NULL); add_child((yyval.node), (yyvsp[0].node)); }
 #line 1905 "y.tab.c"
     break;
 
