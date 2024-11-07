@@ -686,8 +686,8 @@ char *yytext;
 #line 687 "lex.yy.c"
 
 #define INITIAL 0
-#define COMMENT 1
-#define STRLIT 2
+#define COMMENT_STATE 1
+#define STRLIT_STATE 2
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -1055,7 +1055,7 @@ YY_RULE_SETUP
 case 11:
 YY_RULE_SETUP
 #line 144 "src/gocompiler.l"
-{ BEGIN(COMMENT); save_comment_pos(); update_column(); }
+{ BEGIN(COMMENT_STATE); save_comment_pos(); update_column(); }
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
@@ -1073,7 +1073,7 @@ YY_RULE_SETUP
 #line 147 "src/gocompiler.l"
 { update_column(); }
 	YY_BREAK
-case YY_STATE_EOF(COMMENT):
+case YY_STATE_EOF(COMMENT_STATE):
 #line 148 "src/gocompiler.l"
 { error(comment_line, comment_column, "unterminated comment"); yyterminate(); }
 	YY_BREAK
@@ -1290,7 +1290,7 @@ YY_RULE_SETUP
 case 55:
 YY_RULE_SETUP
 #line 202 "src/gocompiler.l"
-{ BEGIN(STRING); save_string_pos(); update_column();}
+{ BEGIN(STRLIT_STATE); save_string_pos(); update_column();}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
@@ -1305,7 +1305,7 @@ YY_RULE_SETUP
                                             update_column(); 
                                         }
 	YY_BREAK
-case YY_STATE_EOF(STRLIT):
+case YY_STATE_EOF(STRLIT_STATE):
 #line 208 "src/gocompiler.l"
 { 
                                             BEGIN(INITIAL);

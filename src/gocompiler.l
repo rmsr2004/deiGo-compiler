@@ -141,11 +141,11 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 
 "//"[^\r\n]*                            { update_column(); }
 
-"/*"                                    { BEGIN(COMMENT); save_comment_pos(); update_column(); }
-<COMMENT>\n                             { update_line(); }
-<COMMENT>"*/"                           { BEGIN(INITIAL); update_column(); }
-<COMMENT>.                              { update_column(); }
-<COMMENT><<EOF>>                        { error(comment_line, comment_column, "unterminated comment"); yyterminate(); }
+"/*"                                    { BEGIN(COMMENT_STATE); save_comment_pos(); update_column(); }
+<COMMENT_STATE>\n                       { update_line(); }
+<COMMENT_STATE>"*/"                     { BEGIN(INITIAL); update_column(); }
+<COMMENT_STATE>.                        { update_column(); }
+<COMMENT_STATE><<EOF>>                  { error(comment_line, comment_column, "unterminated comment"); yyterminate(); }
 
 ";"                                     { if(flag == -1) printf("SEMICOLON\n"); update_column(); emit_semicolon = 0; if(flag == 2) return SEMICOLON; }
 ","                                     { if(flag == -1) printf("COMMA\n"); update_column(); emit_semicolon = 0; if(flag == 2) return COMMA; }
@@ -199,7 +199,7 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
                                           } 
                                         }
 
-\"                                      { BEGIN(STRING); save_string_pos(); update_column();}
+\"                                      { BEGIN(STRLIT_STATE); save_string_pos(); update_column();}
 <STRLIT_STATE>{valid_escape}            { update_column(); }
 <STRLIT_STATE>{invalid_escape}          {
                                             error(line_index, column_index, "invalid escape sequence (%s)", yytext);
