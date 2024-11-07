@@ -79,13 +79,13 @@ oct_digit       [0-7]
 whitespace      [ \t]
 exponent        [eE][+-]?{digit}+
 identifier      ({letter}|"_")({digit}|{letter}|"_")*
-string 	        ["]([^\n\r\"\\]|(\\n|\\r|\\f|\\t|\\\\|\\\"))*["]
+strlit 	        ["]([^\n\r\"\\]|(\\n|\\r|\\f|\\t|\\\\|\\\"))*["]
 valid_escape    \\[fnrt\\\"]
 invalid_escape  \\.|\\
 line_break      \n|\r|\r\n
 keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto|import|interface|map|range|select|struct|switch|type|"++"|"--"
 
-%X  COMMENT STRING
+%X  COMMENT_STATE STRLIT_STATE
 
 %%
 {whitespace}+                           { update_column(); }
@@ -200,25 +200,25 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
                                         }
 
 \"                                      { BEGIN(STRING); save_string_pos(); update_column();}
-<STRING>{valid_escape}                  { update_column(); }
-<STRING>{invalid_escape}                {
+<STRLIT_STATE>{valid_escape}            { update_column(); }
+<STRLIT_STATE>{invalid_escape}          {
                                             error(line_index, column_index, "invalid escape sequence (%s)", yytext);
                                             update_column(); 
                                         }
-<STRING><<EOF>>                         { 
+<STRLIT_STATE><<EOF>>                   { 
                                             BEGIN(INITIAL);
                                             error(string_line, string_column, "unterminated string literal");
                                             update_column(); 
                                         }
-<STRING>{line_break}                    { 
+<STRLIT_STATE>{line_break}              { 
                                             BEGIN(INITIAL); 
                                             error(string_line, string_column, "unterminated string literal");
                                             update_line();
                                         }
-<STRING>\"                              { BEGIN(INITIAL); update_column(); }
-<STRING>.                               { update_column(); }
+<STRLIT_STATE>\"                        { BEGIN(INITIAL); update_column(); }
+<STRLIT_STATE>.                         { update_column(); }
 
-{string}                                { if(flag == -1) printf("STRLIT(%s)\n", yytext); update_column(); emit_semicolon = 1; 
+{strlit}                                { if(flag == -1) printf("STRLIT(%s)\n", yytext); update_column(); emit_semicolon = 1; 
                                           if(flag == 2){ 
                                             yylval.token = (char*) strdup(yytext); 
                                             return STRLIT;

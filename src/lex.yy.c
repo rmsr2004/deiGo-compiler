@@ -687,7 +687,7 @@ char *yytext;
 
 #define INITIAL 0
 #define COMMENT 1
-#define STRING 2
+#define STRLIT 2
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -1305,7 +1305,7 @@ YY_RULE_SETUP
                                             update_column(); 
                                         }
 	YY_BREAK
-case YY_STATE_EOF(STRING):
+case YY_STATE_EOF(STRLIT):
 #line 208 "src/gocompiler.l"
 { 
                                             BEGIN(INITIAL);
