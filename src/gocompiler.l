@@ -26,6 +26,7 @@
     int emit_semicolon = 0;                     // Flag to check if a semicolon should be emitted
 
     int flag = 0;                               // Flag to check if -l flag is present
+    int eof_flag = 0;                           // Flag to check if the EOF was reached
 
     /*
     *   Updates the line and column indexes
@@ -90,6 +91,7 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 %%
 {whitespace}+                           { update_column(); }
 {line_break}                            {
+                                            update_column();
                                             if(emit_semicolon){
                                                 if(flag == -1) printf("SEMICOLON\n");
                                                 emit_semicolon = 0;
@@ -145,7 +147,7 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 <COMMENT_STATE>\n                       { update_line(); }
 <COMMENT_STATE>"*/"                     { BEGIN(INITIAL); update_column(); }
 <COMMENT_STATE>.                        { update_column(); }
-<COMMENT_STATE><<EOF>>                  { error(comment_line, comment_column, "unterminated comment"); yyterminate(); }
+<COMMENT_STATE><<EOF>>                  { error(comment_line, comment_column, "unterminated comment"); eof_flag = 1; yyterminate(); }
 
 ";"                                     { if(flag == -1) printf("SEMICOLON\n"); update_column(); emit_semicolon = 0; if(flag == 2) return SEMICOLON; }
 ","                                     { if(flag == -1) printf("COMMA\n"); update_column(); emit_semicolon = 0; if(flag == 2) return COMMA; }
@@ -209,6 +211,7 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
                                             BEGIN(INITIAL);
                                             error(string_line, string_column, "unterminated string literal");
                                             update_column(); 
+                                            eof_flag = 1;
                                         }
 <STRLIT_STATE>{line_break}              { 
                                             BEGIN(INITIAL); 
@@ -225,12 +228,13 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
                                           } 
                                         }
 
-<<EOF>>                                 { 
+<<EOF>>                                 {   
                                             if(emit_semicolon){
                                                 if(flag == -1) printf("SEMICOLON\n");
                                                 emit_semicolon = 0;
                                                 if(flag == 2) return SEMICOLON;
                                             }
+                                            eof_flag = 1;
                                             yyterminate();
                                         }
 
@@ -240,7 +244,6 @@ extern int yylex();
 int main(int argc, char* argv[]){
   /* Check if -l or -t flag are present */
   if(argc > 1){
-    
     if(strcmp(argv[1], "-l") == 0){
       flag = -1;
         yylex();    /* run the lexical analysis automaton */
@@ -264,6 +267,8 @@ int yywrap() {  /* called on EOF, return 1 to terminate */
 }
 
 void yyerror(char* s){
-  column_index = column_index - yyleng;
+  if(!eof_flag) 
+    column_index = column_index - yyleng;
+
   printf("Line %d, column %d: %s: %s\n", line_index, column_index, s, yytext);
 }
