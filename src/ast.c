@@ -63,13 +63,14 @@ int count_brothers(struct node* node){
 void add_type_to_brothers(struct node* node, category type){
     if(node == NULL) return;
 
-    struct node* aux = node;
-    while(aux->brother != NULL){
-        aux = aux->brother;
-        struct node *new_child = new_node(type, NULL);
-        struct node *child = aux->child;
-        aux->child = new_child;
-        add_brother(new_child, child);
+    struct node* aux = NULL;
+    struct node* current = node;
+    while(current != NULL){
+        aux = new_node(type, NULL);
+        aux->brother = current->child;
+        current->child = aux;
+        
+        current = current->brother;
     }
 }
 

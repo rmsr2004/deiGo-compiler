@@ -65,9 +65,10 @@ VarSpec:
                                                 $$ = new_node(VarDecl, NULL); 
                                                 add_child($$, $3); 
                                                 add_child($$, new_node(Identifier, $1)); 
-                                                add_brother($$, $2);
 
-                                                add_type_to_brothers($$, $3->category);   // Add the type to all the brothers
+                                                add_type_to_brothers($2, $3->category);   // Add the type to all the brothers
+                                                
+                                                add_brother($$, $2);
                                             }
     ;
 
@@ -239,7 +240,7 @@ Statement:
     | ParseArgs                                                             { $$ = $1; }
     | PRINT LPAR Expr RPAR                                                  { $$ = new_node(Print, NULL); add_child($$, $3); }
     | PRINT LPAR STRLIT RPAR                                                { $$ = new_node(Print, NULL); add_child($$, new_node(StrLit, $3)); }
-    | error                                                                 { errors_count++; $$ = new_node(Error, NULL); }
+    | error                                                                 { errors_count++; $$ = NULL; }
     ;
 
 StatementAux:
@@ -255,13 +256,7 @@ ParseArgs:
 
                                                                                     add_child($$, aux_node);
                                                                                 }
-    | IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR                  { 
-                                                                                    $$ = new_node(ParseArgs, NULL);
-
-                                                                                    aux_node = new_node(Identifier, $1);
-                                                                                    add_brother(aux_node, new_node(Error, NULL));
-                                                                                    errors_count++;
-                                                                                }
+    | IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR                  { errors_count++; $$ = NULL; }
     ;
 
 FuncInvocation:
@@ -270,7 +265,7 @@ FuncInvocation:
 
                                                         aux_node = new_node(Identifier, $1);
                                                         add_brother(aux_node, $3);
-                                                        add_brother($3, $4);
+                                                        add_brother(aux_node, $4);
 
                                                         add_child($$, aux_node);
                                                     }
@@ -278,15 +273,7 @@ FuncInvocation:
                                                         $$ = new_node(Call, NULL); 
                                                         add_child($$, new_node(Identifier, $1));
                                                     }
-    | IDENTIFIER LPAR error RPAR                    { 
-                                                        $$ = new_node(Call, NULL); 
-
-                                                        aux_node = new_node(Identifier, $1);
-                                                        add_brother(aux_node, new_node(Error, NULL));
-
-                                                        add_child($$, aux_node);
-                                                        errors_count++;
-                                                    }
+    | IDENTIFIER LPAR error RPAR                    { errors_count++; $$ = NULL; }
     ;
 
 FuncInvocationAux:
@@ -315,6 +302,6 @@ Expr:
     | IDENTIFIER                    { $$ = new_node(Identifier, $1); }
     | FuncInvocation                { $$ = $1; }
     | LPAR Expr RPAR                { $$ = $2; }
-    | LPAR error RPAR               { $$ = new_node(Error, NULL); errors_count++; }
+    | LPAR error RPAR               { errors_count++; $$ = NULL; }
     ;
 %%

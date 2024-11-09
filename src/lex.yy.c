@@ -2365,7 +2365,6 @@ void yyfree (void * ptr )
 
 extern int yylex();
 int main(int argc, char* argv[]){
-    /* Check if -l or -t flag are present */
     if(argc > 1){
       if(strcmp(argv[1], "-l") == 0){
           flag = -1;
@@ -2378,9 +2377,13 @@ int main(int argc, char* argv[]){
 
           if(errors_count == 0) print_ast(program, 0);
       }
+    } else {
+      flag = 2;
+      yyparse();
     }
 
     delete_ast(program);
+
     return 0;
 }
 
@@ -2398,4 +2401,6 @@ void yyerror(char* s){
     } else {
         printf("Line %d, column %d: %s: %s\n", line_index, column_index-yyleng, s, yytext);
     }
+
+    //if(program != NULL) delete_ast(program);
 }
