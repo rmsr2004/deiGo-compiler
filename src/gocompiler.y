@@ -67,7 +67,7 @@ VarSpec:
                                                 add_child($$, new_node(Identifier, $1)); 
                                                 add_brother($$, $2);
 
-                                                add_type_to_brothers($$, $3);
+                                                add_type_to_brothers($$, $3->category);   // Add the type to all the brothers
                                             }
     ;
 
@@ -90,8 +90,9 @@ Type:
 FuncDeclaration:
     FUNC IDENTIFIER LPAR Parameters RPAR Type FuncBody  {   
                                                             $$ = new_node(FuncDecl, NULL);
+
+                                                            // Create the FuncHeader node (Identifier, FuncParams, Type)
                                                             aux_node = new_node(FuncHeader, NULL);
-                                                            
                                                             add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, $6);
                                                             add_child(aux_node, $4);
@@ -100,9 +101,10 @@ FuncDeclaration:
                                                             add_child($$, $7);
                                                         }
     | FUNC IDENTIFIER LPAR RPAR FuncBody                { 
-                                                            $$ = new_node(FuncDecl, NULL); 
+                                                            $$ = new_node(FuncDecl, NULL);
+
+                                                            // Create the FuncHeader node (Identifier, FuncParams = NULL)
                                                             aux_node = new_node(FuncHeader, NULL); 
-                                                            
                                                             add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, new_node(FuncParams, NULL));
 
@@ -111,8 +113,9 @@ FuncDeclaration:
                                                         }
     | FUNC IDENTIFIER LPAR Parameters RPAR FuncBody     { 
                                                             $$ = new_node(FuncDecl, NULL);
-                                                            aux_node = new_node(FuncHeader, NULL);
-                                                            
+
+                                                            // Create the FuncHeader node (Identifier, FuncParams)
+                                                            aux_node = new_node(FuncHeader, NULL);                                                            
                                                             add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, $4);
 
@@ -121,8 +124,9 @@ FuncDeclaration:
                                                         }
     | FUNC IDENTIFIER LPAR RPAR Type FuncBody           { 
                                                             $$ = new_node(FuncDecl, NULL);
-                                                            aux_node = new_node(FuncHeader, NULL);
                                                             
+                                                            // Create the FuncHeader node (Identifier, FuncParams = NULL, Type)
+                                                            aux_node = new_node(FuncHeader, NULL);
                                                             add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, $5);
                                                             add_child(aux_node, new_node(FuncParams, NULL));
@@ -135,8 +139,9 @@ FuncDeclaration:
 Parameters:
     IDENTIFIER Type ParametersAux   { 
                                         $$ = new_node(FuncParams, NULL); 
-                                        aux_node = new_node(ParamDecl, NULL);
 
+                                        // Create ParamDecl node (Identifier, Type)
+                                        aux_node = new_node(ParamDecl, NULL);
                                         add_child(aux_node, $2); 
                                         add_child(aux_node, new_node(Identifier, $1)); 
 
@@ -150,7 +155,6 @@ ParametersAux:
                                                 $$ = new_node(ParamDecl, NULL);
                                                 add_child($$, $3); 
                                                 add_child($$, new_node(Identifier, $2)); 
-
                                                 add_brother($$, $4);
                                             }
     | /*  null production */                { $$ = NULL; }
@@ -253,8 +257,8 @@ ParseArgs:
                                                                                 }
     | IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR                  { 
                                                                                     $$ = new_node(ParseArgs, NULL);
+
                                                                                     aux_node = new_node(Identifier, $1);
-                                                                                    
                                                                                     add_brother(aux_node, new_node(Error, NULL));
                                                                                     errors_count++;
                                                                                 }

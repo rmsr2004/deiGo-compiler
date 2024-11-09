@@ -1,8 +1,8 @@
 %{
-    /*  
-    *   João Afonso dos Santos Simões   -  2022236316
-    *   Rodrigo Miguel Santos Rodrigues -  2022233032
-    */
+  /*  
+  *   João Afonso dos Santos Simões   -  2022236316
+  *   Rodrigo Miguel Santos Rodrigues -  2022233032
+  */
   
     #include <stdio.h>
     #include <stdarg.h>
@@ -31,7 +31,7 @@
     int error_newline = 0;                      // Flag to check if the error occurred in a new line
 
     /*
-    *   Updates the line and column indexes
+    *   Increments the line index and resets the column index
     */
     void update_line(){
         line_index++;
@@ -95,7 +95,6 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 {line_break}                            {
                                           line_aux = line_index;
                                           column_aux = column_index;
-                                          error_newline = 1;
                                           update_line();
                                           if(emit_semicolon){
                                               if(flag == -1) printf("SEMICOLON\n");
@@ -104,7 +103,6 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
                                           } else{
                                               emit_semicolon = 0;
                                           }
-                                          error_newline = 0;
                                         }
 
 0[xX]{hex_digit}+                       { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
@@ -234,41 +232,37 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 %%
 extern int yylex();
 int main(int argc, char* argv[]){
-  /* Check if -l or -t flag are present */
-  if(argc > 1){
-    if(strcmp(argv[1], "-l") == 0){
-      flag = -1;
-        yylex();    /* run the lexical analysis automaton */
+    /* Check if -l or -t flag are present */
+    if(argc > 1){
+      if(strcmp(argv[1], "-l") == 0){
+          flag = -1;
+          yylex();    /* run the lexical analysis automaton */
+      }
+
+      if(strcmp(argv[1], "-t") == 0){
+          flag = 2;
+          yyparse();  /* run the syntax analysis automaton */
+
+          if(errors_count == 0) print_ast(program, 0);
+      }
     }
 
-    if(strcmp(argv[1], "-t") == 0){
-      flag = 2;
-      yyparse();  /* run the syntax analysis automaton */
-
-      if(errors_count == 0) print_ast(program, 0);
-    }
-  } else {
-      flag = 2;
-      yyparse();
-  }
-  return 0;
+    delete_ast(program);
+    return 0;
 }
 
 int yywrap() {  /* called on EOF, return 1 to terminate */
-  return 1;
+    return 1;
 }
 
 void yyerror(char* s){
     if(eof_flag){
+        // EOF was reached
         printf("Line %d, column %d: %s: %s\n", line_aux, column_aux, s, yytext);
-    } else if(error_newline || strcmp(yytext, "\r\n") == 0){
-        if(strcmp(yytext, "\r") == 0 || strcmp(yytext, "\n") == 0){
-          printf("Line %d, column %d: %s: %s\n", line_index-1, column_aux, s, yytext);
-        } 
-        else{
-            printf("Line %d, column %d: %s: %s\n", line_index, column_index-yyleng, s, yytext);
-        }
-    } else{
+    } else if(strcmp(yytext, "\r") == 0 || strcmp(yytext, "\n") == 0){
+        // Error occurred in a new line
+        printf("Line %d, column %d: %s: %s\n", line_index-1, column_aux, s, yytext);
+    } else {
         printf("Line %d, column %d: %s: %s\n", line_index, column_index-yyleng, s, yytext);
     }
 }

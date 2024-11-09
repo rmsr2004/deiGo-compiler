@@ -1,6 +1,6 @@
 /*  
 *   João Afonso dos Santos Simões   -  2022236316
-*   Rodrigo Miguel Santos Rodrigues - 2022233032
+*   Rodrigo Miguel Santos Rodrigues -  2022233032
 */
 
 #include <stdlib.h>
@@ -60,14 +60,13 @@ int count_brothers(struct node* node){
     return count;
 }
 
-void add_type_to_brothers(struct node* node, struct node* type_node){
-    if(node == NULL || type_node == NULL) return;
+void add_type_to_brothers(struct node* node, category type){
+    if(node == NULL) return;
 
     struct node* aux = node;
-
     while(aux->brother != NULL){
         aux = aux->brother;
-        struct node *new_child = new_node(type_node->category, type_node->token);
+        struct node *new_child = new_node(type, NULL);
         struct node *child = aux->child;
         aux->child = new_child;
         add_brother(new_child, child);
@@ -92,14 +91,18 @@ void print_ast(struct node* node, int depth){
     print_ast(node->child, depth + 1);
     print_ast(node->brother, depth);
 }
-/**
-* Converts an enum value of type `category` to its corresponding string representation.
-*
-* @param cat The enum value of type `category` to be converted.
-* @return A constant character pointer to the string representation of the enum value.
-*         If the enum value does not match any known category, "Unknown" is returned.
-*/
-const char* category_to_string(enum category cat){
+
+void delete_ast(struct node* node){
+    if(node == NULL) return;
+
+    if(node != NULL) free(node->token);
+    delete_ast(node->child);
+    delete_ast(node->brother);
+
+    free(node);
+}
+
+char* category_to_string(category cat){
     switch(cat){
     case Program:           return "Program";
     case VarDecl:           return "VarDecl";
