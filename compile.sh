@@ -29,18 +29,21 @@ echo "Done!"
 if [ "$#" -ne 1 ]; then
     # If no argument or more than one argument is passed, run gocompiler without arguments
     ./src/gocompiler
+    rm src/lex.yy.c src/y.tab.c src/y.tab.h src/gocompiler src/y.output src/y.gv 
     exit 1
 fi
 
 # If the argument is '-l', run the gocompiler with the '-l' flag
 if [ "$1" == "-l" ]; then
     ./src/gocompiler -l
+    rm src/lex.yy.c src/y.tab.c src/y.tab.h src/gocompiler src/y.output src/y.gv 
     exit 0
 fi
 
 # If the argument is '-t', run the gocompiler with the '-t' flag
 if [ "$1" == "-t" ]; then
     ./src/gocompiler -t
+    rm src/lex.yy.c src/y.tab.c src/y.tab.h src/gocompiler src/y.output src/y.gv 
     exit 0
 fi
 
@@ -48,6 +51,7 @@ fi
 folder_name=tests/meta2/${1}
 if [ ! -d "$folder_name" ]; then
     echo "File not found: $folder_name"
+    rm src/lex.yy.c src/y.tab.c src/y.tab.h src/gocompiler src/y.output src/y.gv 
     exit 1
 fi
 
@@ -77,3 +81,5 @@ else
     echo "$diff_output"
     exit 1
 fi
+
+rm src/lex.yy.c src/y.tab.c src/y.tab.h src/gocompiler src/y.output src/y.gv 
