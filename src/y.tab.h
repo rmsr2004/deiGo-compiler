@@ -96,7 +96,8 @@ extern int yydebug;
     STRLIT = 297,                  /* STRLIT  */
     NATURAL = 298,                 /* NATURAL  */
     DECIMAL = 299,                 /* DECIMAL  */
-    RESERVED = 300                 /* RESERVED  */
+    RESERVED = 300,                /* RESERVED  */
+    ELSE_IF = 301                  /* ELSE_IF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -148,17 +149,18 @@ extern int yydebug;
 #define NATURAL 298
 #define DECIMAL 299
 #define RESERVED 300
+#define ELSE_IF 301
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 21 "src/gocompiler.y"
+#line 22 "src/gocompiler.y"
 
     char* token;
     struct node* node;
 
-#line 162 "y.tab.h"
+#line 164 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

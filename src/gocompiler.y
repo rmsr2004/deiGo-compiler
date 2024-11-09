@@ -14,6 +14,7 @@
 
     struct node* program;
     struct node* aux_node;
+    struct node* aux_node2;
 
     int errors_count = 0;
 %}
@@ -36,7 +37,9 @@
 %left   STAR DIV MOD
 %right  NOT
 
-%nonassoc ELSE IF
+%nonassoc ELSE_IF
+%nonassoc ELSE
+%nonassoc RPAR LPAR LSQ RSQ
 
 %type<node> Program Declarations VarDeclaration VarSpec VarSpecAux Type FuncDeclaration Parameters ParametersAux FuncBody VarsAndStatements Statement
 %type<node> StatementAux ParseArgs FuncInvocation FuncInvocationAux Expr
@@ -64,7 +67,7 @@ VarSpec:
                                                 add_child($$, new_node(Identifier, $1)); 
                                                 add_brother($$, $2);
 
-                                                add_type_to_brothers($2, $3);
+                                                add_type_to_brothers($$, $3);
                                             }
     ;
 
@@ -88,46 +91,57 @@ FuncDeclaration:
     FUNC IDENTIFIER LPAR Parameters RPAR Type FuncBody  {   
                                                             $$ = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
+                                                            
                                                             add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, $6);
                                                             add_child(aux_node, $4);
+
                                                             add_child($$, aux_node);
                                                             add_child($$, $7);
                                                         }
     | FUNC IDENTIFIER LPAR RPAR FuncBody                { 
                                                             $$ = new_node(FuncDecl, NULL); 
                                                             aux_node = new_node(FuncHeader, NULL); 
-                                                            add_child(aux_node, new_node(Identifier, $2)); 
+                                                            
+                                                            add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, new_node(FuncParams, NULL));
-                                                            add_child($$, aux_node); 
+
+                                                            add_child($$, aux_node);
                                                             add_child($$, $5);
                                                         }
     | FUNC IDENTIFIER LPAR Parameters RPAR FuncBody     { 
                                                             $$ = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
+                                                            
                                                             add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, $4);
+
                                                             add_child($$, aux_node);
                                                             add_child($$, $6);
                                                         }
     | FUNC IDENTIFIER LPAR RPAR Type FuncBody           { 
                                                             $$ = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
+                                                            
                                                             add_child(aux_node, new_node(Identifier, $2));
                                                             add_child(aux_node, $5);
+                                                            add_child(aux_node, new_node(FuncParams, NULL));
+
                                                             add_child($$, aux_node);
-                                                            add_brother($$, $6);
+                                                            add_child($$, $6);
                                                         }
     ;
 
 Parameters:
     IDENTIFIER Type ParametersAux   { 
                                         $$ = new_node(FuncParams, NULL); 
-                                        aux_node = new_node(ParamDecl, NULL); 
+                                        aux_node = new_node(ParamDecl, NULL);
+
                                         add_child(aux_node, $2); 
                                         add_child(aux_node, new_node(Identifier, $1)); 
+
                                         add_child($$, aux_node);
-                                        add_brother(aux_node, $3); 
+                                        add_child($$, $3);
                                     }
     ;
 
@@ -136,6 +150,7 @@ ParametersAux:
                                                 $$ = new_node(ParamDecl, NULL);
                                                 add_child($$, $3); 
                                                 add_child($$, new_node(Identifier, $2)); 
+
                                                 add_brother($$, $4);
                                             }
     | /*  null production */                { $$ = NULL; }
@@ -154,55 +169,64 @@ VarsAndStatements:
 Statement: 
     IDENTIFIER ASSIGN Expr                                                  { 
                                                                                 $$ = new_node(Assign, NULL);
-                                                                                add_child($$, new_node(Identifier, $1)); 
-                                                                                add_child($$, $3); 
+                                                                                add_child($$, new_node(Identifier, $1));
+                                                                                add_child($$, $3);
                                                                             }
-    | LBRACE StatementAux RBRACE                                            { 
-                                                                                if(count_brothers($2) > 0){
-                                                                                    $$ = new_node(Block, NULL);
-                                                                                    add_child($$, $2); 
-                                                                                } else { 
-                                                                                    $$ = $2; 
+    | LBRACE StatementAux RBRACE                                            {
+                                                                                if($2 == NULL){
+                                                                                    $$ = NULL;
+                                                                                } else {
+                                                                                    if(count_brothers($2) > 1){
+                                                                                        $$ = new_node(Block, NULL);
+                                                                                        add_child($$, $2); 
+                                                                                    } else { 
+                                                                                        $$ = $2; 
+                                                                                    }
                                                                                 }
                                                                             }
     | IF Expr LBRACE StatementAux RBRACE ELSE LBRACE StatementAux RBRACE    {
                                                                                 $$ = new_node(If, NULL);
-                                                                                add_child($$, $2);
 
                                                                                 // Create the If block
                                                                                 aux_node = new_node(Block, NULL);
                                                                                 add_child(aux_node, $4);
-                                                                                add_child($$, aux_node);
 
                                                                                 // Create the Else block
-                                                                                aux_node = new_node(Block, NULL);
-                                                                                add_child(aux_node, $8);
-                                                                                add_child($$, aux_node);
-                                                                            }
-    | IF Expr LBRACE StatementAux RBRACE                                    { 
-                                                                                $$ = new_node(If, NULL);
+                                                                                aux_node2 = new_node(Block, NULL);
+                                                                                add_child(aux_node2, $8);
+
                                                                                 add_child($$, $2);
+                                                                                add_child($$, aux_node);
+                                                                                add_child($$, aux_node2);
+                                                                            }
+    | IF Expr LBRACE StatementAux RBRACE %prec ELSE_IF                      { 
+                                                                                $$ = new_node(If, NULL);
 
                                                                                 // Create the If block
                                                                                 aux_node = new_node(Block, NULL);
                                                                                 add_child(aux_node, $4);
-                                                                                add_child($$, aux_node);
 
+                                                                                add_child($$, $2);
+                                                                                add_child($$, aux_node);
                                                                                 add_child($$, new_node(Block, NULL));
                                                                             }
     | FOR Expr LBRACE StatementAux RBRACE                                   { 
                                                                                 $$ = new_node(For, NULL);
-                                                                                add_child($$, $2);
 
                                                                                 // Create the For block
                                                                                 aux_node = new_node(Block, NULL);
                                                                                 add_child(aux_node, $4);
+
+                                                                                add_child($$, $2);
                                                                                 add_child($$, aux_node); 
                                                                             }
     | FOR LBRACE StatementAux RBRACE                                        { 
                                                                                 $$ = new_node(For, NULL);
+
+                                                                                // Create the For block
                                                                                 aux_node = new_node(Block, NULL);
                                                                                 add_child(aux_node, $3);
+
                                                                                 add_child($$, aux_node); 
                                                                             }
     | RETURN Expr                                                           { $$ = new_node(Return, NULL); add_child($$, $2); }
@@ -215,19 +239,23 @@ Statement:
     ;
 
 StatementAux:
-    Statement SEMICOLON StatementAux     { $$ = $1; add_brother($$, $3); }
+    Statement SEMICOLON StatementAux     { if($$ == NULL){ $$ = $3; } else { $$ = $1; add_brother($1, $3); } }
     | /*  null production */             { $$ = NULL; }
     
 ParseArgs:
     IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR CMDARGS LSQ Expr RSQ RPAR     {   
                                                                                     $$ = new_node(ParseArgs, NULL);
-                                                                                    add_child($$, new_node(Identifier, $1)); 
-                                                                                    add_child($$, $9); 
+
+                                                                                    aux_node = new_node(Identifier, $1);
+                                                                                    add_brother(aux_node, $9); 
+
+                                                                                    add_child($$, aux_node);
                                                                                 }
     | IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR                  { 
                                                                                     $$ = new_node(ParseArgs, NULL);
-                                                                                    add_child($$, new_node(Identifier, $1));
-                                                                                    add_child($$, new_node(Error, NULL));
+                                                                                    aux_node = new_node(Identifier, $1);
+                                                                                    
+                                                                                    add_brother(aux_node, new_node(Error, NULL));
                                                                                     errors_count++;
                                                                                 }
     ;
@@ -235,9 +263,12 @@ ParseArgs:
 FuncInvocation:
     IDENTIFIER LPAR Expr FuncInvocationAux RPAR     {
                                                         $$ = new_node(Call, NULL);
-                                                        add_child($$, new_node(Identifier, $1));
-                                                        add_child($$, $3);
-                                                        add_child($$, $4);
+
+                                                        aux_node = new_node(Identifier, $1);
+                                                        add_brother(aux_node, $3);
+                                                        add_brother($3, $4);
+
+                                                        add_child($$, aux_node);
                                                     }
     | IDENTIFIER LPAR RPAR                          { 
                                                         $$ = new_node(Call, NULL); 
@@ -245,14 +276,17 @@ FuncInvocation:
                                                     }
     | IDENTIFIER LPAR error RPAR                    { 
                                                         $$ = new_node(Call, NULL); 
-                                                        add_child($$, new_node(Identifier, $1)); 
-                                                        add_child($$, new_node(Error, NULL));
+
+                                                        aux_node = new_node(Identifier, $1);
+                                                        add_brother(aux_node, new_node(Error, NULL));
+
+                                                        add_child($$, aux_node);
                                                         errors_count++;
                                                     }
     ;
 
 FuncInvocationAux:
-    COMMA Expr FuncInvocationAux     { $$ = $2; add_brother($2, $3); }
+    COMMA Expr FuncInvocationAux     { $$ = $2; add_brother($$, $3); }
     | /*  null production */         { $$ = NULL; }
 
 Expr:
@@ -269,7 +303,7 @@ Expr:
     | Expr STAR Expr                { $$ = new_node(Mul, NULL); add_child($$, $1); add_child($$, $3); }
     | Expr DIV Expr                 { $$ = new_node(Div, NULL); add_child($$, $1); add_child($$, $3); }
     | Expr MOD Expr                 { $$ = new_node(Mod, NULL); add_child($$, $1); add_child($$, $3); }
-    | NOT Expr                      { $$ = new_node(Not, NULL); add_child($$, $2); }
+    | NOT Expr   %prec NOT          { $$ = new_node(Not, NULL); add_child($$, $2); }
     | MINUS Expr %prec NOT          { $$ = new_node(Minus, NULL); add_child($$, $2); }
     | PLUS Expr  %prec NOT          { $$ = new_node(Plus, NULL); add_child($$, $2); }
     | NATURAL                       { $$ = new_node(Natural, $1); }

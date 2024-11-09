@@ -84,10 +84,11 @@
 
     struct node* program;
     struct node* aux_node;
+    struct node* aux_node2;
 
     int errors_count = 0;
 
-#line 91 "y.tab.c"
+#line 92 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -173,7 +174,8 @@ extern int yydebug;
     STRLIT = 297,                  /* STRLIT  */
     NATURAL = 298,                 /* NATURAL  */
     DECIMAL = 299,                 /* DECIMAL  */
-    RESERVED = 300                 /* RESERVED  */
+    RESERVED = 300,                /* RESERVED  */
+    ELSE_IF = 301                  /* ELSE_IF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -225,17 +227,18 @@ extern int yydebug;
 #define NATURAL 298
 #define DECIMAL 299
 #define RESERVED 300
+#define ELSE_IF 301
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 21 "src/gocompiler.y"
+#line 22 "src/gocompiler.y"
 
     char* token;
     struct node* node;
 
-#line 239 "y.tab.c"
+#line 242 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -301,24 +304,25 @@ enum yysymbol_kind_t
   YYSYMBOL_NATURAL = 43,                   /* NATURAL  */
   YYSYMBOL_DECIMAL = 44,                   /* DECIMAL  */
   YYSYMBOL_RESERVED = 45,                  /* RESERVED  */
-  YYSYMBOL_YYACCEPT = 46,                  /* $accept  */
-  YYSYMBOL_Program = 47,                   /* Program  */
-  YYSYMBOL_Declarations = 48,              /* Declarations  */
-  YYSYMBOL_VarDeclaration = 49,            /* VarDeclaration  */
-  YYSYMBOL_VarSpec = 50,                   /* VarSpec  */
-  YYSYMBOL_VarSpecAux = 51,                /* VarSpecAux  */
-  YYSYMBOL_Type = 52,                      /* Type  */
-  YYSYMBOL_FuncDeclaration = 53,           /* FuncDeclaration  */
-  YYSYMBOL_Parameters = 54,                /* Parameters  */
-  YYSYMBOL_ParametersAux = 55,             /* ParametersAux  */
-  YYSYMBOL_FuncBody = 56,                  /* FuncBody  */
-  YYSYMBOL_VarsAndStatements = 57,         /* VarsAndStatements  */
-  YYSYMBOL_Statement = 58,                 /* Statement  */
-  YYSYMBOL_StatementAux = 59,              /* StatementAux  */
-  YYSYMBOL_ParseArgs = 60,                 /* ParseArgs  */
-  YYSYMBOL_FuncInvocation = 61,            /* FuncInvocation  */
-  YYSYMBOL_FuncInvocationAux = 62,         /* FuncInvocationAux  */
-  YYSYMBOL_Expr = 63                       /* Expr  */
+  YYSYMBOL_ELSE_IF = 46,                   /* ELSE_IF  */
+  YYSYMBOL_YYACCEPT = 47,                  /* $accept  */
+  YYSYMBOL_Program = 48,                   /* Program  */
+  YYSYMBOL_Declarations = 49,              /* Declarations  */
+  YYSYMBOL_VarDeclaration = 50,            /* VarDeclaration  */
+  YYSYMBOL_VarSpec = 51,                   /* VarSpec  */
+  YYSYMBOL_VarSpecAux = 52,                /* VarSpecAux  */
+  YYSYMBOL_Type = 53,                      /* Type  */
+  YYSYMBOL_FuncDeclaration = 54,           /* FuncDeclaration  */
+  YYSYMBOL_Parameters = 55,                /* Parameters  */
+  YYSYMBOL_ParametersAux = 56,             /* ParametersAux  */
+  YYSYMBOL_FuncBody = 57,                  /* FuncBody  */
+  YYSYMBOL_VarsAndStatements = 58,         /* VarsAndStatements  */
+  YYSYMBOL_Statement = 59,                 /* Statement  */
+  YYSYMBOL_StatementAux = 60,              /* StatementAux  */
+  YYSYMBOL_ParseArgs = 61,                 /* ParseArgs  */
+  YYSYMBOL_FuncInvocation = 62,            /* FuncInvocation  */
+  YYSYMBOL_FuncInvocationAux = 63,         /* FuncInvocationAux  */
+  YYSYMBOL_Expr = 64                       /* Expr  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -649,7 +653,7 @@ union yyalloc
 #define YYLAST   326
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  46
+#define YYNTOKENS  47
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  18
 /* YYNRULES -- Number of rules.  */
@@ -658,7 +662,7 @@ union yyalloc
 #define YYNSTATES  156
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   300
+#define YYMAXUTOK   301
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -702,21 +706,21 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45
+      45,    46
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    47,    47,    51,    52,    53,    56,    57,    61,    72,
-      77,    81,    82,    83,    84,    88,    97,   105,   113,   124,
-     135,   141,   144,   148,   149,   150,   151,   155,   160,   168,
-     182,   193,   202,   208,   209,   210,   211,   212,   213,   214,
-     218,   219,   222,   227,   236,   242,   246,   255,   256,   259,
-     260,   261,   262,   263,   264,   265,   266,   267,   268,   269,
-     270,   271,   272,   273,   274,   275,   276,   277,   278,   279,
-     280
+       0,    50,    50,    54,    55,    56,    59,    60,    64,    75,
+      80,    84,    85,    86,    87,    91,   102,   112,   122,   136,
+     149,   156,   159,   163,   164,   165,   166,   170,   175,   188,
+     203,   214,   224,   233,   234,   235,   236,   237,   238,   239,
+     243,   244,   247,   255,   265,   274,   278,   290,   291,   294,
+     295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
+     305,   306,   307,   308,   309,   310,   311,   312,   313,   314,
+     315
 };
 #endif
 
@@ -738,10 +742,11 @@ static const char *const yytname[] =
   "RBRACE", "RPAR", "RSQ", "PACKAGE", "RETURN", "ELSE", "FOR", "IF", "VAR",
   "INT", "FLOAT32", "BOOL", "STRING", "PRINT", "PARSEINT", "FUNC",
   "CMDARGS", "IDENTIFIER", "STRLIT", "NATURAL", "DECIMAL", "RESERVED",
-  "$accept", "Program", "Declarations", "VarDeclaration", "VarSpec",
-  "VarSpecAux", "Type", "FuncDeclaration", "Parameters", "ParametersAux",
-  "FuncBody", "VarsAndStatements", "Statement", "StatementAux",
-  "ParseArgs", "FuncInvocation", "FuncInvocationAux", "Expr", YY_NULLPTR
+  "ELSE_IF", "$accept", "Program", "Declarations", "VarDeclaration",
+  "VarSpec", "VarSpecAux", "Type", "FuncDeclaration", "Parameters",
+  "ParametersAux", "FuncBody", "VarsAndStatements", "Statement",
+  "StatementAux", "ParseArgs", "FuncInvocation", "FuncInvocationAux",
+  "Expr", YY_NULLPTR
 };
 
 static const char *
@@ -901,35 +906,35 @@ static const yytype_int16 yycheck[] =
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    27,    47,    41,     0,     3,    32,    39,    48,    49,
-      53,    16,    41,    50,    41,     3,     3,    50,     4,    51,
-      16,    48,    48,     3,    41,    33,    34,    35,    36,    52,
-      25,    41,    54,    25,    51,    14,    52,    56,    52,    25,
-      57,    56,     4,    55,    52,    56,     1,     3,    14,    24,
-      28,    30,    31,    37,    41,    49,    58,    60,    61,    41,
-      56,    58,    59,     9,    10,    16,    21,    41,    43,    44,
-      61,    63,    14,    63,    63,    16,     4,     6,    16,     3,
-       3,    52,     3,    24,    63,    63,     1,    63,    63,     7,
+       0,    27,    48,    41,     0,     3,    32,    39,    49,    50,
+      54,    16,    41,    51,    41,     3,     3,    51,     4,    52,
+      16,    49,    49,     3,    41,    33,    34,    35,    36,    53,
+      25,    41,    55,    25,    52,    14,    53,    57,    53,    25,
+      58,    57,     4,    56,    53,    57,     1,     3,    14,    24,
+      28,    30,    31,    37,    41,    50,    59,    61,    62,    41,
+      57,    59,    60,     9,    10,    16,    21,    41,    43,    44,
+      62,    64,    14,    64,    64,    16,     4,     6,    16,     3,
+       3,    53,     3,    24,    64,    64,     1,    64,    64,     7,
        8,     9,    10,    11,    12,    13,    15,    18,    19,    20,
-      22,    23,    59,    14,    14,    42,    63,     5,    63,     1,
-      25,    63,    55,    59,    25,    25,    63,    63,    63,    63,
-      63,    63,    63,    63,    63,    63,    63,    63,    63,    24,
-      59,    59,    25,    25,     6,    25,     4,    62,    24,    24,
-      38,    63,    25,    29,    16,    62,    14,     1,    40,    59,
-      25,    17,    24,    63,    26,    25
+      22,    23,    60,    14,    14,    42,    64,     5,    64,     1,
+      25,    64,    56,    60,    25,    25,    64,    64,    64,    64,
+      64,    64,    64,    64,    64,    64,    64,    64,    64,    24,
+      60,    60,    25,    25,     6,    25,     4,    63,    24,    24,
+      38,    64,    25,    29,    16,    63,    14,     1,    40,    60,
+      25,    17,    24,    64,    26,    25
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    46,    47,    48,    48,    48,    49,    49,    50,    51,
-      51,    52,    52,    52,    52,    53,    53,    53,    53,    54,
-      55,    55,    56,    57,    57,    57,    57,    58,    58,    58,
-      58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
-      59,    59,    60,    60,    61,    61,    61,    62,    62,    63,
-      63,    63,    63,    63,    63,    63,    63,    63,    63,    63,
-      63,    63,    63,    63,    63,    63,    63,    63,    63,    63,
-      63
+       0,    47,    48,    49,    49,    49,    50,    50,    51,    52,
+      52,    53,    53,    53,    53,    54,    54,    54,    54,    55,
+      56,    56,    57,    58,    58,    58,    58,    59,    59,    59,
+      59,    59,    59,    59,    59,    59,    59,    59,    59,    59,
+      60,    60,    61,    61,    62,    62,    62,    63,    63,    64,
+      64,    64,    64,    64,    64,    64,    64,    64,    64,    64,
+      64,    64,    64,    64,    64,    64,    64,    64,    64,    64,
+      64
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -1406,542 +1411,574 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* Program: PACKAGE IDENTIFIER SEMICOLON Declarations  */
-#line 47 "src/gocompiler.y"
+#line 50 "src/gocompiler.y"
                                                 { (yyval.node) = program = new_node(Program, NULL); add_child(program, (yyvsp[0].node)); }
-#line 1412 "y.tab.c"
+#line 1417 "y.tab.c"
     break;
 
   case 3: /* Declarations: VarDeclaration SEMICOLON Declarations  */
-#line 51 "src/gocompiler.y"
+#line 54 "src/gocompiler.y"
                                                     { (yyval.node) = (yyvsp[-2].node); add_brother((yyval.node), (yyvsp[0].node)); }
-#line 1418 "y.tab.c"
+#line 1423 "y.tab.c"
     break;
 
   case 4: /* Declarations: FuncDeclaration SEMICOLON Declarations  */
-#line 52 "src/gocompiler.y"
+#line 55 "src/gocompiler.y"
                                                     { (yyval.node) = (yyvsp[-2].node); add_brother((yyval.node), (yyvsp[0].node)); }
-#line 1424 "y.tab.c"
+#line 1429 "y.tab.c"
     break;
 
   case 5: /* Declarations: %empty  */
-#line 53 "src/gocompiler.y"
+#line 56 "src/gocompiler.y"
                                                     { (yyval.node) = NULL; }
-#line 1430 "y.tab.c"
+#line 1435 "y.tab.c"
     break;
 
   case 6: /* VarDeclaration: VAR VarSpec  */
-#line 56 "src/gocompiler.y"
+#line 59 "src/gocompiler.y"
                                               { (yyval.node) = (yyvsp[0].node); }
-#line 1436 "y.tab.c"
+#line 1441 "y.tab.c"
     break;
 
   case 7: /* VarDeclaration: VAR LPAR VarSpec SEMICOLON RPAR  */
-#line 57 "src/gocompiler.y"
+#line 60 "src/gocompiler.y"
                                               { (yyval.node) = (yyvsp[-2].node); }
-#line 1442 "y.tab.c"
+#line 1447 "y.tab.c"
     break;
 
   case 8: /* VarSpec: IDENTIFIER VarSpecAux Type  */
-#line 61 "src/gocompiler.y"
+#line 64 "src/gocompiler.y"
                                            {    
                                                 (yyval.node) = new_node(VarDecl, NULL); 
                                                 add_child((yyval.node), (yyvsp[0].node)); 
                                                 add_child((yyval.node), new_node(Identifier, (yyvsp[-2].token))); 
                                                 add_brother((yyval.node), (yyvsp[-1].node));
 
-                                                add_type_to_brothers((yyvsp[-1].node), (yyvsp[0].node));
+                                                add_type_to_brothers((yyval.node), (yyvsp[0].node));
                                             }
-#line 1455 "y.tab.c"
+#line 1460 "y.tab.c"
     break;
 
   case 9: /* VarSpecAux: COMMA IDENTIFIER VarSpecAux  */
-#line 72 "src/gocompiler.y"
+#line 75 "src/gocompiler.y"
                                     { 
                                         (yyval.node) = new_node(VarDecl, NULL); 
                                         add_child((yyval.node), new_node(Identifier, (yyvsp[-1].token))); 
                                         add_brother((yyval.node), (yyvsp[0].node));
                                     }
-#line 1465 "y.tab.c"
+#line 1470 "y.tab.c"
     break;
 
   case 10: /* VarSpecAux: %empty  */
-#line 77 "src/gocompiler.y"
+#line 80 "src/gocompiler.y"
                                     { (yyval.node) = NULL; }
-#line 1471 "y.tab.c"
+#line 1476 "y.tab.c"
     break;
 
   case 11: /* Type: INT  */
-#line 81 "src/gocompiler.y"
+#line 84 "src/gocompiler.y"
                       { (yyval.node) = new_node(Int, NULL); }
-#line 1477 "y.tab.c"
+#line 1482 "y.tab.c"
     break;
 
   case 12: /* Type: FLOAT32  */
-#line 82 "src/gocompiler.y"
+#line 85 "src/gocompiler.y"
                       { (yyval.node) = new_node(Float32, NULL); }
-#line 1483 "y.tab.c"
+#line 1488 "y.tab.c"
     break;
 
   case 13: /* Type: BOOL  */
-#line 83 "src/gocompiler.y"
+#line 86 "src/gocompiler.y"
                       { (yyval.node) = new_node(Bool, NULL); }
-#line 1489 "y.tab.c"
+#line 1494 "y.tab.c"
     break;
 
   case 14: /* Type: STRING  */
-#line 84 "src/gocompiler.y"
+#line 87 "src/gocompiler.y"
                       { (yyval.node) = new_node(String, NULL); }
-#line 1495 "y.tab.c"
+#line 1500 "y.tab.c"
     break;
 
   case 15: /* FuncDeclaration: FUNC IDENTIFIER LPAR Parameters RPAR Type FuncBody  */
-#line 88 "src/gocompiler.y"
+#line 91 "src/gocompiler.y"
                                                         {   
                                                             (yyval.node) = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
+                                                            
                                                             add_child(aux_node, new_node(Identifier, (yyvsp[-5].token)));
                                                             add_child(aux_node, (yyvsp[-1].node));
                                                             add_child(aux_node, (yyvsp[-3].node));
+
                                                             add_child((yyval.node), aux_node);
                                                             add_child((yyval.node), (yyvsp[0].node));
                                                         }
-#line 1509 "y.tab.c"
+#line 1516 "y.tab.c"
     break;
 
   case 16: /* FuncDeclaration: FUNC IDENTIFIER LPAR RPAR FuncBody  */
-#line 97 "src/gocompiler.y"
+#line 102 "src/gocompiler.y"
                                                         { 
                                                             (yyval.node) = new_node(FuncDecl, NULL); 
                                                             aux_node = new_node(FuncHeader, NULL); 
-                                                            add_child(aux_node, new_node(Identifier, (yyvsp[-3].token))); 
+                                                            
+                                                            add_child(aux_node, new_node(Identifier, (yyvsp[-3].token)));
                                                             add_child(aux_node, new_node(FuncParams, NULL));
-                                                            add_child((yyval.node), aux_node); 
+
+                                                            add_child((yyval.node), aux_node);
                                                             add_child((yyval.node), (yyvsp[0].node));
                                                         }
-#line 1522 "y.tab.c"
+#line 1531 "y.tab.c"
     break;
 
   case 17: /* FuncDeclaration: FUNC IDENTIFIER LPAR Parameters RPAR FuncBody  */
-#line 105 "src/gocompiler.y"
+#line 112 "src/gocompiler.y"
                                                         { 
                                                             (yyval.node) = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
+                                                            
                                                             add_child(aux_node, new_node(Identifier, (yyvsp[-4].token)));
                                                             add_child(aux_node, (yyvsp[-2].node));
+
                                                             add_child((yyval.node), aux_node);
                                                             add_child((yyval.node), (yyvsp[0].node));
                                                         }
-#line 1535 "y.tab.c"
+#line 1546 "y.tab.c"
     break;
 
   case 18: /* FuncDeclaration: FUNC IDENTIFIER LPAR RPAR Type FuncBody  */
-#line 113 "src/gocompiler.y"
+#line 122 "src/gocompiler.y"
                                                         { 
                                                             (yyval.node) = new_node(FuncDecl, NULL);
                                                             aux_node = new_node(FuncHeader, NULL);
+                                                            
                                                             add_child(aux_node, new_node(Identifier, (yyvsp[-4].token)));
                                                             add_child(aux_node, (yyvsp[-1].node));
+                                                            add_child(aux_node, new_node(FuncParams, NULL));
+
                                                             add_child((yyval.node), aux_node);
-                                                            add_brother((yyval.node), (yyvsp[0].node));
+                                                            add_child((yyval.node), (yyvsp[0].node));
                                                         }
-#line 1548 "y.tab.c"
+#line 1562 "y.tab.c"
     break;
 
   case 19: /* Parameters: IDENTIFIER Type ParametersAux  */
-#line 124 "src/gocompiler.y"
+#line 136 "src/gocompiler.y"
                                     { 
                                         (yyval.node) = new_node(FuncParams, NULL); 
-                                        aux_node = new_node(ParamDecl, NULL); 
+                                        aux_node = new_node(ParamDecl, NULL);
+
                                         add_child(aux_node, (yyvsp[-1].node)); 
                                         add_child(aux_node, new_node(Identifier, (yyvsp[-2].token))); 
+
                                         add_child((yyval.node), aux_node);
-                                        add_brother(aux_node, (yyvsp[0].node)); 
+                                        add_child((yyval.node), (yyvsp[0].node));
                                     }
-#line 1561 "y.tab.c"
+#line 1577 "y.tab.c"
     break;
 
   case 20: /* ParametersAux: COMMA IDENTIFIER Type ParametersAux  */
-#line 135 "src/gocompiler.y"
+#line 149 "src/gocompiler.y"
                                             { 
                                                 (yyval.node) = new_node(ParamDecl, NULL);
                                                 add_child((yyval.node), (yyvsp[-1].node)); 
                                                 add_child((yyval.node), new_node(Identifier, (yyvsp[-2].token))); 
+
                                                 add_brother((yyval.node), (yyvsp[0].node));
                                             }
-#line 1572 "y.tab.c"
+#line 1589 "y.tab.c"
     break;
 
   case 21: /* ParametersAux: %empty  */
-#line 141 "src/gocompiler.y"
+#line 156 "src/gocompiler.y"
                                             { (yyval.node) = NULL; }
-#line 1578 "y.tab.c"
+#line 1595 "y.tab.c"
     break;
 
   case 22: /* FuncBody: LBRACE VarsAndStatements RBRACE  */
-#line 144 "src/gocompiler.y"
+#line 159 "src/gocompiler.y"
                                         { (yyval.node) = new_node(FuncBody, NULL); add_child((yyval.node), (yyvsp[-1].node)); }
-#line 1584 "y.tab.c"
+#line 1601 "y.tab.c"
     break;
 
   case 23: /* VarsAndStatements: VarsAndStatements VarDeclaration SEMICOLON  */
-#line 148 "src/gocompiler.y"
+#line 163 "src/gocompiler.y"
                                                     { if((yyvsp[-2].node) == NULL) { (yyval.node) = (yyvsp[-1].node); } else { (yyval.node) = (yyvsp[-2].node); add_brother((yyvsp[-2].node), (yyvsp[-1].node)); } }
-#line 1590 "y.tab.c"
+#line 1607 "y.tab.c"
     break;
 
   case 24: /* VarsAndStatements: VarsAndStatements Statement SEMICOLON  */
-#line 149 "src/gocompiler.y"
+#line 164 "src/gocompiler.y"
                                                     { if((yyvsp[-2].node) == NULL) { (yyval.node) = (yyvsp[-1].node); } else { (yyval.node) = (yyvsp[-2].node); add_brother((yyvsp[-2].node), (yyvsp[-1].node)); } }
-#line 1596 "y.tab.c"
+#line 1613 "y.tab.c"
     break;
 
   case 25: /* VarsAndStatements: VarsAndStatements SEMICOLON  */
-#line 150 "src/gocompiler.y"
+#line 165 "src/gocompiler.y"
                                                     { (yyval.node) = (yyvsp[-1].node); }
-#line 1602 "y.tab.c"
+#line 1619 "y.tab.c"
     break;
 
   case 26: /* VarsAndStatements: %empty  */
-#line 151 "src/gocompiler.y"
+#line 166 "src/gocompiler.y"
                                                     { (yyval.node) = NULL; }
-#line 1608 "y.tab.c"
+#line 1625 "y.tab.c"
     break;
 
   case 27: /* Statement: IDENTIFIER ASSIGN Expr  */
-#line 155 "src/gocompiler.y"
+#line 170 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(Assign, NULL);
-                                                                                add_child((yyval.node), new_node(Identifier, (yyvsp[-2].token))); 
-                                                                                add_child((yyval.node), (yyvsp[0].node)); 
+                                                                                add_child((yyval.node), new_node(Identifier, (yyvsp[-2].token)));
+                                                                                add_child((yyval.node), (yyvsp[0].node));
                                                                             }
-#line 1618 "y.tab.c"
+#line 1635 "y.tab.c"
     break;
 
   case 28: /* Statement: LBRACE StatementAux RBRACE  */
-#line 160 "src/gocompiler.y"
-                                                                            { 
-                                                                                if(count_brothers((yyvsp[-1].node)) > 0){
-                                                                                    (yyval.node) = new_node(Block, NULL);
-                                                                                    add_child((yyval.node), (yyvsp[-1].node)); 
-                                                                                } else { 
-                                                                                    (yyval.node) = (yyvsp[-1].node); 
+#line 175 "src/gocompiler.y"
+                                                                            {
+                                                                                if((yyvsp[-1].node) == NULL){
+                                                                                    (yyval.node) = NULL;
+                                                                                } else {
+                                                                                    //printf("count_brothers: %d\n", count_brothers($2));
+                                                                                    if(count_brothers((yyvsp[-1].node)) > 1){
+                                                                                        (yyval.node) = new_node(Block, NULL);
+                                                                                        add_child((yyval.node), (yyvsp[-1].node)); 
+                                                                                    } else { 
+                                                                                        (yyval.node) = (yyvsp[-1].node); 
+                                                                                    }
                                                                                 }
                                                                             }
-#line 1631 "y.tab.c"
+#line 1653 "y.tab.c"
     break;
 
   case 29: /* Statement: IF Expr LBRACE StatementAux RBRACE ELSE LBRACE StatementAux RBRACE  */
-#line 168 "src/gocompiler.y"
+#line 188 "src/gocompiler.y"
                                                                             {
                                                                                 (yyval.node) = new_node(If, NULL);
-                                                                                add_child((yyval.node), (yyvsp[-7].node));
 
                                                                                 // Create the If block
                                                                                 aux_node = new_node(Block, NULL);
                                                                                 add_child(aux_node, (yyvsp[-5].node));
-                                                                                add_child((yyval.node), aux_node);
 
                                                                                 // Create the Else block
-                                                                                aux_node = new_node(Block, NULL);
-                                                                                add_child(aux_node, (yyvsp[-1].node));
+                                                                                aux_node2 = new_node(Block, NULL);
+                                                                                add_child(aux_node2, (yyvsp[-1].node));
+
+                                                                                add_child((yyval.node), (yyvsp[-7].node));
                                                                                 add_child((yyval.node), aux_node);
+                                                                                add_child((yyval.node), aux_node2);
                                                                             }
-#line 1650 "y.tab.c"
+#line 1673 "y.tab.c"
     break;
 
   case 30: /* Statement: IF Expr LBRACE StatementAux RBRACE  */
-#line 182 "src/gocompiler.y"
+#line 203 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(If, NULL);
-                                                                                add_child((yyval.node), (yyvsp[-3].node));
 
                                                                                 // Create the If block
                                                                                 aux_node = new_node(Block, NULL);
                                                                                 add_child(aux_node, (yyvsp[-1].node));
-                                                                                add_child((yyval.node), aux_node);
 
+                                                                                add_child((yyval.node), (yyvsp[-3].node));
+                                                                                add_child((yyval.node), aux_node);
                                                                                 add_child((yyval.node), new_node(Block, NULL));
                                                                             }
-#line 1666 "y.tab.c"
+#line 1689 "y.tab.c"
     break;
 
   case 31: /* Statement: FOR Expr LBRACE StatementAux RBRACE  */
-#line 193 "src/gocompiler.y"
+#line 214 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(For, NULL);
-                                                                                add_child((yyval.node), (yyvsp[-3].node));
 
                                                                                 // Create the For block
                                                                                 aux_node = new_node(Block, NULL);
                                                                                 add_child(aux_node, (yyvsp[-1].node));
+
+                                                                                add_child((yyval.node), (yyvsp[-3].node));
                                                                                 add_child((yyval.node), aux_node); 
                                                                             }
-#line 1680 "y.tab.c"
+#line 1704 "y.tab.c"
     break;
 
   case 32: /* Statement: FOR LBRACE StatementAux RBRACE  */
-#line 202 "src/gocompiler.y"
+#line 224 "src/gocompiler.y"
                                                                             { 
                                                                                 (yyval.node) = new_node(For, NULL);
+
+                                                                                // Create the For block
                                                                                 aux_node = new_node(Block, NULL);
                                                                                 add_child(aux_node, (yyvsp[-1].node));
+
                                                                                 add_child((yyval.node), aux_node); 
                                                                             }
-#line 1691 "y.tab.c"
+#line 1718 "y.tab.c"
     break;
 
   case 33: /* Statement: RETURN Expr  */
-#line 208 "src/gocompiler.y"
+#line 233 "src/gocompiler.y"
                                                                             { (yyval.node) = new_node(Return, NULL); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1697 "y.tab.c"
+#line 1724 "y.tab.c"
     break;
 
   case 34: /* Statement: RETURN  */
-#line 209 "src/gocompiler.y"
+#line 234 "src/gocompiler.y"
                                                                             { (yyval.node) = new_node(Return, NULL); }
-#line 1703 "y.tab.c"
+#line 1730 "y.tab.c"
     break;
 
   case 35: /* Statement: FuncInvocation  */
-#line 210 "src/gocompiler.y"
+#line 235 "src/gocompiler.y"
                                                                             { (yyval.node) = (yyvsp[0].node); }
-#line 1709 "y.tab.c"
+#line 1736 "y.tab.c"
     break;
 
   case 36: /* Statement: ParseArgs  */
-#line 211 "src/gocompiler.y"
+#line 236 "src/gocompiler.y"
                                                                             { (yyval.node) = (yyvsp[0].node); }
-#line 1715 "y.tab.c"
+#line 1742 "y.tab.c"
     break;
 
   case 37: /* Statement: PRINT LPAR Expr RPAR  */
-#line 212 "src/gocompiler.y"
+#line 237 "src/gocompiler.y"
                                                                             { (yyval.node) = new_node(Print, NULL); add_child((yyval.node), (yyvsp[-1].node)); }
-#line 1721 "y.tab.c"
+#line 1748 "y.tab.c"
     break;
 
   case 38: /* Statement: PRINT LPAR STRLIT RPAR  */
-#line 213 "src/gocompiler.y"
+#line 238 "src/gocompiler.y"
                                                                             { (yyval.node) = new_node(Print, NULL); add_child((yyval.node), new_node(StrLit, (yyvsp[-1].token))); }
-#line 1727 "y.tab.c"
+#line 1754 "y.tab.c"
     break;
 
   case 39: /* Statement: error  */
-#line 214 "src/gocompiler.y"
+#line 239 "src/gocompiler.y"
                                                                             { errors_count++; (yyval.node) = new_node(Error, NULL); }
-#line 1733 "y.tab.c"
+#line 1760 "y.tab.c"
     break;
 
   case 40: /* StatementAux: Statement SEMICOLON StatementAux  */
-#line 218 "src/gocompiler.y"
-                                         { (yyval.node) = (yyvsp[-2].node); add_brother((yyval.node), (yyvsp[0].node)); }
-#line 1739 "y.tab.c"
-    break;
-
-  case 41: /* StatementAux: %empty  */
-#line 219 "src/gocompiler.y"
-                                         { (yyval.node) = NULL; }
-#line 1745 "y.tab.c"
-    break;
-
-  case 42: /* ParseArgs: IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR CMDARGS LSQ Expr RSQ RPAR  */
-#line 222 "src/gocompiler.y"
-                                                                                {   
-                                                                                    (yyval.node) = new_node(ParseArgs, NULL);
-                                                                                    add_child((yyval.node), new_node(Identifier, (yyvsp[-10].token))); 
-                                                                                    add_child((yyval.node), (yyvsp[-2].node)); 
-                                                                                }
-#line 1755 "y.tab.c"
-    break;
-
-  case 43: /* ParseArgs: IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR  */
-#line 227 "src/gocompiler.y"
-                                                                                { 
-                                                                                    (yyval.node) = new_node(ParseArgs, NULL);
-                                                                                    add_child((yyval.node), new_node(Identifier, (yyvsp[-7].token)));
-                                                                                    add_child((yyval.node), new_node(Error, NULL));
-                                                                                    errors_count++;
-                                                                                }
+#line 243 "src/gocompiler.y"
+                                         { if((yyval.node) == NULL) { (yyval.node) = (yyvsp[0].node); } else { (yyval.node) = (yyvsp[-2].node); add_brother((yyvsp[-2].node), (yyvsp[0].node)); } }
 #line 1766 "y.tab.c"
     break;
 
+  case 41: /* StatementAux: %empty  */
+#line 244 "src/gocompiler.y"
+                                         { (yyval.node) = NULL; }
+#line 1772 "y.tab.c"
+    break;
+
+  case 42: /* ParseArgs: IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR CMDARGS LSQ Expr RSQ RPAR  */
+#line 247 "src/gocompiler.y"
+                                                                                {   
+                                                                                    (yyval.node) = new_node(ParseArgs, NULL);
+
+                                                                                    aux_node = new_node(Identifier, (yyvsp[-10].token));
+                                                                                    add_brother(aux_node, (yyvsp[-2].node)); 
+
+                                                                                    add_child((yyval.node), aux_node);
+                                                                                }
+#line 1785 "y.tab.c"
+    break;
+
+  case 43: /* ParseArgs: IDENTIFIER COMMA BLANKID ASSIGN PARSEINT LPAR error RPAR  */
+#line 255 "src/gocompiler.y"
+                                                                                { 
+                                                                                    (yyval.node) = new_node(ParseArgs, NULL);
+                                                                                    aux_node = new_node(Identifier, (yyvsp[-7].token));
+                                                                                    
+                                                                                    add_brother(aux_node, new_node(Error, NULL));
+                                                                                    errors_count++;
+                                                                                }
+#line 1797 "y.tab.c"
+    break;
+
   case 44: /* FuncInvocation: IDENTIFIER LPAR Expr FuncInvocationAux RPAR  */
-#line 236 "src/gocompiler.y"
+#line 265 "src/gocompiler.y"
                                                     {
                                                         (yyval.node) = new_node(Call, NULL);
-                                                        add_child((yyval.node), new_node(Identifier, (yyvsp[-4].token)));
-                                                        add_child((yyval.node), (yyvsp[-2].node));
-                                                        add_child((yyval.node), (yyvsp[-1].node));
+
+                                                        aux_node = new_node(Identifier, (yyvsp[-4].token));
+                                                        add_brother(aux_node, (yyvsp[-2].node));
+                                                        add_brother((yyvsp[-2].node), (yyvsp[-1].node));
+
+                                                        add_child((yyval.node), aux_node);
                                                     }
-#line 1777 "y.tab.c"
+#line 1811 "y.tab.c"
     break;
 
   case 45: /* FuncInvocation: IDENTIFIER LPAR RPAR  */
-#line 242 "src/gocompiler.y"
+#line 274 "src/gocompiler.y"
                                                     { 
                                                         (yyval.node) = new_node(Call, NULL); 
                                                         add_child((yyval.node), new_node(Identifier, (yyvsp[-2].token)));
                                                     }
-#line 1786 "y.tab.c"
+#line 1820 "y.tab.c"
     break;
 
   case 46: /* FuncInvocation: IDENTIFIER LPAR error RPAR  */
-#line 246 "src/gocompiler.y"
+#line 278 "src/gocompiler.y"
                                                     { 
                                                         (yyval.node) = new_node(Call, NULL); 
-                                                        add_child((yyval.node), new_node(Identifier, (yyvsp[-3].token))); 
-                                                        add_child((yyval.node), new_node(Error, NULL));
+
+                                                        aux_node = new_node(Identifier, (yyvsp[-3].token));
+                                                        add_brother(aux_node, new_node(Error, NULL));
+
+                                                        add_child((yyval.node), aux_node);
                                                         errors_count++;
                                                     }
-#line 1797 "y.tab.c"
+#line 1834 "y.tab.c"
     break;
 
   case 47: /* FuncInvocationAux: COMMA Expr FuncInvocationAux  */
-#line 255 "src/gocompiler.y"
-                                     { (yyval.node) = (yyvsp[-1].node); add_brother((yyvsp[-1].node), (yyvsp[0].node)); }
-#line 1803 "y.tab.c"
+#line 290 "src/gocompiler.y"
+                                     { (yyval.node) = (yyvsp[-1].node); add_brother((yyval.node), (yyvsp[0].node)); }
+#line 1840 "y.tab.c"
     break;
 
   case 48: /* FuncInvocationAux: %empty  */
-#line 256 "src/gocompiler.y"
+#line 291 "src/gocompiler.y"
                                      { (yyval.node) = NULL; }
-#line 1809 "y.tab.c"
+#line 1846 "y.tab.c"
     break;
 
   case 49: /* Expr: Expr OR Expr  */
-#line 259 "src/gocompiler.y"
+#line 294 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Or, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1815 "y.tab.c"
+#line 1852 "y.tab.c"
     break;
 
   case 50: /* Expr: Expr AND Expr  */
-#line 260 "src/gocompiler.y"
+#line 295 "src/gocompiler.y"
                                     { (yyval.node) = new_node(And, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1821 "y.tab.c"
+#line 1858 "y.tab.c"
     break;
 
   case 51: /* Expr: Expr LT Expr  */
-#line 261 "src/gocompiler.y"
+#line 296 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Lt, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1827 "y.tab.c"
+#line 1864 "y.tab.c"
     break;
 
   case 52: /* Expr: Expr GT Expr  */
-#line 262 "src/gocompiler.y"
+#line 297 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Gt, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1833 "y.tab.c"
+#line 1870 "y.tab.c"
     break;
 
   case 53: /* Expr: Expr EQ Expr  */
-#line 263 "src/gocompiler.y"
+#line 298 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Eq, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1839 "y.tab.c"
+#line 1876 "y.tab.c"
     break;
 
   case 54: /* Expr: Expr NE Expr  */
-#line 264 "src/gocompiler.y"
+#line 299 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Ne, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1845 "y.tab.c"
+#line 1882 "y.tab.c"
     break;
 
   case 55: /* Expr: Expr LE Expr  */
-#line 265 "src/gocompiler.y"
+#line 300 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Le, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1851 "y.tab.c"
+#line 1888 "y.tab.c"
     break;
 
   case 56: /* Expr: Expr GE Expr  */
-#line 266 "src/gocompiler.y"
+#line 301 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Ge, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1857 "y.tab.c"
+#line 1894 "y.tab.c"
     break;
 
   case 57: /* Expr: Expr PLUS Expr  */
-#line 267 "src/gocompiler.y"
+#line 302 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Add, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1863 "y.tab.c"
+#line 1900 "y.tab.c"
     break;
 
   case 58: /* Expr: Expr MINUS Expr  */
-#line 268 "src/gocompiler.y"
+#line 303 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Sub, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1869 "y.tab.c"
+#line 1906 "y.tab.c"
     break;
 
   case 59: /* Expr: Expr STAR Expr  */
-#line 269 "src/gocompiler.y"
+#line 304 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Mul, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1875 "y.tab.c"
+#line 1912 "y.tab.c"
     break;
 
   case 60: /* Expr: Expr DIV Expr  */
-#line 270 "src/gocompiler.y"
+#line 305 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Div, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1881 "y.tab.c"
+#line 1918 "y.tab.c"
     break;
 
   case 61: /* Expr: Expr MOD Expr  */
-#line 271 "src/gocompiler.y"
+#line 306 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Mod, NULL); add_child((yyval.node), (yyvsp[-2].node)); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1887 "y.tab.c"
+#line 1924 "y.tab.c"
     break;
 
   case 62: /* Expr: NOT Expr  */
-#line 272 "src/gocompiler.y"
+#line 307 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Not, NULL); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1893 "y.tab.c"
+#line 1930 "y.tab.c"
     break;
 
   case 63: /* Expr: MINUS Expr  */
-#line 273 "src/gocompiler.y"
+#line 308 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Minus, NULL); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1899 "y.tab.c"
+#line 1936 "y.tab.c"
     break;
 
   case 64: /* Expr: PLUS Expr  */
-#line 274 "src/gocompiler.y"
+#line 309 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Plus, NULL); add_child((yyval.node), (yyvsp[0].node)); }
-#line 1905 "y.tab.c"
+#line 1942 "y.tab.c"
     break;
 
   case 65: /* Expr: NATURAL  */
-#line 275 "src/gocompiler.y"
+#line 310 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Natural, (yyvsp[0].token)); }
-#line 1911 "y.tab.c"
+#line 1948 "y.tab.c"
     break;
 
   case 66: /* Expr: DECIMAL  */
-#line 276 "src/gocompiler.y"
+#line 311 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Decimal, (yyvsp[0].token)); }
-#line 1917 "y.tab.c"
+#line 1954 "y.tab.c"
     break;
 
   case 67: /* Expr: IDENTIFIER  */
-#line 277 "src/gocompiler.y"
+#line 312 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Identifier, (yyvsp[0].token)); }
-#line 1923 "y.tab.c"
+#line 1960 "y.tab.c"
     break;
 
   case 68: /* Expr: FuncInvocation  */
-#line 278 "src/gocompiler.y"
+#line 313 "src/gocompiler.y"
                                     { (yyval.node) = (yyvsp[0].node); }
-#line 1929 "y.tab.c"
+#line 1966 "y.tab.c"
     break;
 
   case 69: /* Expr: LPAR Expr RPAR  */
-#line 279 "src/gocompiler.y"
+#line 314 "src/gocompiler.y"
                                     { (yyval.node) = (yyvsp[-1].node); }
-#line 1935 "y.tab.c"
+#line 1972 "y.tab.c"
     break;
 
   case 70: /* Expr: LPAR error RPAR  */
-#line 280 "src/gocompiler.y"
+#line 315 "src/gocompiler.y"
                                     { (yyval.node) = new_node(Error, NULL); errors_count++; }
-#line 1941 "y.tab.c"
+#line 1978 "y.tab.c"
     break;
 
 
-#line 1945 "y.tab.c"
+#line 1982 "y.tab.c"
 
       default: break;
     }
@@ -2134,4 +2171,4 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 282 "src/gocompiler.y"
+#line 317 "src/gocompiler.y"

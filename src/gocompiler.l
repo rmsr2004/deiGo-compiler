@@ -3,7 +3,7 @@
     *   João Afonso dos Santos Simões   -  2022236316
     *   Rodrigo Miguel Santos Rodrigues -  2022233032
     */
-
+  
     #include <stdio.h>
     #include <stdarg.h>
     #include "y.tab.h"
@@ -21,12 +21,14 @@
     int line_index = 1, column_index = 1;       // Variables to store the current line and column
     int comment_line = 0, comment_column = 0;   // Variables to store the position where the comment started
     int string_line = 0, string_column = 0;     // Variables to store the position where the string started
+    int line_aux, column_aux;                   // Variables to store the position where the error occurred
 
     int flag_string = 1;                        // Flag to check if the string is valid (1) or not (0)
     int emit_semicolon = 0;                     // Flag to check if a semicolon should be emitted
 
     int flag = 0;                               // Flag to check if -l flag is present
     int eof_flag = 0;                           // Flag to check if the EOF was reached
+    int error_newline = 0;                      // Flag to check if the error occurred in a new line
 
     /*
     *   Updates the line and column indexes
@@ -91,54 +93,44 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 %%
 {whitespace}+                           { update_column(); }
 {line_break}                            {
-                                            update_column();
-                                            if(emit_semicolon){
-                                                if(flag == -1) printf("SEMICOLON\n");
-                                                emit_semicolon = 0;
-                                                if(flag == 2) return SEMICOLON;
-                                            }
-                                            update_line();
+                                          line_aux = line_index;
+                                          column_aux = column_index;
+                                          error_newline = 1;
+                                          update_line();
+                                          if(emit_semicolon){
+                                              if(flag == -1) printf("SEMICOLON\n");
+                                              emit_semicolon = 0;
+                                              if(flag == 2) return SEMICOLON;
+                                          } else{
+                                              emit_semicolon = 0;
+                                          }
+                                          error_newline = 0;
                                         }
 
 0[xX]{hex_digit}+                       { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
-                                          if(flag == 2){ 
-                                            yylval.token = (char*) strdup(yytext); 
-                                            return NATURAL; 
-                                          } 
+                                          yylval.token = (char*) strdup(yytext); if(flag == 2) return NATURAL;                                          
                                         }
-0{oct_digit}+                           { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
-                                          if(flag == 2){ 
-                                            yylval.token = (char*) strdup(yytext);
-                                            return NATURAL;
-                                          } 
+0{oct_digit}+                           { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1;  
+                                          yylval.token = (char*) strdup(yytext); if(flag == 2) return NATURAL;                                          
                                         }
 0{digit}+                               { 
-                                            error(line_index, column_index, "invalid octal constant (%s)", yytext);
-                                            update_column(); 
+                                          error(line_index, column_index, "invalid octal constant (%s)", yytext);
+                                          update_column(); 
                                         }
 {digit}+                                { if(flag == -1) printf("NATURAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
-                                          if(flag == 2){
-                                            yylval.token = (char*) strdup(yytext); 
-                                            return NATURAL;
-                                          } 
+                                          yylval.token = (char*) strdup(yytext); if(flag == 2) return NATURAL;                                        
                                         }
 {digit}+"."{digit}*{exponent}?          { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
-                                          if(flag == 2){
-                                            yylval.token = (char*) strdup(yytext); 
-                                            return DECIMAL;
-                                          }
+                                          yylval.token = (char*) strdup(yytext);
+                                          if(flag == 2) return DECIMAL;                                          
                                         }
 "."{digit}+{exponent}*                  { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
-                                          if(flag == 2){
-                                            yylval.token = (char*) strdup(yytext); 
-                                            return DECIMAL;
-                                          } 
+                                          yylval.token = (char*) strdup(yytext);
+                                          if(flag == 2) return DECIMAL;                                          
                                         }
 {digit}+{exponent}                      { if(flag == -1) printf("DECIMAL(%s)\n", yytext); update_column(); emit_semicolon = 1; 
-                                          if(flag == 2){
-                                            yylval.token = (char*) strdup(yytext); 
-                                            return DECIMAL;
-                                          } 
+                                          yylval.token = (char*) strdup(yytext);
+                                          if(flag == 2) return DECIMAL;                                           
                                         }
 
 "//"[^\r\n]*                            { update_column(); }
@@ -147,7 +139,12 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 <COMMENT_STATE>\n                       { update_line(); }
 <COMMENT_STATE>"*/"                     { BEGIN(INITIAL); update_column(); }
 <COMMENT_STATE>.                        { update_column(); }
-<COMMENT_STATE><<EOF>>                  { error(comment_line, comment_column, "unterminated comment"); eof_flag = 1; yyterminate(); }
+<COMMENT_STATE><<EOF>>                  { 
+                                          BEGIN(INITIAL);
+                                          error(comment_line, comment_column, "unterminated comment"); 
+                                          update_column();
+                                          yyterminate(); 
+                                        }
 
 ";"                                     { if(flag == -1) printf("SEMICOLON\n"); update_column(); emit_semicolon = 0; if(flag == 2) return SEMICOLON; }
 ","                                     { if(flag == -1) printf("COMMA\n"); update_column(); emit_semicolon = 0; if(flag == 2) return COMMA; }
@@ -188,54 +185,49 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 "func"                                  { if(flag == -1) printf("FUNC\n"); update_column(); emit_semicolon = 0; if(flag == 2) return FUNC; }
 "os.Args"                               { if(flag == -1) printf("CMDARGS\n"); update_column(); emit_semicolon = 0; if(flag == 2) return CMDARGS; }
 {keyword}                               { if(flag == -1) printf("RESERVED(%s)\n", yytext); update_column(); emit_semicolon = 0; 
-                                          if(flag == 2){ 
-                                            yylval.token = (char*) strdup(yytext); 
-                                            return RESERVED;
-                                          }
+                                          yylval.token = (char*) strdup(yytext); 
+                                          if(flag == 2) return RESERVED;
                                         }
 
 {identifier}                            { if(flag == -1) printf("IDENTIFIER(%s)\n", yytext); update_column(); emit_semicolon = 1; 
-                                          if(flag == 2){
-                                            yylval.token = (char*) strdup(yytext); 
-                                            return IDENTIFIER;
-                                          } 
+                                          yylval.token = (char*) strdup(yytext);
+                                          if(flag == 2) return IDENTIFIER;
                                         }
 
 \"                                      { BEGIN(STRLIT_STATE); save_string_pos(); update_column();}
 <STRLIT_STATE>{valid_escape}            { update_column(); }
 <STRLIT_STATE>{invalid_escape}          {
-                                            error(line_index, column_index, "invalid escape sequence (%s)", yytext);
-                                            update_column(); 
+                                          error(line_index, column_index, "invalid escape sequence (%s)", yytext);
+                                          update_column(); 
                                         }
 <STRLIT_STATE><<EOF>>                   { 
-                                            BEGIN(INITIAL);
-                                            error(string_line, string_column, "unterminated string literal");
-                                            update_column(); 
-                                            eof_flag = 1;
+                                          BEGIN(INITIAL);
+                                          eof_flag = 1;
+                                          error(string_line, string_column, "unterminated string literal");
+                                          update_column();
+                                          yyterminate();
                                         }
 <STRLIT_STATE>{line_break}              { 
-                                            BEGIN(INITIAL); 
-                                            error(string_line, string_column, "unterminated string literal");
-                                            update_line();
+                                          BEGIN(INITIAL); 
+                                          error(string_line, string_column, "unterminated string literal");
+                                          update_line();
                                         }
 <STRLIT_STATE>\"                        { BEGIN(INITIAL); update_column(); }
 <STRLIT_STATE>.                         { update_column(); }
 
 {strlit}                                { if(flag == -1) printf("STRLIT(%s)\n", yytext); update_column(); emit_semicolon = 1; 
-                                          if(flag == 2){ 
-                                            yylval.token = (char*) strdup(yytext); 
-                                            return STRLIT;
-                                          } 
+                                          yylval.token = (char*) strdup(yytext);
+                                          if(flag == 2) return STRLIT;
                                         }
 
-<<EOF>>                                 {   
-                                            if(emit_semicolon){
-                                                if(flag == -1) printf("SEMICOLON\n");
+<<EOF>>                                 {
+                                          update_column();
+                                          if(emit_semicolon){
+                                              if(flag == -1) printf("SEMICOLON\n");
                                                 emit_semicolon = 0;
-                                                if(flag == 2) return SEMICOLON;
-                                            }
-                                            eof_flag = 1;
-                                            yyterminate();
+                                              if(flag == 2) return SEMICOLON;
+                                          }
+                                          yyterminate();
                                         }
 
 .                                       { error(line_index, column_index, "illegal character (%s)", yytext); update_column(); }
@@ -267,8 +259,16 @@ int yywrap() {  /* called on EOF, return 1 to terminate */
 }
 
 void yyerror(char* s){
-  if(!eof_flag) 
-    column_index = column_index - yyleng;
-
-  printf("Line %d, column %d: %s: %s\n", line_index, column_index, s, yytext);
+    if(eof_flag){
+        printf("Line %d, column %d: %s: %s\n", line_aux, column_aux, s, yytext);
+    } else if(error_newline || strcmp(yytext, "\r\n") == 0){
+        if(strcmp(yytext, "\r") == 0 || strcmp(yytext, "\n") == 0){
+          printf("Line %d, column %d: %s: %s\n", line_index-1, column_aux, s, yytext);
+        } 
+        else{
+            printf("Line %d, column %d: %s: %s\n", line_index, column_index-yyleng, s, yytext);
+        }
+    } else{
+        printf("Line %d, column %d: %s: %s\n", line_index, column_index-yyleng, s, yytext);
+    }
 }
