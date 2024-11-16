@@ -1,13 +1,14 @@
 %{
-  /*  
-  *   João Afonso dos Santos Simões   -  2022236316
-  *   Rodrigo Miguel Santos Rodrigues -  2022233032
-  */
+    /*  
+    *   João Afonso dos Santos Simões   -  2022236316
+    *   Rodrigo Miguel Santos Rodrigues -  2022233032
+    */
   
     #include <stdio.h>
     #include <stdarg.h>
     #include "y.tab.h"
     #include "ast.h"
+    #include "symbols.h"
 
     int yyparse(void);
 
@@ -245,6 +246,18 @@ int main(int argc, char* argv[]){
 
           if(errors_count == 0) print_ast(program, 0);
       }
+
+      if(strcmp(argv[1], "-s") == 0){
+          flag = 2;
+          yyparse();  /* run the syntax analysis automaton */
+          if(errors_count == 0){
+              errors_count = check_program(program);
+              if(errors_count == 0){
+                  print_symbol_table();
+                  print_ast(program, 0);
+              }
+          }
+      }
     } else {
       flag = 2;
       yyparse();
@@ -269,6 +282,4 @@ void yyerror(char* s){
     } else {
         printf("Line %d, column %d: %s: %s\n", line_index, column_index-yyleng, s, yytext);
     }
-
-    //if(program != NULL) delete_ast(program);
 }

@@ -3,17 +3,25 @@
 *   Rodrigo Miguel Santos Rodrigues -  2022233032
 */
 
+#include "ast.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "ast.h"
-
-struct node* new_node(enum category category, char *token){
+struct node* new_node(enum category category, char* value){
     struct node* new = (struct node*) malloc(sizeof(struct node));
+    struct token* new_token = (struct token*) malloc(sizeof(struct token));
+    
+    *new_token = (struct token) {
+        .value = value,
+        .category = category,
+        .type = cat_to_type(category),
+        .line = 0,
+        .column = 0
+    };
 
     *new = (struct node) {
-        .category = category,
-        .token = token,
+        .token = new_token,
         .child = NULL,
         .brother = NULL
     };
@@ -33,6 +41,22 @@ void add_child(struct node* parent, struct node* child){
         }
         current->brother = child;
     }
+}
+
+struct node* get_child(struct node* parent, int index){
+    if(parent == NULL) return NULL;
+
+    int count = 0;
+
+    struct node* current = parent->child;
+    while(current != NULL){
+        if(count == index){
+            return current;
+        }
+        count++;
+        current = current->brother;
+    }
+    return NULL;
 }
 
 void add_brother(struct node* node, struct node* new_brother){
@@ -81,10 +105,10 @@ void print_ast(struct node* node, int depth){
         printf("..");
     }
 
-    printf("%s", category_to_string(node->category));
+    printf("%s", category_to_str(node->token->category));
 
-    if(node->token != NULL){
-        printf("(%s)", node->token);
+    if(node->token->value != NULL){
+        printf("(%s)", node->token->value);
     }
 
     printf("\n");
@@ -103,7 +127,7 @@ void delete_ast(struct node* node){
     free(node);
 }
 
-char* category_to_string(category cat){
+char* category_to_str(category cat){
     switch(cat){
     case Program:           return "Program";
     case VarDecl:           return "VarDecl";
@@ -144,7 +168,29 @@ char* category_to_string(category cat){
     case Decimal:           return "Decimal";
     case Identifier:        return "Identifier";
     case StrLit:            return "StrLit";
-    default:                return "Error";
+    default:                return NULL;
+    }
+}
+
+const char* type_to_str(type t){
+    switch(t){
+        case integer:      return "int";
+        case float32:      return "float32";
+        case boolean:      return "bool";
+        case string:       return "string";
+        case None:         return "none";
+        default:           return NULL;
+    }
+}
+
+type cat_to_type(category cat){
+    switch(cat){
+        case Int:           return integer;
+        case Float32:       return float32;
+        case Bool:          return boolean;
+        case String:        return string;
+        case None:          return None;
+        default:            return None;
     }
 }
 

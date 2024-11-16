@@ -66,7 +66,7 @@ VarSpec:
                                                 add_child($$, $3); 
                                                 add_child($$, new_node(Identifier, $1)); 
 
-                                                add_type_to_brothers($2, $3->category);   // Add the type to all the brothers
+                                                add_type_to_brothers($2, $3->token->category);   // Add the type to all the brothers
                                                 
                                                 add_brother($$, $2);
                                             }
