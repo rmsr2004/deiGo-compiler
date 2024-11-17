@@ -284,5 +284,36 @@ void print_symbol_table(){
         aux = aux->next;
     }
 }
+char *change_type(char *type)
+{
+    if (strcmp(type, "Int") == 0)
+    {
+        return "int";
+    }
+    else if (strcmp(type, "Float32") == 0)
+    {
+        return "float32";
+    }
+    else if (strcmp(type, "Bool") == 0)
+    {
+        return "bool";
+    }
+    else if (strcmp(type, "String") == 0)
+    {
+        return "string";
+    }
+    else if (strcmp(type, "IntLit") == 0)
+    {
+        return "intLit";
+    }
+    else if (strcmp(type, "RealLit") == 0)
+    {
+        return "realLit";
+    }
+    else
+    {
+        return "strLit";
+    }
+}
 
 // end of symbols.c

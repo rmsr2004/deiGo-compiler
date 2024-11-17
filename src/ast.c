@@ -16,6 +16,7 @@ struct node* new_node(enum category category, char* value){
         .value = value,
         .category = category,
         .type = cat_to_type(category),
+        .annotation = NULL,
         .line = 0,
         .column = 0
     };
@@ -29,53 +30,6 @@ struct node* new_node(enum category category, char* value){
     return new;
 }
 
-<<<<<<< HEAD
-/**
-* Adds a child node to the given parent node.
-*
-* This function allocates memory for a new node_list structure,
-* assigns the child node to it, and appends it to the end of the
-* parent's children list.
-*
-* @param parent A pointer to the parent node to which the child will be added.
-* @param child A pointer to the child node to be added to the parent.
-*/
-void add_child(struct node* parent, struct node* child) {
-    struct node_list *new = malloc(sizeof(struct node_list));
-    new->node = child;
-    new->next = NULL;
-    struct node_list *children = parent->children;
-    while(children->next != NULL)
-        children = children->next;
-    children->next = new;
-}
-
-
-/**
- * @brief Adds a new brother node to the list of children of the given node.
- *
- * This function adds a new brother node to the list of children of the given node.
- * If either the given node or the new brother node is NULL, the function does nothing.
- * If the given node has no children, the new brother node is added as the first child.
- * Otherwise, the new brother node is added to the end of the list of children.
- *
- * @param aux_brother Pointer to the node to which the new brother node will be added.
- * @param new_brother Pointer to the new brother node to be added.
- */
-void add_brother(struct node* aux_brother, struct node* new_brother){
-    if(aux_brother == NULL || new_brother == NULL){
-        return;
-    }
-
-    struct node_list* current = aux_brother->children;
-    if(current == NULL){
-        aux_brother->children = malloc(sizeof(struct node_list));
-        aux_brother->children->node = new_brother;
-        aux_brother->children->next = NULL;
-    } else{
-        while(current->next != NULL){
-            current = current->next;
-=======
 void add_child(struct node* parent, struct node* child){
     if(parent == NULL || child == NULL) return;
 
@@ -85,31 +39,15 @@ void add_child(struct node* parent, struct node* child){
         struct node* current = parent->child;
         while(current->brother != NULL){
             current = current->brother;
->>>>>>> rmsr2004
         }
         current->brother = child;
     }
 }
 
-<<<<<<< HEAD
-/**
-* This function recursively prints the AST, starting from the specified node.
-* Each level of depth in the tree is indicated by a series of underscores.
-*
-* @param node A pointer to the root node of the AST to be printed.
-* @param depth The current depth in the tree, used for indentation.
-*
-* The function prints the category of each node, and if the node has an associated
-* token, it prints the token as well. It then recursively prints all child nodes.
-*/
-void print_ast(struct node *node, int depth) {
-    if (node == NULL) return;
-=======
 struct node* get_child(struct node* parent, int index){
     if(parent == NULL) return NULL;
 
     int count = 0;
->>>>>>> rmsr2004
 
     struct node* current = parent->child;
     while(current != NULL){
@@ -171,7 +109,11 @@ void print_ast(struct node* node, int depth){
     printf("%s", category_to_str(node->token->category));
 
     if(node->token->value != NULL){
-        printf("(%s)", node->token->value);
+        if(node->token->annotation == NULL)
+            printf("(%s)", node->token->value);
+        else
+            printf("(%s - %s)", node->token->value, node->token->annotation);
+
     }
 
     printf("\n");
@@ -180,56 +122,6 @@ void print_ast(struct node* node, int depth){
     print_ast(node->brother, depth);
 }
 
-<<<<<<< HEAD
-/**
-* Converts an enum value of type `category` to its corresponding string representation.
-*
-* @param cat The enum value of type `category` to be converted.
-* @return A constant character pointer to the string representation of the enum value.
-*         If the enum value does not match any known category, "Unknown" is returned.
-*/
-const char* category_to_string(enum category cat) {
-    switch (cat) {
-    case Program: return "Program";
-    case VarDecl: return "VarDecl";
-    case FuncDecl: return "FuncDecl";
-    case FuncHeader: return "FuncHeader";
-    case FuncParams: return "FuncParams";
-    case FuncBody: return "FuncBody";
-    case ParamDecl: return "ParamDecl";
-    case Block: return "Block";
-    case If: return "If";
-    case For: return "For";
-    case Return: return "Return";
-    case Call: return "Call";
-    case Print: return "Print";
-    case ParseArgs: return "ParseArgs";
-    case Or: return "Or";
-    case And: return "And";
-    case Eq: return "Eq";
-    case Ne: return "Ne";
-    case Lt: return "Lt";
-    case Gt: return "Gt";
-    case Le: return "Le";
-    case Ge: return "Ge";
-    case Add: return "Add";
-    case Sub: return "Sub";
-    case Mul: return "Mul";
-    case Div: return "Div";
-    case Mod: return "Mod";
-    case Not: return "Not";
-    case Minus: return "Minus";
-    case Plus: return "Plus";
-    case Assign: return "Assign";
-    case Int: return "Int";
-    case Float32: return "Float32";
-    case Bool: return "Bool";
-    case String: return "String";
-    case Natural: return "Natural";
-    case Identifier: return "Identifier";
-    case StrLit: return "StrLit";
-    default: return "Unknown";
-=======
 void delete_ast(struct node* node){
     if(node == NULL) return;
 
@@ -304,7 +196,6 @@ type cat_to_type(category cat){
         case String:        return string;
         case None:          return None;
         default:            return None;
->>>>>>> rmsr2004
     }
 }
 

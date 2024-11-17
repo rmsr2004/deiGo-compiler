@@ -37,6 +37,7 @@ struct token {
     char* value;                    // The value of the token.
     category category;              // The category of the token.
     type type;                      // The type of the token.
+    char* annotation;               // The annotation of the token.
     int line;                       // The line in the source code where the token appears.
     int column;                     // The column in the source code where the token appears.                    
 };

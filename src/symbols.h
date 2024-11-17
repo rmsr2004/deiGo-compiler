@@ -18,7 +18,7 @@
 *
 */
 struct symbol_list {
-	char* identifier;                   // The identifier of the symbol.
+	char* identifier;                   // The identifier of the symbol.   
 	type type;                          // The type of the symbol.
     int is_param;                       // Flag to indicate if the symbol is a parameter.
 	struct node* node;                  // The node where the symbol was declared.
@@ -187,6 +187,9 @@ struct table* find_table(char* name);
 * variable and that each table structure contains a linked list of symbols.
 */
 void print_symbol_table();
+char *change_type(char *type);
+
+
 
 #endif // _SYMBOLS_H
 
