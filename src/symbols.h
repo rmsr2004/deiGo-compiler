@@ -163,6 +163,19 @@ struct table* new_table(char* name, char* type, struct node*);
 */
 void insert_table(struct table* new_table);
 /**
+* @brief Finds a table by its name in the global table list.
+*
+* This function searches through the global table list to find a table
+* with the specified name. If a table with the given name is found, it
+* returns a pointer to that table. If no table with the given name is
+* found, it returns NULL.
+*
+* @param name The name of the table to find.
+* @return A pointer to the table with the specified name, or NULL if no
+*         such table is found.
+*/
+struct table* find_table(char* name);
+/**
 * @brief Prints the symbol table, including both global and local symbol tables.
 * 
 * This function iterates through the global symbol table and prints each symbol's
