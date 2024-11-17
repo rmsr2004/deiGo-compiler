@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 struct node* new_node(enum category category, char* value){
     struct node* new = (struct node*) malloc(sizeof(struct node));
@@ -109,11 +110,12 @@ void print_ast(struct node* node, int depth){
     printf("%s", category_to_str(node->token->category));
 
     if(node->token->value != NULL){
-        if(node->token->annotation == NULL)
-            printf("(%s)", node->token->value);
-        else
-            printf("(%s - %s)", node->token->value, node->token->annotation);
+        printf("(%s)", node->token->value);
+    }
 
+    const char* type_str = type_to_str(node->token->type);
+    if (strcmp(type_str, "") != 0 && strcmp(type_str, "none") != 0){
+        printf(" - %s", type_str);
     }
 
     printf("\n");
