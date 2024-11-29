@@ -21,7 +21,11 @@ struct symbol_list {
 	char* identifier;                   // The identifier of the symbol.
 	type type;                          // The type of the symbol.
     int is_param;                       // Flag to indicate if the symbol is a parameter.
-	struct node* node;                  // The node where the symbol was declared.
+	int is_func;                        // Flag to indicate if the symbol is a function.
+    int is_used;                        // Flag to indicate if the symbol is used.
+    int is_declared;                    // Flag to indicate if the symbol is declared.
+    int is_global;                      // Flag to indicate if the symbol is global.
+    struct node* node;                  // The node where the symbol was declared.
 	struct symbol_list* next;           // Pointer to the next symbol in the list.
 };
 /**
@@ -51,6 +55,17 @@ struct table {
 * @return The number of semantic errors found in the program.
 */
 int check_program(struct node* program);
+/**
+* @brief Fills the global symbol table with the given function node.
+*
+* This function checks if the function identifier is already present in the global symbol table.
+* If the identifier is not present, it inserts the function symbol into the global symbol table.
+* If the identifier is already present, it prints an error message indicating that the symbol is already defined
+* and increments the semantic error count.
+*
+* @param function A pointer to the function node (FuncDecl) to be added to the global symbol table.
+*/
+void fill_global_table(struct node* function);
 /**
 * @brief Checks the function declaration and processes its symbol table.
 *   
@@ -108,7 +123,48 @@ void check_body(struct table* table, struct node* body);
 * @param node Pointer to the node representing the variable declaration (VarDecl).
 */
 void check_declaration(struct table* table, struct node* node);
+/**
+* @brief Checks the semantic correctness of an expression in the given symbol table.
+*
+* This function performs semantic analysis on the provided expression node by checking
+* its type, annotations, and ensuring that identifiers are declared and used correctly.
+* It also verifies the compatibility of operators and operands, and handles various
+* expression types such as identifiers, literals, binary and unary operators, control
+* flow statements, function calls, and more.
+*
+* @param table Pointer to the symbol table where the expression is being checked.
+* @param expression Pointer to the expression node to be checked.
+*/
 void check_expression(struct table* table, struct node* expression);
+/**
+* @brief Checks the validity of applying an operator to the given operands.
+*
+* This function verifies if the operator specified in the `operation` node
+* can be applied to the types of the `left` and `right` operand nodes. If the
+* operator is not applicable to the operand types, an error message is printed
+* and the `semantic_errors` counter is incremented.
+*
+* @param left Pointer to the left operand node.
+* @param right Pointer to the right operand node.
+* @param operation Pointer to the operation node containing the operator.
+* 
+* For each operator, the function checks if the operand types are compatible
+* with the operator. If not, an error message is printed with the line and
+* column of the operation, the operator, and the operand types. The function
+* also sets the `annotation` and `type` fields of the `operation` node if the
+* operator is applicable.
+*/
+void check_operators(struct node* left, struct node* right, struct node* operation);
+/**
+* @brief Checks for unused symbols in the symbol table and reports them.
+*
+* This function iterates through the global symbol table and its subsequent tables,
+* checking each symbol to see if it has been used. If a symbol is found that has not
+* been used, is not a function, and is not a parameter, a message is printed indicating
+* the line and column where the symbol was declared, along with the symbol's identifier.
+* The count of semantic errors is incremented for each unused symbol found.
+*/
+void check_unused_symbols();
 /**
 * @brief Inserts a new symbol into the symbol table.
 *
@@ -152,7 +208,7 @@ struct symbol_list* search_symbol(struct table* table, char* identifier);
 *
 * The function also inserts the new table into the symbol table list.
 */
-struct table* new_table(char* name, char* type, struct node*);
+struct table* new_table(char* name, char* type, struct node* node);
 /**
 * @brief Inserts a new table into the global table list.
 *
@@ -174,7 +230,29 @@ void insert_table(struct table* new_table);
 * @return A pointer to the table with the specified name, or NULL if no
 *         such table is found.
 */
-struct table* find_table(char* name);
+struct table* find_table(char* name, char* params);
+/**
+* @brief Annotates the abstract syntax tree (AST) for a function declaration.
+*
+* This function processes the AST node representing a function declaration or variable declaration.
+* It skips variable declarations and checks expressions within the function body.
+* If a variable declaration is found, it marks the variable as declared in the local symbol table.
+*
+* @param node Pointer to the AST node to be annotated. This node should represent a function declaration.
+*/
+void anotate_ast(struct node* node);
+/**
+* @brief Retrieves the parameter types of a function as a string.
+*
+* This function takes a function node and extracts the parameter types,
+* returning them as a string in the format "(type1,type2,...)". If the
+* function has no parameters, it returns "()".
+*
+* @param function A pointer to the function node (expected to be of type FuncDecl).
+* @return A dynamically allocated string containing the parameter types.
+*         The caller is responsible for freeing the allocated memory.
+*/
+char* get_params(struct node* function);
 /**
 * @brief Prints the symbol table, including both global and local symbol tables.
 * 
@@ -187,6 +265,13 @@ struct table* find_table(char* name);
 * variable and that each table structure contains a linked list of symbols.
 */
 void print_symbol_table();
+/**
+* Converts an operator category to its corresponding string representation.
+*
+* @param cat The operator category to be converted.
+* @return A string representing the operator, or NULL if the category is not recognized.
+*/
+char* operator_to_str(category cat);
 
 #endif // _SYMBOLS_H
 

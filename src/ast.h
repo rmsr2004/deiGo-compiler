@@ -37,6 +37,7 @@ struct token {
     char* value;                    // The value of the token.
     category category;              // The category of the token.
     type type;                      // The type of the token.
+    char* annotation;               // The annotation of the token. (can be NULL)
     int line;                       // The line in the source code where the token appears.
     int column;                     // The column in the source code where the token appears.                    
 };
@@ -51,6 +52,7 @@ struct node {
     struct node* child;                 // Pointer to the next child node.
     struct node* brother;               // Pointer to the next brother node.
 };
+struct token* new_token(char* value, int line, int column);
 /**
 * Creates a new node with the specified category and token.
 *
@@ -58,7 +60,7 @@ struct node {
 * @param value The value associated with the node.
 * @return A pointer to the newly created node.
 */
-struct node* new_node(enum category category, char* value);
+struct node* new_node(enum category category, char* value, struct token* token);
 /**
 * Adds a child node to the given parent node.
 *
@@ -140,7 +142,7 @@ char* category_to_str(category cat);
 * @param t The type enumeration value to be converted.
 * @return A string representation of the type.
 */
-const char* type_to_str(type t);
+char* type_to_str(type t);
 /**
 * Converts a category to its corresponding type.
 *

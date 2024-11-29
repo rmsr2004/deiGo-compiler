@@ -8,7 +8,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct node* new_node(enum category category, char* value){
+struct token* new_token(char* value, int line, int column){
+    struct token* new = (struct token*) malloc(sizeof(struct token));
+    *new = (struct token) {
+        .value = value,
+        .category = None,
+        .type = None,
+        .annotation = NULL,
+        .line = line,
+        .column = column
+    };
+    return new;
+}
+
+struct node* new_node(enum category category, char* value, struct token* token){
     struct node* new = (struct node*) malloc(sizeof(struct node));
     struct token* new_token = (struct token*) malloc(sizeof(struct token));
     
@@ -16,8 +29,9 @@ struct node* new_node(enum category category, char* value){
         .value = value,
         .category = category,
         .type = cat_to_type(category),
-        .line = 0,
-        .column = 0
+        .annotation = NULL,
+        .line = token != NULL ? token->line : 0,
+        .column = token != NULL ? token->column : 0
     };
 
     *new = (struct node) {
@@ -90,7 +104,8 @@ void add_type_to_brothers(struct node* node, category type){
     struct node* aux = NULL;
     struct node* current = node;
     while(current != NULL){
-        aux = new_node(type, NULL);
+        aux = new_node(type, NULL, NULL);
+        
         aux->brother = current->child;
         current->child = aux;
         
@@ -109,6 +124,10 @@ void print_ast(struct node* node, int depth){
 
     if(node->token->value != NULL){
         printf("(%s)", node->token->value);
+    }
+
+    if(node->token->annotation != NULL){
+        printf(" - %s", node->token->annotation);
     }
 
     printf("\n");
@@ -172,25 +191,25 @@ char* category_to_str(category cat){
     }
 }
 
-const char* type_to_str(type t){
+char* type_to_str(type t){
     switch(t){
-        case integer:      return "int";
-        case float32:      return "float32";
-        case boolean:      return "bool";
-        case string:       return "string";
-        case None:         return "none";
-        default:           return NULL;
+    case integer:      return "int";
+    case float32:      return "float32";
+    case boolean:      return "bool";
+    case string:       return "string";
+    case None:         return "none";
+    default:           return NULL;
     }
 }
 
 type cat_to_type(category cat){
     switch(cat){
-        case Int:           return integer;
-        case Float32:       return float32;
-        case Bool:          return boolean;
-        case String:        return string;
-        case None:          return None;
-        default:            return None;
+    case Int:           return integer;
+    case Float32:       return float32;
+    case Bool:          return boolean;
+    case String:        return string;
+    case None:          return None;
+    default:            return None;
     }
 }
 

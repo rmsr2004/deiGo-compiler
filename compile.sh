@@ -55,8 +55,12 @@ if [ ! -d "$folder_name" ]; then
 fi
 
 # Run the gocompiler with the '-s' flag, using input from the test file and saving output to a file
-echo -n "./src/gocompiler -t < tests/meta3/${1}/${1}.dgo > tests/${1}/output.out ... "
+echo -n "./src/gocompiler -s < tests/meta3/${1}/${1}.dgo > tests/${1}/output.out ... "
 ./src/gocompiler -s < tests/meta3/${1}/${1}.dgo > tests/meta3/${1}/output.out
+
+if [[ "${1}" == *"error"* ]]; then
+    sort tests/meta3/${1}/output.out -o tests/meta3/${1}/output.out
+fi
 echo "Done!"
 
 # Define the paths for expected and generated output files
