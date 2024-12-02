@@ -232,6 +232,13 @@ void insert_table(struct table* new_table);
 */
 struct table* find_table(char* name, char* params);
 /**
+* @brief Frees the memory allocated for the global symbol table.
+*
+* This function iterates through the linked list of symbol tables starting from
+* the global_table and frees the memory allocated for each table.
+*/
+void free_tables();
+/**
 * @brief Annotates the abstract syntax tree (AST) for a function declaration.
 *
 * This function processes the AST node representing a function declaration or variable declaration.

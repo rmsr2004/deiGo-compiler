@@ -22,7 +22,7 @@ mv y.gv src/y.gv
 
 # Compile the lex.yy.c file into the gocompiler binary
 echo -n "cc src/lex.yy.c src/y.tab.c src/ast.c src/symbols.c  -Wall -Wno-unused-function -o src/gocompiler ... "
-cc src/lex.yy.c src/y.tab.c src/ast.c src/symbols.c -Wall -Wno-unused-function -o src/gocompiler -g
+clang src/lex.yy.c src/y.tab.c src/ast.c src/symbols.c -Wall -Wno-unused-function -o src/gocompiler -g
 echo "Done!"
 
 # Check if the number of arguments passed is not equal to 1

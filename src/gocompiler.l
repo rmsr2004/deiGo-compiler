@@ -231,7 +231,7 @@ keyword         break|case|chan|const|continue|default|defer|fallthrough|go|goto
 %%
 extern int yylex();
 int main(int argc, char* argv[]){
-    /* Check if the -l or -t flag is present */
+    /* Check if the -l or -t ot -s flag is present */
     if(argc > 1){
       if(strcmp(argv[1], "-l") == 0){
           flag = -1;
@@ -250,20 +250,24 @@ int main(int argc, char* argv[]){
           yyparse();  /* run the syntax analysis automaton */
           if(errors_count == 0){
               errors_count = check_program(program);
-              if(errors_count == 0){
-                  print_symbol_table();
-                  print_ast(program, 0);
-              }
+              
+              print_symbol_table();
+              print_ast(program, 0);
           }
-          //print_symbol_table();
-          //print_ast(program, 0);
       }
-    } else {
-      flag = 2;
-      yyparse();
+    } else if(argc == 1){
+        flag = 2;
+        yyparse();
+
+        if(errors_count == 0){
+            errors_count = check_program(program);
+        }
     }
 
-    delete_ast(program);
+    if(program != NULL) delete_ast(program);
+    free_tables();
+
+    yylex_destroy();
 
     return 0;
 }
@@ -282,4 +286,5 @@ void yyerror(char* s){
     } else {
         printf("Line %d, column %d: %s: %s\n", line_index, column_index-yyleng, s, yytext);
     }
+    errors_count++;
 }

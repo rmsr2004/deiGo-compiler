@@ -12,7 +12,7 @@ struct token* new_token(char* value, int line, int column){
     struct token* new = (struct token*) malloc(sizeof(struct token));
     *new = (struct token) {
         .value = value,
-        .category = None,
+        .category = _None,
         .type = None,
         .annotation = NULL,
         .line = line,
@@ -208,7 +208,7 @@ type cat_to_type(category cat){
     case Float32:       return float32;
     case Bool:          return boolean;
     case String:        return string;
-    case None:          return None;
+    case _None:         return None;
     default:            return None;
     }
 }

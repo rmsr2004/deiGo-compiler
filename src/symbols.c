@@ -174,6 +174,7 @@ void check_expression(struct table* table, struct node* expression){
 
     struct node* aux = NULL;
     struct symbol_list* symbol = NULL;
+    char* called_params = (char*) malloc(100 * sizeof(char));
 
     switch(expression->token->category){
     case Identifier:
@@ -325,9 +326,8 @@ void check_expression(struct table* table, struct node* expression){
         // expression == Call
         //check_expression(table, expression->child);
         
-        char* called_params = (char*) malloc(100 * sizeof(char));
-        strcpy(called_params, "");
-        strcat(called_params, "(");
+        strcpy(called_params, "(");
+
         aux = expression->child->brother;
         while(aux != NULL){
             check_expression(table, aux);
@@ -665,6 +665,20 @@ struct table* find_table(char* name, char* params){
         aux = aux->next;
     }
     return NULL;
+}
+
+void free_tables(){
+    if(global_table == NULL){
+        return;
+    }
+    
+    struct table* aux = global_table;
+    struct table* next = NULL;
+    while(aux != NULL){
+        next = aux->next;
+        free(aux);
+        aux = next;
+    }
 }
 
 void anotate_ast(struct node* node){
