@@ -1,0 +1,26 @@
+package main;
+
+func bigmod(base int, exp int, mod int) int {
+	var result int;
+    
+    result = 1;
+
+	base = base % mod;
+	for exp > 0 {
+		if exp%2 == 1 {
+			result = (result * base) % mod;
+		}
+		base = (base * base) % mod;
+		exp = exp / 2;
+	}
+	return result;
+}
+
+func main() {
+	var base, exp, mod, result int;
+    base = 6;
+    exp = 7;
+    mod = 19;
+    result = bigmod(base, exp, mod);
+	fmt.Println(result);
+}
