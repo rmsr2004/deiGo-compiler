@@ -1,0 +1,53 @@
+Line 5, column 9: Operator - cannot be applied to type bool
+Line 5, column 9: Incompatible type undef in return statement
+Line 6, column 6: Incompatible type int in if statement
+Line 7, column 7: Incompatible type int in for statement
+Line 8, column 9: Incompatible type int in return statement
+===== Global Symbol Table =====
+g    ()    int
+j    ()    bool
+f    ()    none
+
+===== Function g() Symbol Table =====
+return        int
+
+===== Function j() Symbol Table =====
+return        bool
+
+===== Function f() Symbol Table =====
+return        none
+
+Program
+..FuncDecl
+....FuncHeader
+......Identifier(g)
+......Int
+......FuncParams
+....FuncBody
+..FuncDecl
+....FuncHeader
+......Identifier(j)
+......Bool
+......FuncParams
+....FuncBody
+..FuncDecl
+....FuncHeader
+......Identifier(f)
+......FuncParams
+....FuncBody
+......Return
+........Minus - undef
+..........Call - bool
+............Identifier(j) - ()
+......If
+........Call - int
+..........Identifier(g) - ()
+........Block
+........Block
+......For
+........Call - int
+..........Identifier(g) - ()
+........Block
+......Return
+........Call - int
+..........Identifier(g) - ()

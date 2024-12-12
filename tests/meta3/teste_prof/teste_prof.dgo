@@ -1,0 +1,9 @@
+package main;
+func g() int {}
+func j() bool {}
+func f() {
+    return -j();
+    if (g()) {}
+    for (g()) {}
+    return g();
+}
