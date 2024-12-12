@@ -3,3 +3,4 @@ src/gocompiler
 src/y.output
 **.ll
 *.ast
+*.bc
