@@ -9,6 +9,7 @@
     #include "y.tab.h"
     #include "ast.h"
     #include "symbols.h"
+    #include "codegen.h"
 
     int yyparse(void);
 
@@ -261,7 +262,11 @@ int main(int argc, char* argv[]){
 
         if(errors_count == 0){
             errors_count = check_program(program);
-        }
+
+            if(errors_count == 0){
+                codegen_program(program);
+            }
+        }   
     }
 
     if(program != NULL) delete_ast(program);

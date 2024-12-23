@@ -49,9 +49,9 @@ if [ "$1" == "-t" ]; then
 fi
 
 # If the argument is '-s', run the gocompiler with the '-t' flag
-if [ "$1" == "-t" ]; then
-    echo "./src/gocompiler -t"
-    ./src/gocompiler -t
+if [ "$1" == "-s" ]; then
+    echo "./src/gocompiler -s"
+    ./src/gocompiler -s
     rm src/lex.yy.c src/y.tab.c src/y.tab.h src/y.output src/y.gv 
     exit 0
 fi

@@ -299,6 +299,8 @@ void check_expression(struct table* table, struct node* expression){
 
         expression->token->annotation = expression->child->token->annotation;
         expression->token->type = expression->child->token->type;
+
+        check_operators(expression->child, NULL, expression);
         break;
     case If:
     case For:
@@ -527,7 +529,7 @@ void check_operators(struct node* left, struct node* right, struct node* operati
     case Minus:
         // Plus || Minus Operator
         if(left->token->type == string || left->token->type == None || left->token->type == boolean){
-            printf("Line %d, column %d: Operator %s cannot be applied to types %s, %s\n", operation->token->line, operation->token->column, operator_to_str(operation->token->category), left->token->annotation, right->token->annotation);
+            printf("Line %d, column %d: Operator %s cannot be applied to type %s\n", operation->token->line, operation->token->column, operator_to_str(operation->token->category), left->token->annotation);
             operation->token->annotation = "undef";
             semantic_errors++;
             break;
@@ -567,6 +569,7 @@ struct symbol_list* insert_symbol(struct table* table, char* identifier, type ty
         .is_func = node->token->category == FuncDecl ? 1 : 0,   // 1 if symbol is a function, 0 otherwise
         .is_used = 0,
         .is_declared = 0,
+        .is_declared_codegen = 0,
         .is_global = strcmp(table->name, "Global") == 0 ? 1 : 0, // 1 if symbol is global, 0 otherwise
         .next = NULL
     };
@@ -802,6 +805,8 @@ char* operator_to_str(category cat){
     case Mul:   return "*";
     case Div:   return "/";
     case Not:   return "!";
+    case Minus: return "-";
+    case Plus:  return "+";
     default:    return NULL;
     }
 }

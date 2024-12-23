@@ -24,6 +24,7 @@ struct symbol_list {
 	int is_func;                        // Flag to indicate if the symbol is a function.
     int is_used;                        // Flag to indicate if the symbol is used.
     int is_declared;                    // Flag to indicate if the symbol is declared.
+    int is_declared_codegen;            // Flag to indicate if the symbol is declared in codegen.
     int is_global;                      // Flag to indicate if the symbol is global.
     struct node* node;                  // The node where the symbol was declared.
 	struct symbol_list* next;           // Pointer to the next symbol in the list.

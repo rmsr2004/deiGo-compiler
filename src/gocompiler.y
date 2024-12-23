@@ -168,7 +168,7 @@ VarsAndStatements:
     VarsAndStatements VarDeclaration SEMICOLON      { if($1 == NULL) { $$ = $2; } else { $$ = $1; add_brother($1, $2); } }
     | VarsAndStatements Statement SEMICOLON         { if($1 == NULL) { $$ = $2; } else { $$ = $1; add_brother($1, $2); } }
     | VarsAndStatements SEMICOLON                   { $$ = $1; }
-    | /* null production */                         { $$ = NULL; }
+    | /* null production */                        { $$ = NULL; }
     ;
 
 Statement: 
@@ -261,7 +261,7 @@ ParseArgs:
 
 FuncInvocation:
     IDENTIFIER LPAR Expr FuncInvocationAux RPAR     {
-                                                        $$ = new_node(Call, NULL, NULL);
+                                                        $$ = new_node(Call, NULL, $1);
 
                                                         aux_node = new_node(Identifier, $1->value, $1);
                                                         add_brother(aux_node, $3);
@@ -270,7 +270,7 @@ FuncInvocation:
                                                         add_child($$, aux_node);
                                                     }
     | IDENTIFIER LPAR RPAR                          { 
-                                                        $$ = new_node(Call, NULL, NULL); 
+                                                        $$ = new_node(Call, NULL, $1); 
                                                         add_child($$, new_node(Identifier, $1->value, $1));
                                                     }
     | IDENTIFIER LPAR error RPAR                    { errors_count++; $$ = NULL; }
