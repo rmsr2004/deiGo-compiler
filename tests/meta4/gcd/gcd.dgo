@@ -1,0 +1,19 @@
+package main;
+
+func gcd(a int, b int) int {
+    var temp int;
+	for b != 0 {
+        temp = b
+        b = a % b
+        a = temp       
+	}
+	return a;
+}
+
+func main() {
+    var a, b, result int;
+    a = 56;
+    b = 98;
+    result = gcd(a, b);
+	fmt.Println(result);
+}

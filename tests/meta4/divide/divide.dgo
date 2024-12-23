@@ -1,0 +1,24 @@
+package main;
+
+func divide(dividendo int, divisor int) {
+	var quotient, remainder int;
+
+	if(divisor == 0){
+		fmt.Println("Divisão por 0 não existe");
+		return;
+	}
+
+	quotient = dividendo / divisor
+	remainder = dividendo % divisor
+	fmt.Println("quotient");
+	fmt.Println(quotient);
+	fmt.Println("remainder");
+	fmt.Println(remainder);
+}
+
+func main() {
+	var dividend, divisor int;
+	dividend = 20;
+	divisor = 2;
+	divide(dividend, divisor)
+}
